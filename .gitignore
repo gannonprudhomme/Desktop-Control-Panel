@@ -1,0 +1,8 @@
+#VSCode
+.vscode/
+*.code-workspace
+
+node_modules/
+
+# 
+config/

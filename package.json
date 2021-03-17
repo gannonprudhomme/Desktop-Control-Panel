@@ -1,0 +1,33 @@
+{
+  "name": "dct-ha",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "webpack --mode development --watch ./index.tsx",
+    "build": "webpack --mode production ./index.tsx",
+    "lint": "eslint --ext .ts,.tsx,.js ."
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "preact": "^10.5.13",
+    "preact-custom-element": "^4.2.1"
+  },
+  "devDependencies": {
+    "@types/preact-custom-element": "^4.0.0",
+    "@typescript-eslint/eslint-plugin": "^4.18.0",
+    "@typescript-eslint/parser": "^4.18.0",
+    "eslint": "^7.22.0",
+    "eslint-config-airbnb": "^18.2.1",
+    "eslint-config-preact": "^1.1.3",
+    "eslint-import-resolver-typescript": "^2.4.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "source-map-loader": "^2.0.1",
+    "ts-loader": "^8.0.18",
+    "typescript": "^4.2.3",
+    "webpack": "^5.26.2",
+    "webpack-cli": "^4.5.0"
+  }
+}

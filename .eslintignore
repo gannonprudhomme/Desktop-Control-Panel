@@ -1,0 +1,6 @@
+**/*.css.d.ts
+webpack.config.js
+static/
+.eslintrc.js
+node_modules/
+config/

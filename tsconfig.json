@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "outDir": "./config/www/",
+    "sourceMap": true,
+    "noImplicitAny": true,
+    "module": "commonjs",
+    "target": "ES2018",
+    "jsx": "react-jsx",
+    "jsxImportSource": "preact",
+    "types": ["preact"],
+    "esModuleInterop": true,
+  }
+}
