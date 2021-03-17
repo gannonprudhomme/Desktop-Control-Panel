@@ -1,0 +1,8 @@
+.grid-container {
+  display: grid;
+  grid-template-rows: 10% 74% 16%;
+  height: 100%;
+
+  background-color: #1c2122;
+  color: red;
+}
