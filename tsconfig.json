@@ -5,9 +5,8 @@
     "noImplicitAny": true,
     "module": "commonjs",
     "target": "ES2018",
-    "jsx": "react-jsx",
-    "jsxImportSource": "preact",
-    "types": ["preact"],
-    "esModuleInterop": true,
+    // "esModuleInterop": true,
+
+    "experimentalDecorators": true,
   }
 }
