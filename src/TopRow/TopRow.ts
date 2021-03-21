@@ -2,6 +2,7 @@ import {
   css, CSSResult, html, LitElement, TemplateResult, property,
 } from 'lit-element';
 import './TimeDisplay';
+import './WeatherDisplay';
 
 // We probably need to get this type from somewhere
 export default class TopRow extends LitElement {
@@ -12,7 +13,7 @@ export default class TopRow extends LitElement {
       <div id="top-row">
         <div>PC Controls</div>
         <time-display></time-display>
-        <div>Weather</div>
+        <weather-display temperature=${0} weatherType="stuff"></weather-display>
       </div>
     `;
   }
