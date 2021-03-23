@@ -4,6 +4,7 @@ import {
 import { HomeAssistant } from '../../types/types';
 import Song from '../../types/Song';
 import './TrackDisplay';
+import './MediaControl';
 import DCPConfig from '../../types/Config';
 
 function getSpotifyAttributes(hass: HomeAssistant, config: DCPConfig): Song {
@@ -42,7 +43,7 @@ export default class BottomRow extends LitElement {
     return html`
       <div id="bottom-row">
         <track-display .song=${song}></track-display>
-        <div>Media control</div>
+        <media-control .hass=${this.hass} .song=${song}></media-control>
         <div>module switcher</div>
       </div>
     `;
