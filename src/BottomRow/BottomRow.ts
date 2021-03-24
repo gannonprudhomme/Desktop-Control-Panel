@@ -5,7 +5,9 @@ import { HomeAssistant } from '../../types/types';
 import Song from '../../types/Song';
 import './TrackDisplay';
 import './MediaControl';
+import './ModuleSwitcher';
 import DCPConfig from '../../types/Config';
+import Module from '../../types/Module';
 
 function getSpotifyAttributes(hass: HomeAssistant, config: DCPConfig): Song {
   if (!config.spotify_name) {
@@ -34,8 +36,9 @@ function getSpotifyAttributes(hass: HomeAssistant, config: DCPConfig): Song {
 // We probably need to get this type from somewhere
 export default class BottomRow extends LitElement {
   @property({ type: Object }) public hass: HomeAssistant;
-
   @property({ type: Object }) public config: DCPConfig;
+  @property({ type: Object }) public currentModule: Module
+  @property({ type: Array }) public modules: Module[]
 
   protected render(): TemplateResult {
     const song = getSpotifyAttributes(this.hass, this.config);
@@ -43,8 +46,13 @@ export default class BottomRow extends LitElement {
     return html`
       <div id="bottom-row">
         <track-display .song=${song}></track-display>
-        <media-control .hass=${this.hass} .song=${song}></media-control>
-        <div>module switcher</div>
+        <media-control
+          .hass=${this.hass}
+          .song=${song}
+          .mediaPlayerId=${this.config.spotify_name}>
+        </media-control>
+        <module-switcher .modules=${this.modules} .currentModule=${this.currentModule}>
+        </module-switcher>
       </div>
     `;
   }

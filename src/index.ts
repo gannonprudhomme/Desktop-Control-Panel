@@ -10,10 +10,12 @@ import { BaseConfig } from '../types/Config';
 // Might as well merge this into index.ts
 export default class App extends LitElement {
   @property({ type: Object }) public hass: HomeAssistant;
-
   @property({ type: Boolean }) public narrow: boolean;
-
   @property({ type: Object }) public panel: BaseConfig;
+
+  @property({ type: Array }) public modules: Module[] = [];
+  @property({ type: Object }) public currentModule: Module = null;
+
 
   protected render(): TemplateResult {
     console.log(this.hass);
@@ -24,7 +26,13 @@ export default class App extends LitElement {
       <div class="grid-container">
         <top-row></top-row>
         <middle-row></middle-row>
-        <bottom-row .hass=${this.hass} .config=${this.panel.config}></bottom-row>
+        <bottom-row
+          .hass=${this.hass}
+          .config=${this.panel.config}
+          .modules=${this.modules}
+          .currentModule=${this.currentModule}
+        >
+        </bottom-row>
       </div>
     `;
   }
