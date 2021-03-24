@@ -8,25 +8,29 @@ import playImage from '../res/play.png';
 import pauseImage from '../res/pause.png';
 import nextImage from '../res/next-song.png';
 
+/**
+ * Calls the according Spotify service using hass.callService
+ * @param hass HomeAssistant instance
+ * @param mediaPlayerId The entity ID , e.g. media_player.spotify_first_last
+ * @param type Either media_previous_track, media_play_pause, or media_next_track
+ */
+function callSpotifyService(hass: HomeAssistant, mediaPlayerId: string, type: string) {
+  hass.callService('media_player', type, { entity_id: mediaPlayerId }).catch((err) => {
+    console.log(err);
+  });
+}
+
 export default class MediaControl extends LitElement {
   @property({ type: Object }) public hass: HomeAssistant;
-
   @property({ type: Object }) public song: Song;
+  @property({ type: String }) public mediaPlayerId: string;
 
   previousClicked(): void {
-    this.hass.callService('media_player', 'media_previous_track', {
-      entity_id: 'media_player.spotify_gannon_prudhomme',
-    }).catch((err) => {
-      console.log(err);
-    });
+    callSpotifyService(this.hass, this.mediaPlayerId, 'media_previous_track');
   }
 
   playPauseClicked(): void {
-    this.hass.callService('media_player', 'media_play_pause', {
-      entity_id: 'media_player.spotify_gannon_prudhomme',
-    }).catch((err) => {
-      console.log(err);
-    });
+    callSpotifyService(this.hass, this.mediaPlayerId, 'media_play_pause');
   }
 
   nextClicked(): void {
@@ -37,6 +41,7 @@ export default class MediaControl extends LitElement {
     return html`
       <div id="spotify-playback">
         <div id="playback-container">
+          <!-- TODO: Make these buttons a function -->
           <button
             type="button" 
             class="image-button"
@@ -77,6 +82,7 @@ export default class MediaControl extends LitElement {
       }
 
       #playback-container {
+        /* TODO: Make this to use the template value */
         border: 1px solid #00C8C8 !important;
         border-radius: 20px;
         display: flex;
