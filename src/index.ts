@@ -9,7 +9,6 @@ import { BaseConfig } from '../types/Config';
 import Module from '../types/Module';
 import getModules from '../types/ModulesManager';
 
-// Might as well merge this into index.ts
 export default class App extends LitElement {
   @property({ type: Object }) public hass: HomeAssistant;
   @property({ type: Boolean }) public narrow: boolean;
@@ -17,6 +16,21 @@ export default class App extends LitElement {
 
   @property({ type: Array }) public modules: Module[];
   @property({ type: Object }) public currentModule: Module = null;
+
+  constructor() {
+    super();
+    this.addEventListener('update-current-module', this.handleUpdateCurrentModule);
+  }
+
+  private handleUpdateCurrentModule(event: CustomEvent): void {
+    const { detail } = event;
+
+    if (!detail.module) {
+      throw Error('did not receive module in current-module CustomEvent');
+    }
+
+    this.currentModule = detail.module;
+  }
 
   protected render(): TemplateResult {
     if (!this.modules) {

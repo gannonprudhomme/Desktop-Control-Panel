@@ -10,8 +10,6 @@ export default class MiddleRow extends LitElement {
   @property({ type: Object }) public currentModule: Module;
 
   protected render(): TemplateResult {
-    console.log(this.currentModule);
-
     return html`
       <div id="middle-row">
         ${this.currentModule ? this.currentModule.component(this.hass) : 'No modules enabled'}

@@ -8,3 +8,5 @@ export default interface Module {
   index: number; // Determined by the config
   active: boolean; // If it's currently active (and should be shown as an option)
 };
+
+export const updateCurrentModuleEventName = 'update-current-module';

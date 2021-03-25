@@ -1,7 +1,7 @@
 import {
   css, CSSResult, html, LitElement, TemplateResult, property,
 } from 'lit-element';
-import Module from '../../types/Module';
+import Module, { updateCurrentModuleEventName } from '../../types/Module';
 import createImageButton from '../ImageButton';
 
 // We probably need to get this type from somewhere
@@ -9,11 +9,22 @@ export default class ModuleSwitcher extends LitElement {
   @property({ type: Array }) public modules: Module[];
   @property({ type: Object }) public currentModule: Module;
 
+  private updateCurrentModule(module: Module): void {
+    const event = new CustomEvent(updateCurrentModuleEventName, {
+      // Make the event pass through shadow DOM boundaries
+      detail: { module },
+      bubbles: true,
+      composed: true,
+    });
+
+    this.dispatchEvent(event);
+  }
+
   protected render(): TemplateResult {
     const moduleButtons = this.modules.map((mod) => createImageButton(
       () => {
         // TODO: send an event to App so it changes MiddleRow
-        this.currentModule = mod;
+        this.updateCurrentModule(mod);
       }, mod.icon, 'toggle-button',
     ));
 
