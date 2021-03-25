@@ -2,7 +2,7 @@ export default interface DCPConfig {
   // eslint-disable-next-line camelcase
   spotify_name: string;
   theme: { primary: string, secondary: string };
-  modules: Array<string>;
+  modules: string[];
 };
 
 // The configs that are passed to use

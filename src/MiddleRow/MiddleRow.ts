@@ -1,15 +1,20 @@
 import {
   css, CSSResult, html, LitElement, TemplateResult, property,
 } from 'lit-element';
+import Module from '../../types/Module';
+import { HomeAssistant } from '../../types/types';
 
 // We probably need to get this type from somewhere
 export default class MiddleRow extends LitElement {
-//   @property({type: Object }) public hass: Hass;
+  @property({ type: Object }) public hass: HomeAssistant;
+  @property({ type: Object }) public currentModule: Module;
 
   protected render(): TemplateResult {
+    console.log(this.currentModule);
+
     return html`
       <div id="middle-row">
-        Middle Row Stuff
+        ${this.currentModule ? this.currentModule.component(this.hass) : 'No modules enabled'}
       </div>
     `;
   }

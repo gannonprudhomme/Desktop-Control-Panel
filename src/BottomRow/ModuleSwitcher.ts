@@ -2,7 +2,6 @@ import {
   css, CSSResult, html, LitElement, TemplateResult, property,
 } from 'lit-element';
 import Module from '../../types/Module';
-import '../ImageButton';
 import createImageButton from '../ImageButton';
 
 // We probably need to get this type from somewhere
@@ -12,7 +11,10 @@ export default class ModuleSwitcher extends LitElement {
 
   protected render(): TemplateResult {
     const moduleButtons = this.modules.map((mod) => createImageButton(
-      () => { this.currentModule = mod; }, mod.icon, 'toggle-button',
+      () => {
+        // TODO: send an event to App so it changes MiddleRow
+        this.currentModule = mod;
+      }, mod.icon, 'toggle-button',
     ));
 
     return html`
