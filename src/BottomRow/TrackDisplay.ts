@@ -14,7 +14,7 @@ export default class TrackDisplay extends LitElement {
           id="album-cover"
           src=${this.song.albumArt} 
           alt="album-cover"
-        />
+        ></img>
         <div id="track-info">
           <span id="current-track">
             ${this.song.title}

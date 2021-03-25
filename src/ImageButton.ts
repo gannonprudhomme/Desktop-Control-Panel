@@ -1,47 +1,38 @@
 import {
   css, CSSResult, html, LitElement, property, TemplateResult,
 } from 'lit-element';
+/**
+ * Creates an image button. Isn't a custom element because how LitElement handles shadow-dom's / and
+ * prevents us from passing and ID to the img from the host component that's using it.
+ * @param onClick Function to be called when the button is pressed
+ * @param icon image name
+ * @param imgId the id to be applied to the img element
+ */
+export default function createImageButton(
+  onClick: () => void, icon: string, imgId: string,
+): TemplateResult {
+  const styles = css`
+    .image-button {
+      border: initial;
+      outline: none;
+      background-color: initial;
+      align-items: initial;
+      display: initial;
+      box-sizing: initial;
+    }
 
-export default class ImageButton extends LitElement {
-  @property({ type: Function }) public onClick: () => void;
-  @property({ type: String }) public icon: string;
-  @property({ type: String }) public altText: string;
+    .image-button:active {
+      transform: scale(0.8);
+      filter: grayscale(0.8);
+    }
+  `;
 
-  protected render(): TemplateResult {
-    return html`
-      <button type="button" @click=${this.onClick} class="image-button">
-        <img src=${`local${this.icon}`} alt=${this.altText}}></img>
-      </button> 
-    `;
-  }
-
-  static get styles(): CSSResult {
-    return css`
-      .image-button {
-        border-width: 0px !important;
-        outline: none;
-        background-color: initial;
-        align-items: initial;
-        display: initial;
-        box-sizing: initial;
-
-        width: inherit;
-        height: inherit;
-      }
-
-      .image-button:active {
-        transform: scale(0.8);
-        filter: grayscale(0.8);
-      }
-
-      .image-button > img {
-        width: inherit;
-        height: inherit;
-      }
-    `;
-  }
-}
-
-if (!customElements.get('image-button')) {
-  customElements.define('image-button', ImageButton);
+  return html`
+    <style>
+      ${styles}
+    </style>
+    <button type="button" @click=${onClick} class="image-button">
+      <img src=${`local${icon}`} alt=${imgId} id=${imgId}></img>
+    </button> 
+  `;
 }

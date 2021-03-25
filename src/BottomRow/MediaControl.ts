@@ -3,6 +3,7 @@ import {
 } from 'lit-element';
 import { HomeAssistant } from '../../types/types';
 import Song from '../../types/Song';
+import createImageButton from '../ImageButton';
 
 import playImage from '../res/play.png';
 import pauseImage from '../res/pause.png';
@@ -34,39 +35,18 @@ export default class MediaControl extends LitElement {
   }
 
   nextClicked(): void {
-    this.hass.callService('media_player', 'media_next_track');
+    callSpotifyService(this.hass, this.mediaPlayerId, 'media_next_track');
   }
 
   protected render(): TemplateResult {
+    const playPauseIcon = this.song.isPlaying ? pauseImage : playImage;
+
     return html`
       <div id="spotify-playback">
         <div id="playback-container">
-          <!-- TODO: Make these buttons a function -->
-          <button
-            type="button" 
-            class="image-button"
-            @click="${this.previousClicked}"
-          >
-            <img id="previous-song" src=${`/local${nextImage}`} alt="previous-song" />
-          </button>
-          <button
-            type="button" 
-            class="image-button"
-            @click="${this.playPauseClicked}"
-          >
-            <img
-              id="play-pause"
-              src=${`/local${(this.song.isPlaying ? pauseImage : playImage)}`}
-              alt="play-pause-song"
-            />
-          </button>
-          <button
-            type="button" 
-            class="image-button"
-            @click="${this.nextClicked}"
-          >
-            <img id="next-song" src=${`/local${nextImage}`} alt="next-song" />
-          </button>
+          ${createImageButton(this.previousClicked, nextImage, 'previous-song')}
+          ${createImageButton(this.playPauseClicked, playPauseIcon, 'play-pause')}
+          ${createImageButton(this.nextClicked, nextImage, 'next-song')}
         </div>
       </div>
     `;
@@ -87,23 +67,9 @@ export default class MediaControl extends LitElement {
         border-radius: 20px;
         display: flex;
         justify-content: space-between;
-        align-content: center !important;
+        align-content: center;
         width: 250px !important;
         margin-top: 10px;
-      }
-
-      .image-button {
-        border-width: 0px !important;
-        background-color: initial;
-        outline: none;
-        align-items: initial;
-        display: initial;
-        box-sizing: initial;
-      }
-
-      .image-button:active {
-        transform: scale(0.8);
-        filter: grayscale(0.8);
       }
 
       #play-pause {

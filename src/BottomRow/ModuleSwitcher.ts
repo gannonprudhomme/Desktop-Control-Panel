@@ -2,6 +2,8 @@ import {
   css, CSSResult, html, LitElement, TemplateResult, property,
 } from 'lit-element';
 import Module from '../../types/Module';
+import '../ImageButton';
+import createImageButton from '../ImageButton';
 
 // We probably need to get this type from somewhere
 export default class ModuleSwitcher extends LitElement {
@@ -9,26 +11,14 @@ export default class ModuleSwitcher extends LitElement {
   @property({ type: Object }) public currentModule: Module;
 
   protected render(): TemplateResult {
-    const modulesHTML = this.modules.map((mod) => {
-      const onClick = () => {
-        this.currentModule = mod;
-      };
-
-      return html`
-      <button
-        type="button"
-        @click=${onClick}
-        class="image-button"
-      >
-        <img src=${`/local${mod.icon}`} class="toggle-button" alt=${mod.name}/>
-      </button>
-    `;
-    });
+    const moduleButtons = this.modules.map((mod) => createImageButton(
+      () => { this.currentModule = mod; }, mod.icon, 'toggle-button',
+    ));
 
     return html`
       <div id="view-swapper">
         <div id="control-container">
-          ${modulesHTML}
+          ${moduleButtons}
         </div>
       </div>
     `;
@@ -52,7 +42,8 @@ export default class ModuleSwitcher extends LitElement {
         width: 85%;
         height: 75%;
       }
-      .toggle-button {
+      
+      #toggle-button {
         width: 32px;
         height: 32px;
       }
