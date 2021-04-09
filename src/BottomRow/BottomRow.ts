@@ -63,7 +63,8 @@ export default class BottomRow extends LitElement {
         display: grid;
         grid-template-columns: 32% 36% 32%;
         grid-template-rows: 100%;
-        height: 100%;
+        height: calc(100% - 16px);
+        padding: 8px 0;
       }
     `;
   }

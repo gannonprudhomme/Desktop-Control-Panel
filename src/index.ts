@@ -33,6 +33,8 @@ export default class App extends LitElement {
   }
 
   protected render(): TemplateResult {
+    console.log(this.hass.states);
+    console.log(this.hass.states['desktop_processes.desktop']);
     if (!this.modules) {
       this.modules = getModules(this.panel.config.modules);
       [this.currentModule = null] = this.modules;
@@ -41,7 +43,7 @@ export default class App extends LitElement {
     return html`
       <div class="grid-container">
         <top-row></top-row>
-        <middle-row .hass=${this.hass} .currentModule=${this.currentModule}></middle-row>
+        <middle-row .hass=${this.hass} .currentModule=${this.currentModule} id="middle-row"></middle-row>
         <bottom-row
           .hass=${this.hass}
           .config=${this.panel.config}
@@ -56,11 +58,16 @@ export default class App extends LitElement {
   static get styles(): CSSResult {
     return css`
       .grid-container {
-        display: grid;
-        grid-template-rows: 10% 74% 16%;
+        display: flex;
+        flex-direction: column;
         height: 100%;
-        width: 97%;
+        width: calc(100% - 1.5% * 2);
         padding-left: 1.5%;
+        justify-content: space-around;
+      }
+
+      #middle-row {
+        flex-grow: 1;
       }
     `;
   }

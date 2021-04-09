@@ -43,7 +43,7 @@ export default class ModuleSwitcher extends LitElement {
         display: flex;
         justify-content: center;
         align-items: flex-end;
-        width: 100%;
+        width: calc(100% - 16px);
         height: 100%;
       }
       #control-container {
@@ -52,8 +52,8 @@ export default class ModuleSwitcher extends LitElement {
         align-items: center;
         border: 1px solid #00C8C8;
         border-radius: 20px;
-        width: 85%;
-        height: 75%;
+        min-width: 200px;
+        height: 100%;
       }
       
       #toggle-button {

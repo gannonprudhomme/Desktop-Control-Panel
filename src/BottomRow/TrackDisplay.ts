@@ -10,11 +10,11 @@ export default class TrackDisplay extends LitElement {
   protected render(): TemplateResult {
     return html`
       <div id="track">
-        <img
-          id="album-cover"
-          src=${this.song.albumArt} 
-          alt="album-cover"
-        ></img>
+          <img
+            id="album-cover"
+            src=${this.song.albumArt} 
+            alt="album-cover"
+          ></img>
         <div id="track-info">
           <span id="current-track">
             ${this.song.title}
@@ -34,11 +34,14 @@ export default class TrackDisplay extends LitElement {
         flex-direction: row;
         align-items: flex-end;
         width: 100%;
+        height: 100%;
+        /* margin: 8px 0px 16px; */
+      }
+      #album-cover-container {
       }
       #album-cover {
-        width: 70px;
-        height: 70px;
-        padding-top: 10px;
+        object-fit: contain;
+        max-height: 80px;
       }
 
       #track-info {

@@ -24,6 +24,7 @@ export default class MiddleRow extends LitElement {
         height: 100%;
         border: 1px solid #00C8C8;
         overflow-y: hidden;
+        flex-grow: 1;
       }
     `;
   }

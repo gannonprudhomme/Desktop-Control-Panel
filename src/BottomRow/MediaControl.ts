@@ -69,7 +69,6 @@ export default class MediaControl extends LitElement {
         justify-content: space-between;
         align-content: center;
         width: 250px !important;
-        margin-top: 10px;
       }
 
       #play-pause {
