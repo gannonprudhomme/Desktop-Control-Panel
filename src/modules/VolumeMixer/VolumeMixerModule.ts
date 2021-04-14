@@ -4,6 +4,7 @@ import { HomeAssistant } from '../../../types/types';
 import './VolumeMixer';
 
 import icon from '../../res/levels-adjustment.png';
+import VolumeProcess from '../../../types/VolumeProcess';
 
 export default class VolumeMixerModule implements Module {
   icon: string;
@@ -19,10 +20,13 @@ export default class VolumeMixerModule implements Module {
     this.icon = icon;
     this.index = index; // We don't assign this
     this.active = true; // This will change
-    this.component = (hass: HomeAssistant): TemplateResult => (
-      html`
-        <volume-mixer .hass=${hass}></volume-mixer>
-      `
-    );
+    this.component = (hass: HomeAssistant): TemplateResult => {
+      // map it
+      const procs: VolumeProcess[] = hass.states['desktop_processes.desktop'].attributes.processes;
+
+      return html`
+        <volume-mixer .hass=${hass} .volumeProcesses=${procs}></volume-mixer>
+      `;
+    };
   }
 }

@@ -1,15 +1,31 @@
 import {
   css, CSSResult, html, LitElement, TemplateResult, property,
 } from 'lit-element';
+import { HomeAssistant } from '../../../types/types';
+import VolumeProcess from '../../../types/VolumeProcess';
+import './VolumeSlider';
 
 // We probably need to get this type from somewhere
 export default class VolumeMixer extends LitElement {
-//   @property({type: Object }) public hass: Hass;
+  @property({type: Array }) public hass: HomeAssistant;
+  @property({ type: Array }) public volumeProcesses: VolumeProcess[];
 
   protected render(): TemplateResult {
+    const setVolume = (pid: number, volume: number) => {
+      console.log(`${pid} ${volume}`);
+      this.hass.callService('desktop_processes', 'set_process_volume', { pid, volume });
+    };
+
+    const sliders: TemplateResult[] = this.volumeProcesses.map((proc: VolumeProcess) => {
+      const thing = 5;
+      return html`
+        <volume-slider .volumeProcess=${proc} class="volume-slider" .setVolume=${setVolume} /><volume-slider>
+      `;
+    });
+
     return html`
-      <div id="middle-row">
-        Volume Mixer
+      <div id="volume-mixer">
+        ${sliders}
       </div>
     `;
   }
@@ -23,6 +39,10 @@ export default class VolumeMixer extends LitElement {
         height: 100%;
         overflow-x: auto;
         overflow-y: hidden;
+      }
+      .volume-slider {
+        width: 100%;
+        height: 100%;
       }
     `;
   }

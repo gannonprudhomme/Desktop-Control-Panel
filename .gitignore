@@ -7,6 +7,10 @@ node_modules/
 # Parcel cache
 .cache/
 
-# 
-config/
+# Home Assisnt stuff
+config/*
 env/
+!config/custom_components/
+
+__pycache__/
+xenv/
