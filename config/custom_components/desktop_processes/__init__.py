@@ -16,13 +16,21 @@ URL = "http://localhost:3001/"
 
 SCANNING_INTERVAL = 5
 
+desktops = []
+
 @callback
-def _set_process_volume(call: ServiceCall):
+async def _set_process_volume(call: ServiceCall):
     """ Handle the call """
-    # I guess they need to specify which desktop this is setting process volume for?
-    print("set_process_volume")
-    name = "some name"
-    print(repr(call.data))
+    pid = call.data.get('pid')
+    volume = call.data.get('volume')
+
+    if pid is None or volume is None:
+        raise Exception("pid is none!")
+        return
+
+    # We're assuming there's only 1 desktop at the moment
+    desktop = desktops[0]
+    await desktop.set_volume(pid, volume)
 
 @asyncio.coroutine
 async def async_setup(hass: HomeAssistant, config: dict):
@@ -35,7 +43,6 @@ async def async_setup(hass: HomeAssistant, config: dict):
     }
 
     hass.services.async_register(DOMAIN, "set_process_volume", _set_process_volume)
-    # hass.helpers.discovery.load_platform('light', DOMAIN, {}, config)
 
     # TODO: Add desktop dynamically
     return True
@@ -55,6 +62,7 @@ async def async_setup_entry(hass, entry):
 
     desktop = Desktop(URL)
     await desktop.connect()
+    desktops.append(desktop)
     component = EntityComponent(None, DOMAIN, hass, timedelta(seconds=SCANNING_INTERVAL))
     await component.async_add_entities([desktop])
 
