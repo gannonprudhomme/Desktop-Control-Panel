@@ -1,16 +1,17 @@
 """ The Desktop Processes integration. """
+import logging
 import asyncio
 from datetime import timedelta
+from typing import List
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant, ServiceCall, callback
 from homeassistant.helpers.entity_component import EntityComponent
-# import socketio
 from .desktop import Desktop, Process
 
-# sio = socketio.AsyncClient()
+from .const import DOMAIN, IGNORE, PRIORITY, ATTR_CONFIG
 
-from .const import DOMAIN
+_LOGGER = logging.getLogger(__name__)
 
 URL = "http://localhost:3001/"
 
@@ -35,34 +36,42 @@ async def _set_process_volume(call: ServiceCall):
 @asyncio.coroutine
 async def async_setup(hass: HomeAssistant, config: dict):
     """ Set up the Desktop Processes component. """
-    hass.data.setdefault(DOMAIN, {})
     print("\nasync_setup\n")
 
-    hass.data[DOMAIN] = {
-        "some stuff": "something else"
-    }
+    # Setup data so we can pass the config data to async_setup_entry
+    hass.data.setdefault(DOMAIN, {})
+    hass.data[DOMAIN] = {}
+    hass.data[DOMAIN][ATTR_CONFIG] = config.get(DOMAIN)
 
     hass.services.async_register(DOMAIN, "set_process_volume", _set_process_volume)
 
-    # TODO: Add desktop dynamically
     return True
 
-async def async_setup_entry(hass, entry):
+async def async_setup_entry(hass: HomeAssistant, entry):
     """ Setup from config entry """
     print("\nasync_setup_entry\n")
-    print(entry)
-    print(entry.data)
+
+    config_data = hass.data[DOMAIN].get(ATTR_CONFIG)
+
+    # Setup priorities and ignore_list
+    ignore_list = config_data.get(IGNORE)
+
+    priority_settings = config_data.get(PRIORITY)
+    priorities = {
+        setting['name']: setting.get('priority') for setting in priority_settings
+    }
 
     if not 'url' in entry.data:
         print("shit went wrong\n")
         return False
-    
-    url = entry.data.get('url')
-    print(f'{url}\n')
 
-    desktop = Desktop(URL)
+    url = entry.data.get('url')
+
+    desktop = Desktop(URL, priorities, ignore_list)
     await desktop.connect()
+
     desktops.append(desktop)
+
     component = EntityComponent(None, DOMAIN, hass, timedelta(seconds=SCANNING_INTERVAL))
     await component.async_add_entities([desktop])
 

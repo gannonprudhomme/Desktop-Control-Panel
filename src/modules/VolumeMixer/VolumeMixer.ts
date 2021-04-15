@@ -7,16 +7,23 @@ import './VolumeSlider';
 
 // We probably need to get this type from somewhere
 export default class VolumeMixer extends LitElement {
-  @property({type: Array }) public hass: HomeAssistant;
+  @property({ type: Array }) public hass: HomeAssistant;
   @property({ type: Array }) public volumeProcesses: VolumeProcess[];
 
   protected render(): TemplateResult {
     const setVolume = (pid: number, volume: number) => {
-      console.log(`${pid} ${volume}`);
       this.hass.callService('desktop_processes', 'set_process_volume', { pid, volume });
     };
 
-    const sliders: TemplateResult[] = this.volumeProcesses.map((proc: VolumeProcess) => {
+    const sortedProcs = this.volumeProcesses.sort((a, b) => {
+      if (a.priority === b.priority) {
+        return a.name.localeCompare(b.name); // ascending (alphabetical)
+      }
+
+      return b.priority - a.priority;
+    });
+
+    const sliders: TemplateResult[] = sortedProcs.map((proc: VolumeProcess) => {
       const thing = 5;
       return html`
         <volume-slider .volumeProcess=${proc} class="volume-slider" .setVolume=${setVolume} /><volume-slider>

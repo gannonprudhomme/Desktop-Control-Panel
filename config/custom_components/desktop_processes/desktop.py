@@ -1,5 +1,6 @@
 import os
 from dataclasses import dataclass
+from typing import List, Dict
 from homeassistant.helpers.entity import Entity
 from homeassistant.helpers.update_coordinator import (
     CoordinatorEntity, DataUpdateCoordinator, UpdateFailed
@@ -28,14 +29,14 @@ class Desktop(Entity):
         resources on the Desktop
     """
 
-    def __init__(self, url: str):
-        """ Initialize the Desktop. """
+    def __init__(self, url: str, priorities: Dict[str, int], ignore_list: List[str]):
+        """ Initialize the Desktop """
 
-        # self._state = [Process('Spotify', 10, None)]
         self._state = 123
         self.url = url
         self.processes = []
-        print(f"\nentity {url}\n")
+        self.priorities = priorities
+        self.ignore_list = ignore_list
 
         # self.socket.send()
 
@@ -109,8 +110,14 @@ class Desktop(Entity):
             return write_data_to_file
 
         async def get_volumes(data):
-            # TODO: Probably need to validate data
-            self.processes = data
+            filtered = [proc for proc in data if proc['name'] not in self.ignore_list]
+            with_priority = []
+            for proc in filtered:
+                priority = self.priorities.get(proc['name'], 0)
+                proc['priority'] = priority
+                with_priority.append(proc)
+
+            self.processes = with_priority
 
             # Get the volume icon for each process
             for proc in self.processes:

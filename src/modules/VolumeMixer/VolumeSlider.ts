@@ -16,6 +16,8 @@ export default class VolumeSlider extends LitElement {
     const onChange = (value: number) => {
       // call a service to change the volume
       this.setVolume(this.volumeProcess.pid, value);
+
+      // "Remake" the volumeProcess property, which forces a re-render
       this.volumeProcess = { ...this.volumeProcess, volume: value };
     };
 
@@ -23,7 +25,7 @@ export default class VolumeSlider extends LitElement {
     const url = `${rootUrl}/${this.volumeProcess.name}.png`;
     return html`
       <div class="slider-container">
-        ${createSlider(onChange)}
+        ${createSlider(onChange, this.volumeProcess.volume)}
         <span class="slider-label">
           ${this.volumeProcess.volume}%
         </span>
