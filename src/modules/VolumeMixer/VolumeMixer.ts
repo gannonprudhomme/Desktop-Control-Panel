@@ -48,8 +48,6 @@ export default class VolumeMixer extends LitElement {
         overflow-y: hidden;
       }
       .volume-slider {
-        width: 100%;
-        height: 100%;
       }
     `;
   }

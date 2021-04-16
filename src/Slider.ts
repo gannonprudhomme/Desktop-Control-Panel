@@ -5,7 +5,7 @@ import {
 // Reference: https://stackoverflow.com/a/61453050/
 // We probably need to get this type from somewhere
 export default function createSlider(
-  onSlide: (value: number) => void, min = 0, max = 100, orientation = 'vertical',
+  onSlide: (value: number) => void, startVal: number, min = 0, max = 100, orientation = 'vertical',
 ): TemplateResult {
   const callOnSlider = (event: Event) => {
     const valueStr = (<HTMLInputElement>event.target).value;
@@ -20,18 +20,19 @@ export default function createSlider(
 
   const styles = css`
     .slider {
-      background: #d3d3d3;
+      /* background: #d3d3d3; */
       outline: none;
       transition: opacity .2s;
       appearance: slider-vertical;
       width: 0;
+      height: 100%;
     }
 
     /*.slider::-webkit-slider-thumb {*/
     input[type=range]::-webkit-slider-thumb {
-      width: 64px;
-      height: 64px;
-      border-radius: 15px;
+      width: 100px;
+      height: 100px;
+      border-radius: 30px;
       background: #4CAF50 !important;
     }
     /*
@@ -44,7 +45,7 @@ export default function createSlider(
     */
     
     input[type=range]::-webkit-slider-runnable-track {
-      height: 90px;
+      height: 300px;
     }
 
     input[type=range]::-webkit-slider-runnable-track {
@@ -108,6 +109,15 @@ export default function createSlider(
     <style>
       ${styles}
     </style>
-    <input type="range" orient="vertical" class="slider" @input=${callOnSlider}></input>
+    <input
+      type="range"
+      orient="vertical"
+      class="slider"
+      @input=${callOnSlider}
+      value=${startVal}
+      min=${min}
+      max=${max}
+    >
+    </input>
   `;
 }

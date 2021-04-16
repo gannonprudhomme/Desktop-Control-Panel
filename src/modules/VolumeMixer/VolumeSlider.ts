@@ -50,10 +50,7 @@ export default class VolumeSlider extends LitElement {
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        /* width: 100%; */
-        margin-left: 15px;
-        margin-right: 15px;
-        margin-top: 36px; /* Equal to thumbSize */
+        margin-right: 20px;
         width: 100%;
         height: 100%;
       }
@@ -74,6 +71,13 @@ export default class VolumeSlider extends LitElement {
 
       .slider-label {
         padding-left: 5px;
+      }
+
+      .process-name-text {
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        max-width: 6rem;
       }
     `;
   }
