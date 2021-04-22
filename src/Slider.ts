@@ -1,11 +1,21 @@
 import {
-  css, CSSResult, html, LitElement, TemplateResult, property,
+  css, html, TemplateResult,
 } from 'lit-element';
 
 // Reference: https://stackoverflow.com/a/61453050/
 // We probably need to get this type from somewhere
+/**
+ * Creates a slider
+ * @param onSlide Function to be updated on every slide update
+ * @param onChange Function that's called only when the user is done sliding
+ * @param startVal The start value of the slider
+ * @param min Minimum value of the slider
+ * @param max Maximum value of the slider
+ * @returns TemplateResult (html) of the slider
+ */
 export default function createSlider(
-  onSlide: (value: number) => void, startVal: number, min = 0, max = 100, orientation = 'vertical',
+  onSlide: (value: number) => void, onChange: (value: number) => void, startVal: number, min = 0,
+  max = 100,
 ): TemplateResult {
   const callOnSlider = (event: Event) => {
     const valueStr = (<HTMLInputElement>event.target).value;
@@ -14,7 +24,16 @@ export default function createSlider(
 
     if (onSlide) {
       onSlide(value);
-      // also set this things value too
+    }
+  };
+
+  const callOnChange = (event: Event) => {
+    const valueStr = (<HTMLInputElement>event.target).value;
+    // convert value to an int
+    const value = Number.parseInt(valueStr, 10);
+
+    if (onChange) {
+      onChange(value);
     }
   };
 
@@ -114,6 +133,7 @@ export default function createSlider(
       orient="vertical"
       class="slider"
       @input=${callOnSlider}
+      @change=${callOnChange}
       value=${startVal}
       min=${min}
       max=${max}

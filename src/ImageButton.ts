@@ -1,6 +1,7 @@
 import {
-  css, CSSResult, html, LitElement, property, TemplateResult,
+  css, html, TemplateResult,
 } from 'lit-element';
+
 /**
  * Creates an image button. Isn't a custom element because how LitElement handles shadow-dom's / and
  * prevents us from passing and ID to the img from the host component that's using it.

@@ -25,7 +25,7 @@ export default class VolumeSlider extends LitElement {
     const url = `${rootUrl}/${this.volumeProcess.name}.png`;
     return html`
       <div class="slider-container">
-        ${createSlider(onChange, this.volumeProcess.volume)}
+        ${createSlider(onChange, null, this.volumeProcess.volume)}
         <span class="slider-label">
           ${this.volumeProcess.volume}%
         </span>
