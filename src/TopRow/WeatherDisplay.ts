@@ -1,28 +1,31 @@
 import {
   css, CSSResult, html, LitElement, TemplateResult, property,
 } from 'lit-element';
+import { HomeAssistant } from '../../types/types';
 
-interface WeatherProps {
-  temperature: number;
-  weatherType: string;
-  icon: string; // link to the icon to use
+function getWeatherText(hass: HomeAssistant, weatherState: string): string {
+  const localizeUrl = `component.weather.state._.${weatherState}`;
+  return hass.localize(localizeUrl) ?? 'unknown';
 }
 
 // We probably need to get this type from somewhere
 export default class WeatherDisplay extends LitElement {
-  @property({ type: Number }) public temperature: number;
-
-  @property({ type: String }) public weatherType: string;
+  @property({ type: Object }) public hass: HomeAssistant;
 
   protected render(): TemplateResult {
+    const { state, attributes } = this.hass.states['weather.home'];
+    const weatherType = getWeatherText(this.hass, state);
+    const temperature: number = attributes.temperature ?? -1;
+    const icon = '';
+
     return html`
       <div class="weather-container">
         <div class="temperature-weather-container">
           <span id="temperature">
-            ${this.temperature}°F
+            ${temperature.toFixed(0)}°C
           </span>
           <span>
-            ${this.weatherType}
+            ${weatherType}
           </span>
         </div>
       </div>

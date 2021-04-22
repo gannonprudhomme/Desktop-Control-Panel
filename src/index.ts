@@ -33,8 +33,6 @@ export default class App extends LitElement {
   }
 
   protected render(): TemplateResult {
-    console.log(this.hass.states);
-    console.log(this.hass.states['desktop_processes.desktop']);
     if (!this.modules) {
       this.modules = getModules(this.panel.config.modules);
       [this.currentModule = null] = this.modules;
@@ -42,7 +40,7 @@ export default class App extends LitElement {
 
     return html`
       <div class="grid-container">
-        <top-row></top-row>
+        <top-row .hass=${this.hass}></top-row>
         <middle-row .hass=${this.hass} .currentModule=${this.currentModule} id="middle-row"></middle-row>
         <bottom-row
           .hass=${this.hass}

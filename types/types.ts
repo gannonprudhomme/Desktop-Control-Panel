@@ -183,6 +183,7 @@ export interface ServiceCallRequest {
 }
 
 export interface HomeAssistant {
+  localize(key: string, ...args: any[]): string;
   // auth: Auth & { external?: ExternalMessaging };
   // connection: Connection;
   // connected: boolean;
