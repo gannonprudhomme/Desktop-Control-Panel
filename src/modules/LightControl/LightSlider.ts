@@ -38,6 +38,13 @@ export default class LightSlider extends LitElement {
       this.light = { ...this.light, colorTemp: value };
     };
 
+    const onTempChange = (value: number) => {
+      onTempSlide(value);
+      this.setLightState(this.light.entityId, {
+        color_temp: value, entity_id: this.light.entityId,
+      });
+    };
+
     const onPowerClick = () => {
       console.log('clicked!');
     };
@@ -49,7 +56,7 @@ export default class LightSlider extends LitElement {
     `;
 
     const conv = this.light.brightness / 255 * 100;
-    console.log(`lightSlider render ${this.light.brightness} ${conv} ${this.light.colorTemp} ${this.light.minTemp} ${this.light.maxTemp}`);
+    console.log(`lightSlider render ${this.light.brightness} ${conv} ${this.light.colorTemp} ${this.light.minMireds} ${this.light.maxMireds}`);
 
     const brightness = (this.light.brightness / 255) * 100;
 
@@ -58,9 +65,11 @@ export default class LightSlider extends LitElement {
         <span class="light-name">
           ${this.light.name}
         </span>
-        <div class="light-slider-container">
-          <div class="slider-container">
-            ${createSlider(onBrightnessSlide, onBrightnessChange, brightness, 0, 100)}
+        <div class="multi-light-slider-container">
+          <div class="light-slider-container">
+            <div class="slider-container">
+              ${createSlider(onBrightnessSlide, onBrightnessChange, brightness, 1, 100)}
+            </div>
 
             <div class="slider-info-container">
               <span class="brightness-value">
@@ -70,8 +79,11 @@ export default class LightSlider extends LitElement {
               ${createImageButton(onPowerClick, icon, 'power-button')}
             </div>
           </div>
-          <div class="slider-container">
-            ${createSlider(null, onTempSlide, this.light.colorTemp, this.light.minTemp, this.light.maxTemp, 'vertical')}
+          <div class="light-slider-container">
+            <!-- TODO: Note that we do minMireds + 1 - otherwise, it will throw an error for some reason -->
+            <div class="slider-container temperature-slider-container">
+              ${createSlider(onTempSlide, onTempChange, this.light.colorTemp, this.light.minMireds + 1, this.light.maxMireds, 'vertical')}
+            </div>
 
             <div class="slider-info-container">
               <span class="brightness-value">
@@ -95,6 +107,7 @@ export default class LightSlider extends LitElement {
         justify-content: flex-start;
         /* TODO: Check this */
         max-width: 15rem;
+        height: 100%;
       }
 
       .light-name {
@@ -102,10 +115,11 @@ export default class LightSlider extends LitElement {
         flex-grow: 0;
       }
 
-      .light-slider-container {
+      .multi-light-slider-container {
         display: flex;
         justify-content: flex-start;
-        flex-grow: 5;
+        height: 100%;
+        /* flex-grow: 5; */
       }
 
       .slider-info-container {
@@ -115,16 +129,29 @@ export default class LightSlider extends LitElement {
         justify-content: center;
       }
 
-      .slider-container {
+      .light-slider-container {
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: center;
+        justify-content: flex-end;
+        /* height: 100%; */
+      }
+
+      .slider-container {
+        /* height: 300px; */
+        /* height: 100%; */
+        padding: -40% 0;
+        width: 0;
+        margin-left: -25%;
       }
 
       #power-button {
         width: 32px;
         height: 32px;
+      }
+
+      .temperature-slider-container > .slider {
+        background-image: -webkit-linear-gradient( right, rgb(255, 160, 0) 0%, white 50%, rgb(166, 209, 255) 100% );
       }
     `;
   }
