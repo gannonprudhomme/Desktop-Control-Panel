@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   // Auth,
@@ -144,14 +145,14 @@ export interface TranslationMetadata {
   };
 }
 
-export interface IconMetaFile {
-  version: string;
-  parts: IconMeta[];
-}
-
 export interface IconMeta {
   start: string;
   file: string;
+}
+
+export interface IconMetaFile {
+  version: string;
+  parts: IconMeta[];
 }
 
 export interface Notification {
@@ -192,7 +193,7 @@ export interface HomeAssistant {
   // config: HassConfig;
   // themes: Themes;
   // selectedTheme?: ThemeSettings | null;
-  // panels: Panels;
+  panels: Panels;
   // panelUrl: string;
 
   // i18n

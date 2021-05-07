@@ -11,11 +11,13 @@ import {
  * @param startVal The start value of the slider
  * @param min Minimum value of the slider
  * @param max Maximum value of the slider
+ * @param additionalClass Additional class to add to the slider container. Namely used
+ *  for changing the track color of the slider (e.g. for the temperature slider)
  * @returns TemplateResult (html) of the slider
  */
 export default function createSlider(
   onSlide: (value: number) => void, onChange: (value: number) => void, startVal: number, min = 0,
-  max = 100,
+  max = 100, additionalClass: string = null,
 ): TemplateResult {
   const callOnSlider = (event: Event) => {
     const valueStr = (<HTMLInputElement>event.target).value;
@@ -42,7 +44,7 @@ export default function createSlider(
     .slider {
       -webkit-appearance: none;
       /* TODO: This width does *not* scale well, but it's really wack since vh isn't working */
-      width: min(45vw, 74vh);
+      width: min(30vw, 74vh);
       height: 12px; /* width of the track */
       border-radius: 25px;
       background: #d3d3d3;
@@ -81,6 +83,12 @@ export default function createSlider(
           text and you want a single long vertical line of text and the pre-rotation
           width of your element is small enough that the text wraps: */
     white-space: nowrap;
+  }
+
+  /* TODO: This doesn't seem to do anything and idk why */
+  .slider-container { /* Centers it */
+    width: 0;
+    margin-left: 25%;
   }
   `;
 
@@ -173,20 +181,25 @@ export default function createSlider(
     */
   `;
 
+  const classes = additionalClass ? `slider-container ${additionalClass}` : 'slider-container';
+
   return html`
-    <style>
-      ${styles}
-    </style>
-    <input
-      type="range"
-      orient="vertical"
-      class="slider element-to-rotate"
-      @input=${callOnSlider}
-      @change=${callOnChange}
-      value=${startVal}
-      min=${min}
-      max=${max}
-    >
-    </input>
+    <!-- <div class="${classes}"> -->
+    <div class="slider-container ${additionalClass}">
+      <style>
+        ${styles}
+      </style>
+      <input
+        type="range"
+        orient="vertical"
+        class="slider element-to-rotate"
+        @input=${callOnSlider}
+        @change=${callOnChange}
+        value=${startVal}
+        min=${min}
+        max=${max}
+      >
+      </input>
+    </div>
   `;
 }

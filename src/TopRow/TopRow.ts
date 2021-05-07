@@ -27,8 +27,9 @@ export default class TopRow extends LitElement {
         grid-template-rows: 100%;
         justify-content: space-between;
         align-items: center;
+        margin-top: 4px;
 
-        height: 100%;
+        height: calc(100% - 4px);
       }
     `;
   }

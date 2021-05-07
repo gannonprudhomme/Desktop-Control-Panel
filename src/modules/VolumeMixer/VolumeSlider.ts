@@ -21,17 +21,18 @@ export default class VolumeSlider extends LitElement {
       this.volumeProcess = { ...this.volumeProcess, volume: value };
     };
 
-    const rootUrl = 'http://localhost:8123/local/icons';
+    const rootUrl = '/local/icons';
     const url = `${rootUrl}/${this.volumeProcess.name}.png`;
     return html`
-      <div class="slider-container">
-        ${createSlider(onChange, null, this.volumeProcess.volume)}
+      <div class="volume-slider-container">
+        ${createSlider(onChange, null, this.volumeProcess.volume, 0, 100, 'override')}
         <span class="slider-label">
           ${this.volumeProcess.volume}%
         </span>
         <img src=${url} class="slider-icon"></img>
         <span class="process-name-text">
           ${this.volumeProcess.name}
+          <!-- ${this.volumeProcess.name.charAt(0) === 'D' ? 'askldfjghkasjodlhgfghsdaf' : null} -->
         </span>
       </div>
     `;
@@ -39,21 +40,15 @@ export default class VolumeSlider extends LitElement {
 
   static get styles(): CSSResult {
     return css`
-      #actual-slider {
-        background-color: red;
-        height: 100%;
-        width: 20%;
-      }
-
-      .slider-container {
+      .volume-slider-container {
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: center;
-        margin-right: 20px;
-        width: 100%;
+        justify-content: flex-end;
         height: 100%;
+        margin-left: 16px;
       }
+
       /* Should probably make this always be stuck at the bottom no matter what, but this will work
         since we're using a fixed screen size
       */
@@ -63,6 +58,7 @@ export default class VolumeSlider extends LitElement {
         align-items: center;
         justify-content: center;
       }
+
       .slider-icon {
         width: 32px;
         height: 32px;
@@ -71,6 +67,12 @@ export default class VolumeSlider extends LitElement {
 
       .slider-label {
         padding-left: 5px;
+      }
+
+      .slider-container {
+        padding: -40% 0;
+        width: 0;
+        margin-left: -25%;
       }
 
       .process-name-text {

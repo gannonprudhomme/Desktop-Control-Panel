@@ -62,14 +62,9 @@ export default class LightSlider extends LitElement {
 
     return html`
       <div class="smart-light-slider-container">
-        <span class="light-name">
-          ${this.light.name}
-        </span>
         <div class="multi-light-slider-container">
           <div class="light-slider-container">
-            <div class="slider-container">
-              ${createSlider(onBrightnessSlide, onBrightnessChange, brightness, 1, 100)}
-            </div>
+            ${createSlider(onBrightnessSlide, onBrightnessChange, brightness, 1, 100)}
 
             <div class="slider-info-container">
               <span class="brightness-value">
@@ -81,9 +76,9 @@ export default class LightSlider extends LitElement {
           </div>
           <div class="light-slider-container">
             <!-- TODO: Note that we do minMireds + 1 - otherwise, it will throw an error for some reason -->
-            <div class="slider-container temperature-slider-container">
-              ${createSlider(onTempSlide, onTempChange, this.light.colorTemp, this.light.minMireds + 1, this.light.maxMireds, 'vertical')}
-            </div>
+            <!-- <div class="slider-container temperature-slider-container"> -->
+            ${createSlider(onTempSlide, onTempChange, this.light.colorTemp, this.light.minMireds + 1, this.light.maxMireds, 'temperature-slider-container')}
+            <!-- </div> -->
 
             <div class="slider-info-container">
               <span class="brightness-value">
@@ -93,6 +88,11 @@ export default class LightSlider extends LitElement {
               ${createImageButton(onPowerClick, icon, 'power-button')}
             </div>
           </div>
+        </div>
+        <div class="light-name-container">
+          <span class="light-name">
+            ${this.light.name}
+          </span>
         </div>
       </div>
     `;
@@ -108,11 +108,7 @@ export default class LightSlider extends LitElement {
         /* TODO: Check this */
         max-width: 15rem;
         height: 100%;
-      }
-
-      .light-name {
-        display: inline-block;
-        flex-grow: 0;
+        margin-left: 16px;
       }
 
       .multi-light-slider-container {
@@ -143,6 +139,17 @@ export default class LightSlider extends LitElement {
         padding: -40% 0;
         width: 0;
         margin-left: -25%;
+      }
+
+      .light-name-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .light-name {
+        display: inline-block;
+        flex-grow: 0;
       }
 
       #power-button {

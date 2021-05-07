@@ -43,11 +43,10 @@ export default class VolumeMixer extends LitElement {
         display: flex;
         justify-content: flex-start;
         width: calc(100% - 20px);
-        height: 100%;
+        height: calc(100% - 4px);
         overflow-x: auto;
         overflow-y: hidden;
-      }
-      .volume-slider {
+        margin-bottom: 4px;
       }
     `;
   }

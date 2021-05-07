@@ -26,12 +26,13 @@ export default class LightControl extends LitElement {
     const rows = this.lights.map((light) => {
       const thing = 5;
       return html`
-        <light-slider .light=${light} .setLightState=${setLightState}></light-slider>
+        <light-slider .light=${light} .setLightState=${setLightState} class="light-slider-margin">
+        </light-slider>
       `;
     });
 
     return html`
-      <div id="middle-row">
+      <div id="light-control">
         ${rows}
       </div>
     `;
@@ -39,13 +40,14 @@ export default class LightControl extends LitElement {
 
   static get styles(): CSSResult {
     return css`
-      #volume-mixer {
+      #light-control {
         display: flex;
         justify-content: flex-start;
-        width: calc(100% - 20px);
-        height: 100%;
+        width: calc(100% - 8px);
+        height: calc(100% - 8px);
         overflow-x: auto;
         overflow-y: hidden;
+        margin: 4px 0;
       }
     `;
   }

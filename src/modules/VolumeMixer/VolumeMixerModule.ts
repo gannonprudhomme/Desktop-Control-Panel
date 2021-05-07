@@ -21,6 +21,7 @@ export default class VolumeMixerModule implements Module {
     this.index = index; // We don't assign this
     this.active = true; // This will change
     this.component = (hass: HomeAssistant): TemplateResult => {
+      // TODO: Retrieve desktop_processes.desktop from somewhere
       // map it
       const procs: VolumeProcess[] = hass.states['desktop_processes.desktop'].attributes.processes;
 
