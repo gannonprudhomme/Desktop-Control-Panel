@@ -2,7 +2,6 @@ import {
   css, CSSResult, html, LitElement, TemplateResult, property,
 } from 'lit-element';
 import Light from '../../../types/Light';
-import { HomeAssistant } from '../../../types/types';
 import createSlider from '../../Slider';
 import icon from '../../res/light-bulb.png';
 import createImageButton from '../../ImageButton';
@@ -15,29 +14,41 @@ import createImageButton from '../../ImageButton';
 export default class LightSlider extends LitElement {
   @property({ type: Object }) public light: Light;
   @property({ type: Function }) public setLightState: (
-    light: string, state: Record<string, unknown>,
+    lightID: string, state: Record<string, unknown>,
   ) => void;
-  // Pass in the callService function? Or just some function to call it
+  @property({ type: Function }) public toggleLight: (lightID: string) => void;
 
   protected render(): TemplateResult {
-    // Only updates the 
+    /** 
+     * Convert the value from [0, 100] to [0, 255] and update the value so its rendered on screen
+    */
     const onBrightnessSlide = (value: number) => {
       const shifted = value / 100 * 255;
       this.light = { ...this.light, brightness: shifted };
     };
 
+    /**
+     * Update the value (through onBrightnessSlide) and call the according service.
+     * Only called once we're done dragging to prevent overloading the light.
+     */
     const onBrightnessChange = (value: number) => {
-      // Ignore duplicates?
       onBrightnessSlide(value);
       this.setLightState(this.light.entityId, {
         brightness_pct: value, entity_id: this.light.entityId,
       });
     };
 
+    /**
+     *  Update the value so it's rendered on the screen
+     */
     const onTempSlide = (value: number) => {
       this.light = { ...this.light, colorTemp: value };
     };
 
+    /**
+     *  Update the value of the slider (through onTempSlide) and call the according service
+     *  Only called once we're done dragging to prevent overloading the light.
+     */
     const onTempChange = (value: number) => {
       onTempSlide(value);
       this.setLightState(this.light.entityId, {
@@ -46,19 +57,14 @@ export default class LightSlider extends LitElement {
     };
 
     const onPowerClick = () => {
-      console.log('clicked!');
+      this.toggleLight(this.light.entityId);
     };
 
-    const tempContainer = html`
-      <div>
-
-      </div>
-    `;
-
-    const conv = this.light.brightness / 255 * 100;
-    console.log(`lightSlider render ${this.light.brightness} ${conv} ${this.light.colorTemp} ${this.light.minMireds} ${this.light.maxMireds}`);
-
+    // Normalize brightness from [0, 255] to [0, 100]
     const brightness = (this.light.brightness / 255) * 100;
+
+    const brightnessValue = brightness ? `${brightness.toFixed(0)}%` : 'Off';
+    const temperatureValue = this.light.colorTemp ? `${this.light.colorTemp}K` : 'Off';
 
     return html`
       <div class="smart-light-slider-container">
@@ -68,26 +74,23 @@ export default class LightSlider extends LitElement {
 
             <div class="slider-info-container">
               <span class="brightness-value">
-                ${brightness.toFixed(0)}
-                %
+                ${brightnessValue}
               </span>
-              ${createImageButton(onPowerClick, icon, 'power-button')}
             </div>
           </div>
           <div class="light-slider-container">
             <!-- TODO: Note that we do minMireds + 1 - otherwise, it will throw an error for some reason -->
-            <!-- <div class="slider-container temperature-slider-container"> -->
             ${createSlider(onTempSlide, onTempChange, this.light.colorTemp, this.light.minMireds + 1, this.light.maxMireds, 'temperature-slider-container')}
-            <!-- </div> -->
 
             <div class="slider-info-container">
               <span class="brightness-value">
-                ${this.light.colorTemp}
-                K
+                ${temperatureValue}
               </span>
-              ${createImageButton(onPowerClick, icon, 'power-button')}
             </div>
           </div>
+        </div>
+        <div class="power-button-container">
+          ${createImageButton(onPowerClick, icon, 'power-button')}
         </div>
         <div class="light-name-container">
           <span class="light-name">
@@ -115,7 +118,6 @@ export default class LightSlider extends LitElement {
         display: flex;
         justify-content: flex-start;
         height: 100%;
-        /* flex-grow: 5; */
       }
 
       .slider-info-container {
@@ -123,6 +125,12 @@ export default class LightSlider extends LitElement {
         flex-direction: column;
         align-items: center;
         justify-content: center;
+        margin-right: 6px;
+      }
+
+      .brightness-value {
+        min-width: 34px; /* So the text doesn't shift when it goes to 1 digit */
+        text-align: right;
       }
 
       .light-slider-container {
@@ -130,15 +138,16 @@ export default class LightSlider extends LitElement {
         flex-direction: column;
         align-items: center;
         justify-content: flex-end;
-        /* height: 100%; */
       }
 
       .slider-container {
-        /* height: 300px; */
-        /* height: 100%; */
-        padding: -40% 0;
         width: 0;
         margin-left: -25%;
+      }
+
+      .power-button-container {
+        display: flex;
+        justify-content: center;
       }
 
       .light-name-container {

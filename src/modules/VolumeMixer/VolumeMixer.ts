@@ -23,12 +23,10 @@ export default class VolumeMixer extends LitElement {
       return b.priority - a.priority;
     });
 
-    const sliders: TemplateResult[] = sortedProcs.map((proc: VolumeProcess) => {
-      const thing = 5;
-      return html`
-        <volume-slider .volumeProcess=${proc} class="volume-slider" .setVolume=${setVolume} /><volume-slider>
-      `;
-    });
+    const sliders: TemplateResult[] = sortedProcs.map((proc: VolumeProcess) => html`
+      <volume-slider .volumeProcess=${proc} class="volume-slider" .setVolume=${setVolume} />
+      <volume-slider>
+    `);
 
     return html`
       <div id="volume-mixer">
@@ -46,7 +44,7 @@ export default class VolumeMixer extends LitElement {
         height: calc(100% - 4px);
         overflow-x: auto;
         overflow-y: hidden;
-        margin-bottom: 4px;
+        margin-bottom: 2px;
       }
     `;
   }

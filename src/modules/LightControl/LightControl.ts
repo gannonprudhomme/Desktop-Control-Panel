@@ -18,18 +18,17 @@ export default class LightControl extends LitElement {
 
   protected render(): TemplateResult {
     const setLightState = (lightID: string, state: Record<string, unknown>) => {
-      this.hass.callService('light', 'turn_on', { ...state });
+      this.hass.callService('light', 'turn_on', { ...state, entity_id: lightID });
     };
 
-    // console.log(this.hass.states);
+    const toggleLight = (lightID: string) => {
+      this.hass.callService('light', 'toggle', { entity_id: lightID });
+    };
 
-    const rows = this.lights.map((light) => {
-      const thing = 5;
-      return html`
-        <light-slider .light=${light} .setLightState=${setLightState} class="light-slider-margin">
-        </light-slider>
-      `;
-    });
+    const rows = this.lights.map((light) => html`
+      <light-slider .light=${light} .setLightState=${setLightState} .toggleLight=${toggleLight} class="light-slider-margin">
+      </light-slider>
+    `);
 
     return html`
       <div id="light-control">
