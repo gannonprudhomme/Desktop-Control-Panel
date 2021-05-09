@@ -316,7 +316,7 @@ parcelRequire=function(e,r,t,n){var i,o="function"==typeof parcelRequire&&parcel
       ${n}
     </style>
     <button type="button" @click=${i} class="image-button">
-      <img src=${`local${e}`} alt=${l} id=${l}></img>
+      <img src=${`/local${e}`} alt=${l} id=${l}></img>
     </button> 
   `}exports.default=i;
 },{"lit-element":"bhxD"}],"jUO8":[function(require,module,exports) {

@@ -33,7 +33,7 @@ export default function createImageButton(
       ${styles}
     </style>
     <button type="button" @click=${onClick} class="image-button">
-      <img src=${`local${icon}`} alt=${imgId} id=${imgId}></img>
+      <img src=${`/local${icon}`} alt=${imgId} id=${imgId}></img>
     </button> 
   `;
 }
