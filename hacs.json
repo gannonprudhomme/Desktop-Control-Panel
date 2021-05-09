@@ -1,0 +1,6 @@
+{
+  "name": "Desktop Control Panel",
+  "filename": "dcp.js",
+  "hacs": "1.6.0",
+  "homeassistant": "0.118.0"
+}
