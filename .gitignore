@@ -8,9 +8,8 @@ node_modules/
 .cache/
 
 # Home Assisnt stuff
-config/*
+config/
 env/
-!config/custom_components/
 
 __pycache__/
 xenv/
