@@ -1,16 +1,17 @@
 import { html, TemplateResult } from 'lit-element';
 import Module from '../../../types/Module';
 import { HomeAssistant } from '../../../types/types';
-import Light, { LightConfig } from '../../../types/Light';
+import Light from '../../../types/Light';
 import './LightControl';
 
 import icon from '../../res/light-bulb.png';
 import PANEL_NAME from '../../constants';
+import DCPConfig, { LightConfig } from '../../../types/Config';
 
 export default class LightControlModule implements Module {
   icon: string;
   name: string;
-  component: (hass: HomeAssistant) => TemplateResult;
+  component: (hass: HomeAssistant, config: DCPConfig) => TemplateResult;
   index: number;
   active: boolean;
 
@@ -21,11 +22,11 @@ export default class LightControlModule implements Module {
     this.icon = icon;
     this.index = index; // We don't assign this
     this.active = true; // This will change
-    this.component = (hass: HomeAssistant): TemplateResult => {
-      const lightsConfig: LightConfig[] = hass.panels[PANEL_NAME].config.lights;
+    this.component = (hass: HomeAssistant, config: DCPConfig): TemplateResult => {
+      const lightsConfig = config.lights;
 
       const lightNamesPriorityMap = new Map<string, number>();
-      lightsConfig.forEach((config) => lightNamesPriorityMap.set(config.name, config.priority));
+      lightsConfig.forEach((conf) => lightNamesPriorityMap.set(conf.name, conf.priority));
 
       const lights: Light[] = lightsConfig.map(
         (lightConfig) => hass.states[lightConfig.name],

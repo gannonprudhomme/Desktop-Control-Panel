@@ -2,7 +2,6 @@ import {
   css, CSSResult, html, LitElement, TemplateResult, property,
 } from 'lit-element';
 import VolumeProcess from '../../../types/VolumeProcess';
-import { ROOT_URL } from '../../constants';
 import createSlider from '../../Slider';
 // We probably need to get this type from somewhere
 export default class VolumeSlider extends LitElement {

@@ -5,6 +5,7 @@ import './PCStats';
 
 import icon from '../../res/dial.png';
 import PCStatData from '../../../types/PCStats';
+import DCPConfig from '../../../types/Config';
 
 // No clue where to derive these from really
 const CPU_TEMP_STATE = 'sensor.gannon_sff_amd_ryzen_9_5900x_temperatures_cpu_ccd_average';
@@ -18,7 +19,7 @@ const MEMORY_USAGE_STATE = 'sensor.gannon_sff_generic_memory_load_memory';
 export default class PCStatsModule implements Module {
   icon: string;
   name: string;
-  component: (hass: HomeAssistant) => TemplateResult;
+  component: (hass: HomeAssistant, config: DCPConfig) => TemplateResult;
   index: number;
   active: boolean;
 

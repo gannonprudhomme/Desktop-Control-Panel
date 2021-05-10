@@ -6,11 +6,12 @@ import './VolumeMixer';
 import icon from '../../res/levels-adjustment.png';
 import VolumeProcess from '../../../types/VolumeProcess';
 import PANEL_NAME from '../../constants';
+import DCPConfig from '../../../types/Config';
 
 export default class VolumeMixerModule implements Module {
   icon: string;
   name: string;
-  component: (hass: HomeAssistant) => TemplateResult;
+  component: (hass: HomeAssistant, config: DCPConfig) => TemplateResult;
   index: number;
   active: boolean;
 
@@ -21,8 +22,8 @@ export default class VolumeMixerModule implements Module {
     this.icon = icon;
     this.index = index; // We don't assign this
     this.active = true; // This will change
-    this.component = (hass: HomeAssistant): TemplateResult => {
-      const desktopName: string = hass.panels[PANEL_NAME].config.desktop_name;
+    this.component = (hass: HomeAssistant, config: DCPConfig): TemplateResult => {
+      const desktopName: string = config.desktop_name;
 
       let procs: VolumeProcess[] = null;
 

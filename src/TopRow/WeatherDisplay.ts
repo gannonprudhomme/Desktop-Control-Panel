@@ -1,6 +1,7 @@
 import {
   css, CSSResult, html, LitElement, TemplateResult, property,
 } from 'lit-element';
+import DCPConfig from '../../types/Config';
 import { HomeAssistant } from '../../types/types';
 import getWeatherStateSVG, { weatherSVGStyles } from '../external/weatherIcons';
 
@@ -12,10 +13,18 @@ function getWeatherText(hass: HomeAssistant, weatherState: string): string {
 // We probably need to get this type from somewhere
 export default class WeatherDisplay extends LitElement {
   @property({ type: Object }) public hass: HomeAssistant;
+  @property({ type: Object }) public config: DCPConfig;
 
   protected render(): TemplateResult {
-    const { state, attributes } = this.hass.states['weather.home'];
-    console.log(state);
+    if (!this.config.weather_name || !this.hass.states[this.config.weather_name]) {
+      return html`
+        <div class="unavailable-text">
+          Unavailable
+        </div>
+      `;
+    }
+
+    const { state, attributes } = this.hass.states[this.config.weather_name];
     const weatherType = getWeatherText(this.hass, state);
     const temperature: number = attributes.temperature ?? -1;
 
@@ -68,6 +77,11 @@ export default class WeatherDisplay extends LitElement {
 
       #temperature {
         font-size: 28px;
+      }
+
+      .unavailable-text {
+        display: flex;
+        justify-content: flex-end;
       }
     `];
   }

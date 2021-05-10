@@ -40,8 +40,13 @@ export default class App extends LitElement {
 
     return html`
       <div class="grid-container">
-        <top-row .hass=${this.hass}></top-row>
-        <middle-row .hass=${this.hass} .currentModule=${this.currentModule} id="middle-row"></middle-row>
+        <top-row .hass=${this.hass} .config=${this.panel.config}></top-row>
+        <middle-row
+          .hass=${this.hass}
+          .currentModule=${this.currentModule}
+          .config=${this.panel.config}
+          id="middle-row">
+        </middle-row>
         <bottom-row
           .hass=${this.hass}
           .config=${this.panel.config}
