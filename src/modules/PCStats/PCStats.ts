@@ -25,7 +25,7 @@ export default class PCStats extends LitElement {
     const rows: TemplateResult[] = [];
     conv.forEach((val, key) => {
       rows.push(html`
-        <div>
+        <div class="stat-row">
           <span>${key}:</span>
           <!-- TODO: Check for non-percentage values? -->
           <span>${val}</span>
@@ -34,7 +34,7 @@ export default class PCStats extends LitElement {
     });
 
     return html`
-      <div id="middle-row">
+      <div id="pc-stats">
         ${rows}
       </div>
     `;
@@ -42,13 +42,14 @@ export default class PCStats extends LitElement {
 
   static get styles(): CSSResult {
     return css`
-      #volume-mixer {
+      #pc-stats {
         display: flex;
-        justify-content: flex-start;
-        width: calc(100% - 20px);
-        height: 100%;
-        overflow-x: auto;
-        overflow-y: hidden;
+        flex-direction: column;
+      }
+
+      .stat-row {
+        font-size: 24px;
+        padding-bottom: 8px;
       }
     `;
   }
