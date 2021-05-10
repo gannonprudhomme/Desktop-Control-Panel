@@ -7,12 +7,9 @@ import icon from '../../res/dial.png';
 import PCStatData from '../../../types/PCStats';
 import DCPConfig, { PCStatsConfig } from '../../../types/Config';
 
-// No clue where to derive these from really
-const CPU_TEMP_STATE = 'sensor.gannon_sff_amd_ryzen_9_5900x_temperatures_cpu_ccd_average';
-const GPU_TEMP_STATE = 'sensor.gannon_sff_nvidia_geforce_rtx_2070_super_temperatures_gpu_core';
-const CPU_USAGE_STATE = 'sensor.gannon_sff_amd_ryzen_9_5900x_load_cpu_total';
-const GPU_USAGE_STATE = 'sensor.gannon_sff_nvidia_geforce_rtx_2070_super_load_gpu_core';
-const MEMORY_USAGE_STATE = 'sensor.gannon_sff_generic_memory_load_memory';
+function fahrenheitToCelcius(fahrenheit: number): number {
+  return (fahrenheit - 32) / 1.8;
+}
 
 /**
  * Attempts to parse the state for a given  into a float only if it exists
@@ -51,10 +48,12 @@ export default class PCStatsModule implements Module {
       let pcData: PCStatData = null;
       const statsConfig = config.pc_stats;
 
+      // Assumes we're in fahrenheit (bad assumption)
+
       if (statsConfig) {
         pcData = {
-          gpuTemp: parseStatsFloat(hass, statsConfig, 'gpu_temp'),
-          cpuTemp: parseStatsFloat(hass, statsConfig, 'cpu_temp'),
+          gpuTemp: fahrenheitToCelcius(parseStatsFloat(hass, statsConfig, 'gpu_temp')),
+          cpuTemp: fahrenheitToCelcius(parseStatsFloat(hass, statsConfig, 'cpu_temp')),
           cpuUsage: parseStatsFloat(hass, statsConfig, 'cpu_usage'),
           gpuUsage: parseStatsFloat(hass, statsConfig, 'gpu_usage'),
           memoryUsage: parseStatsFloat(hass, statsConfig, 'memory_usage'),

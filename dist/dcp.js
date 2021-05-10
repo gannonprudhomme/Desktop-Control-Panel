@@ -182,7 +182,7 @@ parcelRequire=function(e,r,t,n){var i,o="function"==typeof parcelRequire&&parcel
         </div>
         <div class="temperature-weather-container">
           <span id="temperature">
-            ${o.toFixed(0)}°C
+            ${o.toFixed(0)}°F
           </span>
           <span>
             ${r}
@@ -741,11 +741,11 @@ module.exports="/light-bulb.05b0d28e.png";
         <light-control .hass=${t} .lights=${n}></light-control>
       `})}}exports.default=r;
 },{"lit-element":"bhxD","./LightControl":"rmHj","../../res/light-bulb.png":"SgXa"}],"UY11":[function(require,module,exports) {
-"use strict";var t=this&&this.__decorate||function(t,e,s,a){var n,i=arguments.length,r=i<3?e:null===a?a=Object.getOwnPropertyDescriptor(e,s):a;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)r=Reflect.decorate(t,e,s,a);else for(var o=t.length-1;o>=0;o--)(n=t[o])&&(r=(i<3?n(r):i>3?n(e,s,r):n(e,s))||r);return i>3&&r&&Object.defineProperty(e,s,r),r};Object.defineProperty(exports,"__esModule",{value:!0});const e=require("lit-element");class s extends e.LitElement{render(){var t,s,a,n;if(!this.stats)return e.html`
+"use strict";var t=this&&this.__decorate||function(t,e,s,a){var n,i=arguments.length,r=i<3?e:null===a?a=Object.getOwnPropertyDescriptor(e,s):a;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)r=Reflect.decorate(t,e,s,a);else for(var o=t.length-1;o>=0;o--)(n=t[o])&&(r=(i<3?n(r):i>3?n(e,s,r):n(e,s))||r);return i>3&&r&&Object.defineProperty(e,s,r),r};Object.defineProperty(exports,"__esModule",{value:!0});const e=require("lit-element");class s extends e.LitElement{render(){if(!this.stats)return e.html`
         <div class="unavailable-text">
           PC Stat data not provided.
         </div>
-      `;const i=new Map(Object.entries({"CPU Temp":`${null!==(t=this.stats.cpuTemp)&&void 0!==t?t:-1}°C`,"GPU Temp":`${null!==(s=this.stats.gpuTemp)&&void 0!==s?s:-1}°C`,"CPU Usage":`${null!==(a=this.stats.cpuUsage)&&void 0!==a?a:-1}%`,"Memory Usage":`${null!==(n=this.stats.memoryUsage)&&void 0!==n?n:-1}%`})),r=[];return i.forEach((t,s)=>{r.push(e.html`
+      `;const t=t=>t?t.toFixed(0):-1,s=new Map(Object.entries({"CPU Temp":`${t(this.stats.cpuTemp)}°C`,"GPU Temp":`${t(this.stats.gpuTemp)}°C`,"CPU Usage":`${t(this.stats.cpuUsage)}%`,"Memory Usage":`${t(this.stats.memoryUsage)}%`})),a=[];return s.forEach((t,s)=>{a.push(e.html`
         <div class="stat-row">
           <span>${s}:</span>
           <!-- TODO: Check for non-percentage values? -->
@@ -753,7 +753,7 @@ module.exports="/light-bulb.05b0d28e.png";
         </div>
       `)}),e.html`
       <div id="pc-stats">
-        ${r}
+        ${a}
       </div>
     `}static get styles(){return e.css`
       #pc-stats {
@@ -778,7 +778,7 @@ module.exports="/light-bulb.05b0d28e.png";
 },{"lit-element":"bhxD"}],"ML5B":[function(require,module,exports) {
 module.exports="/dial.dd16d943.png";
 },{}],"M4iw":[function(require,module,exports) {
-"use strict";var e=this&&this.__importDefault||function(e){return e&&e.__esModule?e:{default:e}};Object.defineProperty(exports,"__esModule",{value:!0});const t=require("lit-element");require("./PCStats");const s=e(require("../../res/dial.png")),_="sensor.gannon_sff_amd_ryzen_9_5900x_temperatures_cpu_ccd_average",n="sensor.gannon_sff_nvidia_geforce_rtx_2070_super_temperatures_gpu_core",r="sensor.gannon_sff_amd_ryzen_9_5900x_load_cpu_total",a="sensor.gannon_sff_nvidia_geforce_rtx_2070_super_load_gpu_core",o="sensor.gannon_sff_generic_memory_load_memory";function u(e,t,s){const _=t[s],n=e.states[_];return n?parseFloat(n.state):null}class c{constructor(e){const{index:_=-1}=e;this.name="Spotify",this.icon=s.default,this.index=_,this.active=!0,this.component=((e,s)=>{let _=null;const n=s.pc_stats;return n&&(_={gpuTemp:u(e,n,"gpu_temp"),cpuTemp:u(e,n,"cpu_temp"),cpuUsage:u(e,n,"cpu_usage"),gpuUsage:u(e,n,"gpu_usage"),memoryUsage:u(e,n,"memory_usage")}),t.html`<pc-stats .stats=${_}></pc-stats>`})}}exports.default=c;
+"use strict";var t=this&&this.__importDefault||function(t){return t&&t.__esModule?t:{default:t}};Object.defineProperty(exports,"__esModule",{value:!0});const e=require("lit-element");require("./PCStats");const s=t(require("../../res/dial.png"));function u(t){return(t-32)/1.8}function n(t,e,s){const u=e[s],n=t.states[u];return n?parseFloat(n.state):null}class r{constructor(t){const{index:r=-1}=t;this.name="Spotify",this.icon=s.default,this.index=r,this.active=!0,this.component=((t,s)=>{let r=null;const a=s.pc_stats;return a&&(r={gpuTemp:u(n(t,a,"gpu_temp")),cpuTemp:u(n(t,a,"cpu_temp")),cpuUsage:n(t,a,"cpu_usage"),gpuUsage:n(t,a,"gpu_usage"),memoryUsage:n(t,a,"memory_usage")}),e.html`<pc-stats .stats=${r}></pc-stats>`})}}exports.default=r;
 },{"lit-element":"bhxD","./PCStats":"UY11","../../res/dial.png":"ML5B"}],"qinj":[function(require,module,exports) {
 "use strict";var e=this&&this.__decorate||function(e,t,i,r){var a,s=arguments.length,o=s<3?t:null===r?r=Object.getOwnPropertyDescriptor(t,i):r;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)o=Reflect.decorate(e,t,i,r);else for(var n=e.length-1;n>=0;n--)(a=e[n])&&(o=(s<3?a(o):s>3?a(t,i,o):a(t,i))||o);return s>3&&o&&Object.defineProperty(t,i,o),o},t=this&&this.__importDefault||function(e){return e&&e.__esModule?e:{default:e}};Object.defineProperty(exports,"__esModule",{value:!0});const i=require("lit-element"),r=t(require("../../ImageButton")),a=t(require("../../res/play.png")),s=t(require("../../res/pause.png")),o=t(require("../../res/next-song.png")),n=require("../../BottomRow/MediaControl");class l extends i.LitElement{previousClicked(){n.callSpotifyService(this.hass,this.mediaPlayerId,"media_previous_track")}playPauseClicked(){n.callSpotifyService(this.hass,this.mediaPlayerId,"media_play_pause")}nextClicked(){n.callSpotifyService(this.hass,this.mediaPlayerId,"media_next_track")}shuffleClicked(){}repeatClicked(){}render(){const e=this.song.isPlaying?s.default:a.default;return i.html`
       <div>

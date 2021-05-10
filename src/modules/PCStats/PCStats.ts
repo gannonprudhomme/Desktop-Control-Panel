@@ -22,12 +22,20 @@ export default class PCStats extends LitElement {
       `;
     }
 
+    const format = (num: number) => {
+      if (num) {
+        return num.toFixed(0);
+      }
+
+      return -1;
+    };
+
     // TODO: Format these depending on what unit we're using
     const conv = new Map<string, string>(Object.entries({
-      'CPU Temp': `${this.stats.cpuTemp ?? -1}°C`,
-      'GPU Temp': `${this.stats.gpuTemp ?? -1}°C`,
-      'CPU Usage': `${this.stats.cpuUsage ?? -1}%`,
-      'Memory Usage': `${this.stats.memoryUsage ?? -1}%`,
+      'CPU Temp': `${format(this.stats.cpuTemp)}°C`,
+      'GPU Temp': `${format(this.stats.gpuTemp)}°C`,
+      'CPU Usage': `${format(this.stats.cpuUsage)}%`,
+      'Memory Usage': `${format(this.stats.memoryUsage)}%`,
     }));
 
     const rows: TemplateResult[] = [];

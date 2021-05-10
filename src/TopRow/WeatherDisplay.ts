@@ -35,7 +35,7 @@ export default class WeatherDisplay extends LitElement {
         </div>
         <div class="temperature-weather-container">
           <span id="temperature">
-            ${temperature.toFixed(0)}°C
+            ${temperature.toFixed(0)}°F
           </span>
           <span>
             ${weatherType}
