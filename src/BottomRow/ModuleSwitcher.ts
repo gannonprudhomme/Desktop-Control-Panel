@@ -4,7 +4,6 @@ import {
 import Module, { updateCurrentModuleEventName } from '../../types/Module';
 import createImageButton from '../ImageButton';
 
-// We probably need to get this type from somewhere
 export default class ModuleSwitcher extends LitElement {
   @property({ type: Array }) public modules: Module[];
   @property({ type: Object }) public currentModule: Module;
@@ -29,7 +28,7 @@ export default class ModuleSwitcher extends LitElement {
     ));
 
     return html`
-      <div id="view-swapper">
+      <div id="module-swapper">
         <div id="control-container">
           ${moduleButtons}
         </div>
@@ -39,13 +38,13 @@ export default class ModuleSwitcher extends LitElement {
 
   static get styles(): CSSResult {
     return css`
-      #view-swapper {
+      #module-swapper {
         display: flex;
-        justify-content: center;
+        justify-content: flex-end;
         align-items: flex-end;
-        width: calc(100% - 16px);
-        height: 100%;
+        width: 100%;
       }
+
       #control-container {
         display: flex;
         justify-content: space-around;
@@ -59,6 +58,7 @@ export default class ModuleSwitcher extends LitElement {
       #toggle-button {
         width: 32px;
         height: 32px;
+        margin: 16px 0;
       }
     `;
   }

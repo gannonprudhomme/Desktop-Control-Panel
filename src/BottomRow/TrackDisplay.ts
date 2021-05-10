@@ -41,7 +41,7 @@ export default class TrackDisplay extends LitElement {
       }
       #album-cover {
         object-fit: contain;
-        max-height: 80px;
+        max-height: 64px;
       }
 
       #track-info {

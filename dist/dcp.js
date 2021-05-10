@@ -296,8 +296,10 @@ parcelRequire=function(e,r,t,n){var i,o="function"==typeof parcelRequire&&parcel
         font-size: 13px;
       }
     `}}t([e.property({type:Object})],r.prototype,"song",void 0),exports.default=r,customElements.get("track-display")||customElements.define("track-display",r);
-},{"lit-element":"bhxD"}],"HxTM":[function(require,module,exports) {
-"use strict";Object.defineProperty(exports,"__esModule",{value:!0});const t=require("lit-element");function i(i,e,l){const n=t.css`
+},{"lit-element":"bhxD"}],"eKDL":[function(require,module,exports) {
+"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.ROOT_URL=void 0;const e="desktop-control";exports.ROOT_URL="/local/community/Desktop-Control-Panel",exports.default=e;
+},{}],"HxTM":[function(require,module,exports) {
+"use strict";Object.defineProperty(exports,"__esModule",{value:!0});const t=require("lit-element"),i=require("./constants");function e(e,n,l){const o=t.css`
     .image-button {
       border: initial;
       outline: none;
@@ -313,13 +315,13 @@ parcelRequire=function(e,r,t,n){var i,o="function"==typeof parcelRequire&&parcel
     }
   `;return t.html`
     <style>
-      ${n}
+      ${o}
     </style>
-    <button type="button" @click=${i} class="image-button">
-      <img src=${`/local${e}`} alt=${l} id=${l}></img>
+    <button type="button" @click=${e} class="image-button">
+      <img src=${`${i.ROOT_URL}/${n}`} alt=${l} id=${l}></img>
     </button> 
-  `}exports.default=i;
-},{"lit-element":"bhxD"}],"jUO8":[function(require,module,exports) {
+  `}exports.default=e;
+},{"lit-element":"bhxD","./constants":"eKDL"}],"jUO8":[function(require,module,exports) {
 module.exports="/play.07f2dcff.png";
 },{}],"h2IA":[function(require,module,exports) {
 module.exports="/pause.5c453d4d.png";
@@ -707,9 +709,7 @@ module.exports="/light-bulb.05b0d28e.png";
         margin: 4px 0;
       }
     `}}t([e.property({type:Object})],i.prototype,"hass",void 0),t([e.property({type:Array})],i.prototype,"lights",void 0),exports.default=i,customElements.get("light-control")||customElements.define("light-control",i);
-},{"lit-element":"bhxD","./LightSlider":"kf7s"}],"eKDL":[function(require,module,exports) {
-"use strict";Object.defineProperty(exports,"__esModule",{value:!0});const e="desktop-control";exports.default=e;
-},{}],"qBI7":[function(require,module,exports) {
+},{"lit-element":"bhxD","./LightSlider":"kf7s"}],"qBI7":[function(require,module,exports) {
 "use strict";var t=this&&this.__importDefault||function(t){return t&&t.__esModule?t:{default:t}};Object.defineProperty(exports,"__esModule",{value:!0});const e=require("lit-element");require("./LightControl");const i=t(require("../../res/light-bulb.png")),r=t(require("../../constants"));class s{constructor(t){const{index:s=-1}=t;this.name="Light Control",this.icon=i.default,this.index=s,this.active=!0,this.component=(t=>{const i=t.panels[r.default].config.lights,s=new Map;i.forEach(t=>s.set(t.name,t.priority));const n=i.map(e=>t.states[e.name]).map(t=>{var e;const{brightness:i,color_temp:r,friendly_name:n,min_mireds:o,max_mireds:l}=t.attributes,a=t.entity_id,c=null!==(e=s.get(a))&&void 0!==e?e:0;return{name:n,colorTemp:r,isOn:"on"===t.state,minMireds:o,maxMireds:l,brightness:i,entityId:a,priority:c}});return n.sort((t,e)=>e.priority-t.priority),e.html`
         <light-control .hass=${t} .lights=${n}></light-control>
       `})}}exports.default=s;
@@ -739,9 +739,9 @@ module.exports="/dial.dd16d943.png";
 },{}],"M4iw":[function(require,module,exports) {
 "use strict";var e=this&&this.__importDefault||function(e){return e&&e.__esModule?e:{default:e}};Object.defineProperty(exports,"__esModule",{value:!0});const t=require("lit-element");require("./PCStats");const s=e(require("../../res/dial.png")),a="sensor.gannon_sff_amd_ryzen_9_5900x_temperatures_cpu_ccd_average",r="sensor.gannon_sff_nvidia_geforce_rtx_2070_super_temperatures_gpu_core",_="sensor.gannon_sff_amd_ryzen_9_5900x_load_cpu_total",n="sensor.gannon_sff_nvidia_geforce_rtx_2070_super_load_gpu_core",o="sensor.gannon_sff_generic_memory_load_memory";class p{constructor(e){const{index:p=-1}=e;this.name="Spotify",this.icon=s.default,this.index=p,this.active=!0,this.component=(e=>{const s={gpuTemp:parseFloat(e.states[r].state),cpuTemp:parseFloat(e.states[a].state),cpuUsage:parseFloat(e.states[_].state),gpuUsage:parseFloat(e.states[n].state),memoryUsage:parseFloat(e.states[o].state)};return t.html`<pc-stats .stats=${s}></pc-stats>`})}}exports.default=p;
 },{"lit-element":"bhxD","./PCStats":"UY11","../../res/dial.png":"ML5B"}],"t5Rq":[function(require,module,exports) {
-"use strict";var e=this&&this.__decorate||function(e,t,s,i){var l,o=arguments.length,r=o<3?t:null===i?i=Object.getOwnPropertyDescriptor(t,s):i;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)r=Reflect.decorate(e,t,s,i);else for(var n=e.length-1;n>=0;n--)(l=e[n])&&(r=(o<3?l(r):o>3?l(t,s,r):l(t,s))||r);return o>3&&r&&Object.defineProperty(t,s,r),r},t=this&&this.__importDefault||function(e){return e&&e.__esModule?e:{default:e}};Object.defineProperty(exports,"__esModule",{value:!0});const s=require("lit-element"),i=t(require("../../Slider"));class l extends s.LitElement{render(){if(!this.volumeProcess)return s.html`<div> empty </div>`;const e=`/local/icons/${this.volumeProcess.name}.png`;return s.html`
+"use strict";var e=this&&this.__decorate||function(e,t,s,i){var o,l=arguments.length,r=l<3?t:null===i?i=Object.getOwnPropertyDescriptor(t,s):i;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)r=Reflect.decorate(e,t,s,i);else for(var n=e.length-1;n>=0;n--)(o=e[n])&&(r=(l<3?o(r):l>3?o(t,s,r):o(t,s))||r);return l>3&&r&&Object.defineProperty(t,s,r),r},t=this&&this.__importDefault||function(e){return e&&e.__esModule?e:{default:e}};Object.defineProperty(exports,"__esModule",{value:!0});const s=require("lit-element"),i=require("../../constants"),o=t(require("../../Slider"));class l extends s.LitElement{render(){if(!this.volumeProcess)return s.html`<div> empty </div>`;const e=`${i.ROOT_URL}/icons/${this.volumeProcess.name}.png`;return s.html`
       <div class="volume-slider-container">
-        ${i.default(e=>{this.setVolume(this.volumeProcess.pid,e),this.volumeProcess={...this.volumeProcess,volume:e}},null,this.volumeProcess.volume,0,100,"override")}
+        ${o.default(e=>{this.setVolume(this.volumeProcess.pid,e),this.volumeProcess={...this.volumeProcess,volume:e}},null,this.volumeProcess.volume,0,100,"override")}
         <span class="slider-label">
           ${this.volumeProcess.volume}%
         </span>
@@ -794,8 +794,12 @@ module.exports="/dial.dd16d943.png";
         max-width: 6rem;
       }
     `}}e([s.property({type:Object})],l.prototype,"volumeProcess",void 0),e([s.property({type:Function})],l.prototype,"setVolume",void 0),exports.default=l,customElements.get("volume-slider")||customElements.define("volume-slider",l);
-},{"lit-element":"bhxD","../../Slider":"OL9p"}],"fg5f":[function(require,module,exports) {
-"use strict";var e=this&&this.__decorate||function(e,t,r,o){var s,l=arguments.length,i=l<3?t:null===o?o=Object.getOwnPropertyDescriptor(t,r):o;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)i=Reflect.decorate(e,t,r,o);else for(var c=e.length-1;c>=0;c--)(s=e[c])&&(i=(l<3?s(i):l>3?s(t,r,i):s(t,r))||i);return l>3&&i&&Object.defineProperty(t,r,i),i};Object.defineProperty(exports,"__esModule",{value:!0});const t=require("lit-element");require("./VolumeSlider");class r extends t.LitElement{render(){const e=(e,t)=>{this.hass.callService("desktop_processes","set_process_volume",{pid:e,volume:t})},r=this.volumeProcesses.sort((e,t)=>e.priority===t.priority?e.name.localeCompare(t.name):t.priority-e.priority).map(r=>t.html`
+},{"lit-element":"bhxD","../../constants":"eKDL","../../Slider":"OL9p"}],"fg5f":[function(require,module,exports) {
+"use strict";var e=this&&this.__decorate||function(e,t,r,o){var s,i=arguments.length,l=i<3?t:null===o?o=Object.getOwnPropertyDescriptor(t,r):o;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)l=Reflect.decorate(e,t,r,o);else for(var n=e.length-1;n>=0;n--)(s=e[n])&&(l=(i<3?s(l):i>3?s(t,r,l):s(t,r))||l);return i>3&&l&&Object.defineProperty(t,r,l),l};Object.defineProperty(exports,"__esModule",{value:!0});const t=require("lit-element");require("./VolumeSlider");class r extends t.LitElement{render(){const e=(e,t)=>{this.hass.callService("desktop_processes","set_process_volume",{pid:e,volume:t})};if(!this.volumeProcesses)return t.html`
+        <div class="invalid-entry">
+          desktop_name was either not passed or is invalid.
+        </div>
+      `;const r=this.volumeProcesses.sort((e,t)=>e.priority===t.priority?e.name.localeCompare(t.name):t.priority-e.priority).map(r=>t.html`
       <volume-slider .volumeProcess=${r} class="volume-slider" .setVolume=${e} />
       <volume-slider>
     `);return t.html`
@@ -812,14 +816,22 @@ module.exports="/dial.dd16d943.png";
         overflow-y: hidden;
         margin-bottom: 2px;
       }
+
+      .invalid-entry {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 20px;
+        height: 100%;
+      }
     `}}e([t.property({type:Array})],r.prototype,"hass",void 0),e([t.property({type:Array})],r.prototype,"volumeProcesses",void 0),exports.default=r,customElements.get("volume-mixer")||customElements.define("volume-mixer",r);
 },{"lit-element":"bhxD","./VolumeSlider":"t5Rq"}],"e1m1":[function(require,module,exports) {
 module.exports="/levels-adjustment.5a50fb25.png";
 },{}],"iZUv":[function(require,module,exports) {
-"use strict";var e=this&&this.__importDefault||function(e){return e&&e.__esModule?e:{default:e}};Object.defineProperty(exports,"__esModule",{value:!0});const t=require("lit-element");require("./VolumeMixer");const s=e(require("../../res/levels-adjustment.png"));class r{constructor(e){const{index:r=-1}=e;this.name="Volume Mixer",this.icon=s.default,this.index=r,this.active=!0,this.component=(e=>{const s=e.states["desktop_processes.desktop"].attributes.processes;return t.html`
-        <volume-mixer .hass=${e} .volumeProcesses=${s}></volume-mixer>
-      `})}}exports.default=r;
-},{"lit-element":"bhxD","./VolumeMixer":"fg5f","../../res/levels-adjustment.png":"e1m1"}],"Jx17":[function(require,module,exports) {
+"use strict";var e=this&&this.__importDefault||function(e){return e&&e.__esModule?e:{default:e}};Object.defineProperty(exports,"__esModule",{value:!0});const t=require("lit-element");require("./VolumeMixer");const s=e(require("../../res/levels-adjustment.png")),r=e(require("../../constants"));class i{constructor(e){const{index:i=-1}=e;this.name="Volume Mixer",this.icon=s.default,this.index=i,this.active=!0,this.component=(e=>{const s=e.panels[r.default].config.desktop_name;let i=null;return s&&e.states[s]&&(i=e.states[s].attributes.processes),t.html`
+        <volume-mixer .hass=${e} .volumeProcesses=${i}></volume-mixer>
+      `})}}exports.default=i;
+},{"lit-element":"bhxD","./VolumeMixer":"fg5f","../../res/levels-adjustment.png":"e1m1","../../constants":"eKDL"}],"Jx17":[function(require,module,exports) {
 "use strict";var e=this&&this.__importDefault||function(e){return e&&e.__esModule?e:{default:e}};Object.defineProperty(exports,"__esModule",{value:!0});const t=e(require("../src/modules/LightControl/LightControlModule")),r=e(require("../src/modules/PCStats/PCStatsModule")),o=e(require("../src/modules/VolumeMixer/VolumeMixerModule"));function u(e){const u=new o.default({index:0}),l=new t.default({index:0}),n=new r.default({index:0}),s=new Map(Object.entries({volume_mixer:u,light_control:l,pc_stats:n}));return e.map(e=>{const t=s.get(e);return t||(console.error(`${e} not in module map!`),null)}).filter(e=>e)}exports.default=u;
 },{"../src/modules/LightControl/LightControlModule":"qBI7","../src/modules/PCStats/PCStatsModule":"M4iw","../src/modules/VolumeMixer/VolumeMixerModule":"iZUv"}],"QCba":[function(require,module,exports) {
 "use strict";var e=this&&this.__decorate||function(e,t,o,r){var s,d=arguments.length,l=d<3?t:null===r?r=Object.getOwnPropertyDescriptor(t,o):r;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)l=Reflect.decorate(e,t,o,r);else for(var i=e.length-1;i>=0;i--)(s=e[i])&&(l=(d<3?s(l):d>3?s(t,o,l):s(t,o))||l);return d>3&&l&&Object.defineProperty(t,o,l),l},t=this&&this.__importDefault||function(e){return e&&e.__esModule?e:{default:e}};Object.defineProperty(exports,"__esModule",{value:!0});const o=require("lit-element");require("./TopRow/TopRow"),require("./MiddleRow/MiddleRow"),require("./BottomRow/BottomRow");const r=t(require("../types/ModulesManager"));class s extends o.LitElement{constructor(){super(),this.currentModule=null,this.addEventListener("update-current-module",this.handleUpdateCurrentModule)}handleUpdateCurrentModule(e){const{detail:t}=e;if(!t.module)throw Error("did not receive module in current-module CustomEvent");this.currentModule=t.module}render(){return this.modules||(this.modules=r.default(this.panel.config.modules),[this.currentModule=null]=this.modules),o.html`
