@@ -22,7 +22,7 @@ export default class VolumeSlider extends LitElement {
       this.volumeProcess = { ...this.volumeProcess, volume: value };
     };
 
-    const url = `${ROOT_URL}/icons/${this.volumeProcess.name}.png`;
+    const url = `/local/icons/${this.volumeProcess.name}.png`;
     return html`
       <div class="volume-slider-container">
         ${createSlider(onChange, null, this.volumeProcess.volume, 0, 100, 'override')}
