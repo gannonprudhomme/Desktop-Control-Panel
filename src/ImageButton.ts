@@ -1,6 +1,7 @@
 import {
   css, html, TemplateResult,
 } from 'lit-element';
+import { ROOT_URL } from './constants';
 
 /**
  * Creates an image button. Isn't a custom element because how LitElement handles shadow-dom's / and
@@ -33,7 +34,7 @@ export default function createImageButton(
       ${styles}
     </style>
     <button type="button" @click=${onClick} class="image-button">
-      <img src=${`/local${icon}`} alt=${imgId} id=${imgId}></img>
+      <img src=${`${ROOT_URL}/${icon}`} alt=${imgId} id=${imgId}></img>
     </button> 
   `;
 }

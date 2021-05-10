@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "parcel watch src/index.ts --out-dir ./config/www/",
+    "dev": "parcel watch src/index.ts --out-dir ./config/www/community/Desktop-Control-Panel/",
     "build": "parcel build src/index.ts --out-dir ./dist/ --out-file dcp.js",
     "lint": "eslint src/ types/"
   },

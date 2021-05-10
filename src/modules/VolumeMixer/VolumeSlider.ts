@@ -2,6 +2,7 @@ import {
   css, CSSResult, html, LitElement, TemplateResult, property,
 } from 'lit-element';
 import VolumeProcess from '../../../types/VolumeProcess';
+import { ROOT_URL } from '../../constants';
 import createSlider from '../../Slider';
 // We probably need to get this type from somewhere
 export default class VolumeSlider extends LitElement {
@@ -21,8 +22,7 @@ export default class VolumeSlider extends LitElement {
       this.volumeProcess = { ...this.volumeProcess, volume: value };
     };
 
-    const rootUrl = '/local/icons';
-    const url = `${rootUrl}/${this.volumeProcess.name}.png`;
+    const url = `${ROOT_URL}/icons/${this.volumeProcess.name}.png`;
     return html`
       <div class="volume-slider-container">
         ${createSlider(onChange, null, this.volumeProcess.volume, 0, 100, 'override')}
