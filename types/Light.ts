@@ -16,7 +16,3 @@ export default interface Light {
   // hsColor?: number[]; // hue, saturation
 };
 
-export interface LightConfig {
-  name: string;
-  priority?: number;
-}

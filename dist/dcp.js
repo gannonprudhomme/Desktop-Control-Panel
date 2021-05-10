@@ -171,17 +171,21 @@ parcelRequire=function(e,r,t,n){var i,o="function"==typeof parcelRequire&&parcel
       `:""}
   </svg>`;exports.default=o;
 },{"lit-element":"bhxD"}],"bzTu":[function(require,module,exports) {
-"use strict";var e=this&&this.__createBinding||(Object.create?function(e,t,r,n){void 0===n&&(n=r),Object.defineProperty(e,n,{enumerable:!0,get:function(){return t[r]}})}:function(e,t,r,n){void 0===n&&(n=r),e[n]=t[r]}),t=this&&this.__setModuleDefault||(Object.create?function(e,t){Object.defineProperty(e,"default",{enumerable:!0,value:t})}:function(e,t){e.default=t}),r=this&&this.__decorate||function(e,t,r,n){var i,a=arguments.length,o=a<3?t:null===n?n=Object.getOwnPropertyDescriptor(t,r):n;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)o=Reflect.decorate(e,t,r,n);else for(var s=e.length-1;s>=0;s--)(i=e[s])&&(o=(a<3?i(o):a>3?i(t,r,o):i(t,r))||o);return a>3&&o&&Object.defineProperty(t,r,o),o},n=this&&this.__importStar||function(r){if(r&&r.__esModule)return r;var n={};if(null!=r)for(var i in r)"default"!==i&&Object.prototype.hasOwnProperty.call(r,i)&&e(n,r,i);return t(n,r),n};Object.defineProperty(exports,"__esModule",{value:!0});const i=require("lit-element"),a=n(require("../external/weatherIcons"));function o(e,t){var r;const n=`component.weather.state._.${t}`;return null!==(r=e.localize(n))&&void 0!==r?r:"unknown"}class s extends i.LitElement{render(){var e;const{state:t,attributes:r}=this.hass.states["weather.home"];console.log(t);const n=o(this.hass,t),s=null!==(e=r.temperature)&&void 0!==e?e:-1;return i.html`
+"use strict";var e=this&&this.__createBinding||(Object.create?function(e,t,n,r){void 0===r&&(r=n),Object.defineProperty(e,r,{enumerable:!0,get:function(){return t[n]}})}:function(e,t,n,r){void 0===r&&(r=n),e[r]=t[n]}),t=this&&this.__setModuleDefault||(Object.create?function(e,t){Object.defineProperty(e,"default",{enumerable:!0,value:t})}:function(e,t){e.default=t}),n=this&&this.__decorate||function(e,t,n,r){var i,a=arguments.length,s=a<3?t:null===r?r=Object.getOwnPropertyDescriptor(t,n):r;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)s=Reflect.decorate(e,t,n,r);else for(var o=e.length-1;o>=0;o--)(i=e[o])&&(s=(a<3?i(s):a>3?i(t,n,s):i(t,n))||s);return a>3&&s&&Object.defineProperty(t,n,s),s},r=this&&this.__importStar||function(n){if(n&&n.__esModule)return n;var r={};if(null!=n)for(var i in n)"default"!==i&&Object.prototype.hasOwnProperty.call(n,i)&&e(r,n,i);return t(r,n),r};Object.defineProperty(exports,"__esModule",{value:!0});const i=require("lit-element"),a=r(require("../external/weatherIcons"));function s(e,t){var n;const r=`component.weather.state._.${t}`;return null!==(n=e.localize(r))&&void 0!==n?n:"unknown"}class o extends i.LitElement{render(){var e;if(!this.config.weather_name||!this.hass.states[this.config.weather_name])return i.html`
+        <div class="unavailable-text">
+          Unavailable
+        </div>
+      `;const{state:t,attributes:n}=this.hass.states[this.config.weather_name],r=s(this.hass,t),o=null!==(e=n.temperature)&&void 0!==e?e:-1;return i.html`
       <div class="weather-container">
         <div class="weather-icon">
             ${a.default(t)}
         </div>
         <div class="temperature-weather-container">
           <span id="temperature">
-            ${s.toFixed(0)}°C
+            ${o.toFixed(0)}°C
           </span>
           <span>
-            ${n}
+            ${r}
           </span>
         </div>
       </div>
@@ -215,13 +219,18 @@ parcelRequire=function(e,r,t,n){var i,o="function"==typeof parcelRequire&&parcel
       #temperature {
         font-size: 28px;
       }
-    `]}}r([i.property({type:Object})],s.prototype,"hass",void 0),exports.default=s,customElements.get("weather-display")||customElements.define("weather-display",s);
+
+      .unavailable-text {
+        display: flex;
+        justify-content: flex-end;
+      }
+    `]}}n([i.property({type:Object})],o.prototype,"hass",void 0),n([i.property({type:Object})],o.prototype,"config",void 0),exports.default=o,customElements.get("weather-display")||customElements.define("weather-display",o);
 },{"lit-element":"bhxD","../external/weatherIcons":"wpZ5"}],"kLvr":[function(require,module,exports) {
-"use strict";var e=this&&this.__decorate||function(e,t,r,s){var i,o=arguments.length,l=o<3?t:null===s?s=Object.getOwnPropertyDescriptor(t,r):s;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)l=Reflect.decorate(e,t,r,s);else for(var p=e.length-1;p>=0;p--)(i=e[p])&&(l=(o<3?i(l):o>3?i(t,r,l):i(t,r))||l);return o>3&&l&&Object.defineProperty(t,r,l),l};Object.defineProperty(exports,"__esModule",{value:!0});const t=require("lit-element");require("./TimeDisplay"),require("./WeatherDisplay");class r extends t.LitElement{render(){return t.html`
+"use strict";var e=this&&this.__decorate||function(e,t,r,i){var o,s=arguments.length,p=s<3?t:null===i?i=Object.getOwnPropertyDescriptor(t,r):i;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)p=Reflect.decorate(e,t,r,i);else for(var l=e.length-1;l>=0;l--)(o=e[l])&&(p=(s<3?o(p):s>3?o(t,r,p):o(t,r))||p);return s>3&&p&&Object.defineProperty(t,r,p),p};Object.defineProperty(exports,"__esModule",{value:!0});const t=require("lit-element");require("./TimeDisplay"),require("./WeatherDisplay");class r extends t.LitElement{render(){return t.html`
       <div id="top-row">
         <div>PC Controls</div>
         <time-display></time-display>
-        <weather-display .hass=${this.hass}></weather-display>
+        <weather-display .hass=${this.hass} .config=${this.config}></weather-display>
       </div>
     `}static get styles(){return t.css`
       #top-row {
@@ -234,11 +243,11 @@ parcelRequire=function(e,r,t,n){var i,o="function"==typeof parcelRequire&&parcel
 
         height: calc(100% - 4px);
       }
-    `}}e([t.property({type:Object})],r.prototype,"hass",void 0),exports.default=r,customElements.get("top-row")||customElements.define("top-row",r);
+    `}}e([t.property({type:Object})],r.prototype,"hass",void 0),e([t.property({type:Object})],r.prototype,"config",void 0),exports.default=r,customElements.get("top-row")||customElements.define("top-row",r);
 },{"lit-element":"bhxD","./TimeDisplay":"imI1","./WeatherDisplay":"bzTu"}],"KEHX":[function(require,module,exports) {
-"use strict";var e=this&&this.__decorate||function(e,t,r,o){var d,l=arguments.length,s=l<3?t:null===o?o=Object.getOwnPropertyDescriptor(t,r):o;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)s=Reflect.decorate(e,t,r,o);else for(var i=e.length-1;i>=0;i--)(d=e[i])&&(s=(l<3?d(s):l>3?d(t,r,s):d(t,r))||s);return l>3&&s&&Object.defineProperty(t,r,s),s};Object.defineProperty(exports,"__esModule",{value:!0});const t=require("lit-element");class r extends t.LitElement{render(){return t.html`
+"use strict";var e=this&&this.__decorate||function(e,t,r,o){var d,i=arguments.length,s=i<3?t:null===o?o=Object.getOwnPropertyDescriptor(t,r):o;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)s=Reflect.decorate(e,t,r,o);else for(var l=e.length-1;l>=0;l--)(d=e[l])&&(s=(i<3?d(s):i>3?d(t,r,s):d(t,r))||s);return i>3&&s&&Object.defineProperty(t,r,s),s};Object.defineProperty(exports,"__esModule",{value:!0});const t=require("lit-element");class r extends t.LitElement{render(){return t.html`
       <div id="middle-row">
-        ${this.currentModule?this.currentModule.component(this.hass):"No modules enabled"}
+        ${this.currentModule?this.currentModule.component(this.hass,this.config):"No modules enabled"}
       </div>
     `}static get styles(){return t.css`
       #middle-row {
@@ -248,9 +257,9 @@ parcelRequire=function(e,r,t,n){var i,o="function"==typeof parcelRequire&&parcel
         overflow-y: hidden;
         flex-grow: 1;
       }
-    `}}e([t.property({type:Object})],r.prototype,"hass",void 0),e([t.property({type:Object})],r.prototype,"currentModule",void 0),exports.default=r,customElements.get("middle-row")||customElements.define("middle-row",r);
+    `}}e([t.property({type:Object})],r.prototype,"hass",void 0),e([t.property({type:Object})],r.prototype,"config",void 0),e([t.property({type:Object})],r.prototype,"currentModule",void 0),exports.default=r,customElements.get("middle-row")||customElements.define("middle-row",r);
 },{"lit-element":"bhxD"}],"qMnx":[function(require,module,exports) {
-"use strict";var t=this&&this.__decorate||function(t,e,r,i){var n,c=arguments.length,o=c<3?e:null===i?i=Object.getOwnPropertyDescriptor(e,r):i;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)o=Reflect.decorate(t,e,r,i);else for(var s=t.length-1;s>=0;s--)(n=t[s])&&(o=(c<3?n(o):c>3?n(e,r,o):n(e,r))||o);return c>3&&o&&Object.defineProperty(e,r,o),o};Object.defineProperty(exports,"__esModule",{value:!0});const e=require("lit-element");class r extends e.LitElement{render(){return e.html`
+"use strict";var e=this&&this.__decorate||function(e,t,r,i){var n,o=arguments.length,s=o<3?t:null===i?i=Object.getOwnPropertyDescriptor(t,r):i;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)s=Reflect.decorate(e,t,r,i);else for(var a=e.length-1;a>=0;a--)(n=e[a])&&(s=(o<3?n(s):o>3?n(t,r,s):n(t,r))||s);return o>3&&s&&Object.defineProperty(t,r,s),s};Object.defineProperty(exports,"__esModule",{value:!0});const t=require("lit-element");class r extends t.LitElement{render(){return t.html`
       <div id="track">
           <img
             id="album-cover"
@@ -266,14 +275,13 @@ parcelRequire=function(e,r,t,n){var i,o="function"==typeof parcelRequire&&parcel
           </span>
         </div>
       </div>
-    `}static get styles(){return e.css`
+    `}static get styles(){return t.css`
       #track {
         display: flex;
         flex-direction: row;
         align-items: flex-end;
         width: 100%;
         height: 100%;
-        /* margin: 8px 0px 16px; */
       }
       #album-cover-container {
       }
@@ -286,6 +294,7 @@ parcelRequire=function(e,r,t,n){var i,o="function"==typeof parcelRequire&&parcel
         display: flex;
         flex-direction: column;
         margin-left: 5px;
+        width: 100%;
       }
       #current-track {
         font-size: 16px;
@@ -294,8 +303,13 @@ parcelRequire=function(e,r,t,n){var i,o="function"==typeof parcelRequire&&parcel
 
       #current-artist {
         font-size: 13px;
+        width: 100%;
+        max-width: 100%;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
       }
-    `}}t([e.property({type:Object})],r.prototype,"song",void 0),exports.default=r,customElements.get("track-display")||customElements.define("track-display",r);
+    `}}e([t.property({type:Object})],r.prototype,"song",void 0),exports.default=r,customElements.get("track-display")||customElements.define("track-display",r);
 },{"lit-element":"bhxD"}],"eKDL":[function(require,module,exports) {
 "use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.ROOT_URL=void 0;const e="desktop-control";exports.ROOT_URL="/local/community/Desktop-Control-Panel",exports.default=e;
 },{}],"HxTM":[function(require,module,exports) {
@@ -328,12 +342,12 @@ module.exports="/pause.5c453d4d.png";
 },{}],"XsgK":[function(require,module,exports) {
 module.exports="/next-song.c0cd0cf6.png";
 },{}],"C6La":[function(require,module,exports) {
-"use strict";var e=this&&this.__decorate||function(e,t,i,a){var r,s=arguments.length,o=s<3?t:null===a?a=Object.getOwnPropertyDescriptor(t,i):a;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)o=Reflect.decorate(e,t,i,a);else for(var n=e.length-1;n>=0;n--)(r=e[n])&&(o=(s<3?r(o):s>3?r(t,i,o):r(t,i))||o);return s>3&&o&&Object.defineProperty(t,i,o),o},t=this&&this.__importDefault||function(e){return e&&e.__esModule?e:{default:e}};Object.defineProperty(exports,"__esModule",{value:!0});const i=require("lit-element"),a=t(require("../ImageButton")),r=t(require("../res/play.png")),s=t(require("../res/pause.png")),o=t(require("../res/next-song.png"));function n(e,t,i){e.callService("media_player",i,{entity_id:t}).catch(e=>{console.log(e)})}class l extends i.LitElement{previousClicked(){n(this.hass,this.mediaPlayerId,"media_previous_track")}playPauseClicked(){n(this.hass,this.mediaPlayerId,"media_play_pause")}nextClicked(){n(this.hass,this.mediaPlayerId,"media_next_track")}render(){const e=this.song.isPlaying?s.default:r.default;return i.html`
+"use strict";var e=this&&this.__decorate||function(e,t,i,r){var a,s=arguments.length,o=s<3?t:null===r?r=Object.getOwnPropertyDescriptor(t,i):r;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)o=Reflect.decorate(e,t,i,r);else for(var n=e.length-1;n>=0;n--)(a=e[n])&&(o=(s<3?a(o):s>3?a(t,i,o):a(t,i))||o);return s>3&&o&&Object.defineProperty(t,i,o),o},t=this&&this.__importDefault||function(e){return e&&e.__esModule?e:{default:e}};Object.defineProperty(exports,"__esModule",{value:!0}),exports.callSpotifyService=void 0;const i=require("lit-element"),r=t(require("../ImageButton")),a=t(require("../res/play.png")),s=t(require("../res/pause.png")),o=t(require("../res/next-song.png"));function n(e,t,i){e.callService("media_player",i,{entity_id:t}).catch(e=>{console.log(e)})}exports.callSpotifyService=n;class l extends i.LitElement{previousClicked(){n(this.hass,this.mediaPlayerId,"media_previous_track")}playPauseClicked(){n(this.hass,this.mediaPlayerId,"media_play_pause")}nextClicked(){n(this.hass,this.mediaPlayerId,"media_next_track")}render(){const e=this.song.isPlaying?s.default:a.default;return i.html`
       <div id="spotify-playback">
         <div id="playback-container">
-          ${a.default(this.previousClicked,o.default,"previous-song")}
-          ${a.default(this.playPauseClicked,e,"play-pause")}
-          ${a.default(this.nextClicked,o.default,"next-song")}
+          ${r.default(this.previousClicked,o.default,"previous-song")}
+          ${r.default(this.playPauseClicked,e,"play-pause")}
+          ${r.default(this.nextClicked,o.default,"next-song")}
         </div>
       </div>
     `}static get styles(){return i.css`
@@ -380,13 +394,17 @@ module.exports="/next-song.c0cd0cf6.png";
 },{"lit-element":"bhxD","../ImageButton":"HxTM","../res/play.png":"jUO8","../res/pause.png":"h2IA","../res/next-song.png":"XsgK"}],"WwXa":[function(require,module,exports) {
 "use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.updateCurrentModuleEventName=void 0,exports.updateCurrentModuleEventName="update-current-module";
 },{}],"yX0n":[function(require,module,exports) {
-"use strict";var e=this&&this.__decorate||function(e,t,r,o){var n,i=arguments.length,d=i<3?t:null===o?o=Object.getOwnPropertyDescriptor(t,r):o;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)d=Reflect.decorate(e,t,r,o);else for(var l=e.length-1;l>=0;l--)(n=e[l])&&(d=(i<3?n(d):i>3?n(t,r,d):n(t,r))||d);return i>3&&d&&Object.defineProperty(t,r,d),d},t=this&&this.__importDefault||function(e){return e&&e.__esModule?e:{default:e}};Object.defineProperty(exports,"__esModule",{value:!0});const r=require("lit-element"),o=require("../../types/Module"),n=t(require("../ImageButton"));class i extends r.LitElement{updateCurrentModule(e){const t=new CustomEvent(o.updateCurrentModuleEventName,{detail:{module:e},bubbles:!0,composed:!0});this.dispatchEvent(t)}render(){const e=this.modules.map(e=>n.default(()=>{this.updateCurrentModule(e)},e.icon,"toggle-button"));return r.html`
+"use strict";var e=this&&this.__decorate||function(e,t,o,r){var n,i=arguments.length,d=i<3?t:null===r?r=Object.getOwnPropertyDescriptor(t,o):r;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)d=Reflect.decorate(e,t,o,r);else for(var s=e.length-1;s>=0;s--)(n=e[s])&&(d=(i<3?n(d):i>3?n(t,o,d):n(t,o))||d);return i>3&&d&&Object.defineProperty(t,o,d),d},t=this&&this.__importDefault||function(e){return e&&e.__esModule?e:{default:e}};Object.defineProperty(exports,"__esModule",{value:!0});const o=require("lit-element"),r=require("../../types/Module"),n=t(require("../ImageButton"));class i extends o.LitElement{updateCurrentModule(e){const t=new CustomEvent(r.updateCurrentModuleEventName,{detail:{module:e},bubbles:!0,composed:!0});this.dispatchEvent(t)}render(){const e=this.modules.map(e=>{const t=n.default(()=>{this.updateCurrentModule(e)},e.icon,"toggle-button");return o.html`
+        <div class="button-container">
+          ${t}
+        </div> 
+      `});return o.html`
       <div id="module-swapper">
         <div id="control-container">
           ${e}
         </div>
       </div>
-    `}static get styles(){return r.css`
+    `}static get styles(){return o.css`
       #module-swapper {
         display: flex;
         justify-content: flex-end;
@@ -403,26 +421,31 @@ module.exports="/next-song.c0cd0cf6.png";
         min-width: 200px;
         height: 100%;
       }
+
+      /* Add greater gaps between buttons to force container to grow */
+      .button-container {
+        padding: 0 4px;
+      }
       
       #toggle-button {
         width: 32px;
         height: 32px;
         margin: 16px 0;
       }
-    `}}e([r.property({type:Array})],i.prototype,"modules",void 0),e([r.property({type:Object})],i.prototype,"currentModule",void 0),exports.default=i,customElements.get("module-switcher")||customElements.define("module-switcher",i);
+    `}}e([o.property({type:Array})],i.prototype,"modules",void 0),e([o.property({type:Object})],i.prototype,"currentModule",void 0),exports.default=i,customElements.get("module-switcher")||customElements.define("module-switcher",i);
 },{"lit-element":"bhxD","../../types/Module":"WwXa","../ImageButton":"HxTM"}],"XFkt":[function(require,module,exports) {
-"use strict";var e=this&&this.__decorate||function(e,t,o,r){var i,s=arguments.length,n=s<3?t:null===r?r=Object.getOwnPropertyDescriptor(t,o):r;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)n=Reflect.decorate(e,t,o,r);else for(var l=e.length-1;l>=0;l--)(i=e[l])&&(n=(s<3?i(n):s>3?i(t,o,n):i(t,o))||n);return s>3&&n&&Object.defineProperty(t,o,n),n};Object.defineProperty(exports,"__esModule",{value:!0});const t=require("lit-element");function o(e,t){if(!t.spotify_name)return console.log("ERROR: No spotify_name passed in as argument"),null;const o=e.states[t.spotify_name];if(!o)return console.log("ERROR: no state"),null;const r=o.attributes;return{title:r.media_title,artistName:r.media_artist,albumArt:r.entity_picture,isPlaying:"playing"===o.state}}require("./TrackDisplay"),require("./MediaControl"),require("./ModuleSwitcher");class r extends t.LitElement{render(){const e=o(this.hass,this.config);return t.html`
+"use strict";var t=this&&this.__decorate||function(t,e,o,r){var s,i=arguments.length,n=i<3?e:null===r?r=Object.getOwnPropertyDescriptor(e,o):r;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)n=Reflect.decorate(t,e,o,r);else for(var l=t.length-1;l>=0;l--)(s=t[l])&&(n=(i<3?s(n):i>3?s(e,o,n):s(e,o))||n);return i>3&&n&&Object.defineProperty(e,o,n),n};Object.defineProperty(exports,"__esModule",{value:!0}),exports.getSongFromSpotify=void 0;const e=require("lit-element");function o(t,e){if(!e.spotify_name)return console.log("ERROR: No spotify_name passed in as argument"),null;const o=t.states[e.spotify_name];if(!o)return console.log("ERROR: no state"),null;const r=o.attributes;return{title:r.media_title,artistName:r.media_artist,albumArt:r.entity_picture,isPlaying:"playing"===o.state}}require("./TrackDisplay"),require("./MediaControl"),require("./ModuleSwitcher"),exports.getSongFromSpotify=o;class r extends e.LitElement{render(){const t=o(this.hass,this.config);return e.html`
       <div id="bottom-row">
-        <track-display .song=${e}></track-display>
+        <track-display .song=${t} class="shrink"></track-display>
         <media-control
           .hass=${this.hass}
-          .song=${e}
+          .song=${t}
           .mediaPlayerId=${this.config.spotify_name}>
         </media-control>
         <module-switcher .modules=${this.modules} .currentModule=${this.currentModule}>
         </module-switcher>
       </div>
-    `}static get styles(){return t.css`
+    `}static get styles(){return e.css`
       #bottom-row {
         display: grid;
         grid-template-columns: 32% 36% 32%;
@@ -430,7 +453,11 @@ module.exports="/next-song.c0cd0cf6.png";
         height: calc(100% - 16px);
         padding: 8px 0;
       }
-    `}}e([t.property({type:Object})],r.prototype,"hass",void 0),e([t.property({type:Object})],r.prototype,"config",void 0),e([t.property({type:Object})],r.prototype,"currentModule",void 0),e([t.property({type:Array})],r.prototype,"modules",void 0),exports.default=r,customElements.get("bottom-row")||customElements.define("bottom-row",r);
+
+      .shrink {
+        flex-shrink: 1;
+      }
+    `}}t([e.property({type:Object})],r.prototype,"hass",void 0),t([e.property({type:Object})],r.prototype,"config",void 0),t([e.property({type:Object})],r.prototype,"currentModule",void 0),t([e.property({type:Array})],r.prototype,"modules",void 0),exports.default=r,customElements.get("bottom-row")||customElements.define("bottom-row",r);
 },{"lit-element":"bhxD","./TrackDisplay":"qMnx","./MediaControl":"C6La","./ModuleSwitcher":"yX0n"}],"OL9p":[function(require,module,exports) {
 "use strict";Object.defineProperty(exports,"__esModule",{value:!0});const e=require("lit-element");function t(t,r,n,o=0,a=100,i=null){const d=e.css`
     .slider {
@@ -710,35 +737,149 @@ module.exports="/light-bulb.05b0d28e.png";
       }
     `}}t([e.property({type:Object})],i.prototype,"hass",void 0),t([e.property({type:Array})],i.prototype,"lights",void 0),exports.default=i,customElements.get("light-control")||customElements.define("light-control",i);
 },{"lit-element":"bhxD","./LightSlider":"kf7s"}],"qBI7":[function(require,module,exports) {
-"use strict";var t=this&&this.__importDefault||function(t){return t&&t.__esModule?t:{default:t}};Object.defineProperty(exports,"__esModule",{value:!0});const e=require("lit-element");require("./LightControl");const i=t(require("../../res/light-bulb.png")),r=t(require("../../constants"));class s{constructor(t){const{index:s=-1}=t;this.name="Light Control",this.icon=i.default,this.index=s,this.active=!0,this.component=(t=>{const i=t.panels[r.default].config.lights,s=new Map;i.forEach(t=>s.set(t.name,t.priority));const n=i.map(e=>t.states[e.name]).map(t=>{var e;const{brightness:i,color_temp:r,friendly_name:n,min_mireds:o,max_mireds:l}=t.attributes,a=t.entity_id,c=null!==(e=s.get(a))&&void 0!==e?e:0;return{name:n,colorTemp:r,isOn:"on"===t.state,minMireds:o,maxMireds:l,brightness:i,entityId:a,priority:c}});return n.sort((t,e)=>e.priority-t.priority),e.html`
+"use strict";var t=this&&this.__importDefault||function(t){return t&&t.__esModule?t:{default:t}};Object.defineProperty(exports,"__esModule",{value:!0});const e=require("lit-element");require("./LightControl");const i=t(require("../../res/light-bulb.png"));class r{constructor(t){const{index:r=-1}=t;this.name="Light Control",this.icon=i.default,this.index=r,this.active=!0,this.component=((t,i)=>{const r=i.lights,s=new Map;r.forEach(t=>s.set(t.name,t.priority));const n=r.map(e=>t.states[e.name]).map(t=>{var e;const{brightness:i,color_temp:r,friendly_name:n,min_mireds:o,max_mireds:l}=t.attributes,a=t.entity_id,c=null!==(e=s.get(a))&&void 0!==e?e:0;return{name:n,colorTemp:r,isOn:"on"===t.state,minMireds:o,maxMireds:l,brightness:i,entityId:a,priority:c}});return n.sort((t,e)=>e.priority-t.priority),e.html`
         <light-control .hass=${t} .lights=${n}></light-control>
-      `})}}exports.default=s;
-},{"lit-element":"bhxD","./LightControl":"rmHj","../../res/light-bulb.png":"SgXa","../../constants":"eKDL"}],"UY11":[function(require,module,exports) {
-"use strict";var e=this&&this.__decorate||function(e,t,s,r){var o,n=arguments.length,a=n<3?t:null===r?r=Object.getOwnPropertyDescriptor(t,s):r;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)a=Reflect.decorate(e,t,s,r);else for(var c=e.length-1;c>=0;c--)(o=e[c])&&(a=(n<3?o(a):n>3?o(t,s,a):o(t,s))||a);return n>3&&a&&Object.defineProperty(t,s,a),a};Object.defineProperty(exports,"__esModule",{value:!0});const t=require("lit-element");class s extends t.LitElement{render(){const e=new Map(Object.entries({"CPU Temp":`${this.stats.cpuTemp}°C`,"GPU Temp":`${this.stats.gpuTemp}°C`,"CPU Usage":`${this.stats.cpuUsage}%`,"Memory Usage":`${this.stats.memoryUsage}%`})),s=[];return e.forEach((e,r)=>{s.push(t.html`
-        <div>
-          <span>${r}:</span>
-          <!-- TODO: Check for non-percentage values? -->
-          <span>${e}</span>
+      `})}}exports.default=r;
+},{"lit-element":"bhxD","./LightControl":"rmHj","../../res/light-bulb.png":"SgXa"}],"UY11":[function(require,module,exports) {
+"use strict";var t=this&&this.__decorate||function(t,e,s,a){var n,i=arguments.length,r=i<3?e:null===a?a=Object.getOwnPropertyDescriptor(e,s):a;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)r=Reflect.decorate(t,e,s,a);else for(var o=t.length-1;o>=0;o--)(n=t[o])&&(r=(i<3?n(r):i>3?n(e,s,r):n(e,s))||r);return i>3&&r&&Object.defineProperty(e,s,r),r};Object.defineProperty(exports,"__esModule",{value:!0});const e=require("lit-element");class s extends e.LitElement{render(){var t,s,a,n;if(!this.stats)return e.html`
+        <div class="unavailable-text">
+          PC Stat data not provided.
         </div>
-      `)}),t.html`
-      <div id="middle-row">
-        ${s}
+      `;const i=new Map(Object.entries({"CPU Temp":`${null!==(t=this.stats.cpuTemp)&&void 0!==t?t:-1}°C`,"GPU Temp":`${null!==(s=this.stats.gpuTemp)&&void 0!==s?s:-1}°C`,"CPU Usage":`${null!==(a=this.stats.cpuUsage)&&void 0!==a?a:-1}%`,"Memory Usage":`${null!==(n=this.stats.memoryUsage)&&void 0!==n?n:-1}%`})),r=[];return i.forEach((t,s)=>{r.push(e.html`
+        <div class="stat-row">
+          <span>${s}:</span>
+          <!-- TODO: Check for non-percentage values? -->
+          <span>${t}</span>
+        </div>
+      `)}),e.html`
+      <div id="pc-stats">
+        ${r}
       </div>
-    `}static get styles(){return t.css`
-      #volume-mixer {
+    `}static get styles(){return e.css`
+      #pc-stats {
         display: flex;
-        justify-content: flex-start;
-        width: calc(100% - 20px);
-        height: 100%;
-        overflow-x: auto;
-        overflow-y: hidden;
+        flex-direction: column;
+        padding: 8px 8px;
       }
-    `}}e([t.property({type:Object})],s.prototype,"stats",void 0),exports.default=s,customElements.get("pc-stats")||customElements.define("pc-stats",s);
+
+      .stat-row {
+        font-size: 24px;
+        padding-bottom: 8px;
+      }
+
+      .unavailable-text {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        font-size: 20px;
+      }
+    `}}t([e.property({type:Object})],s.prototype,"stats",void 0),exports.default=s,customElements.get("pc-stats")||customElements.define("pc-stats",s);
 },{"lit-element":"bhxD"}],"ML5B":[function(require,module,exports) {
 module.exports="/dial.dd16d943.png";
 },{}],"M4iw":[function(require,module,exports) {
-"use strict";var e=this&&this.__importDefault||function(e){return e&&e.__esModule?e:{default:e}};Object.defineProperty(exports,"__esModule",{value:!0});const t=require("lit-element");require("./PCStats");const s=e(require("../../res/dial.png")),a="sensor.gannon_sff_amd_ryzen_9_5900x_temperatures_cpu_ccd_average",r="sensor.gannon_sff_nvidia_geforce_rtx_2070_super_temperatures_gpu_core",_="sensor.gannon_sff_amd_ryzen_9_5900x_load_cpu_total",n="sensor.gannon_sff_nvidia_geforce_rtx_2070_super_load_gpu_core",o="sensor.gannon_sff_generic_memory_load_memory";class p{constructor(e){const{index:p=-1}=e;this.name="Spotify",this.icon=s.default,this.index=p,this.active=!0,this.component=(e=>{const s={gpuTemp:parseFloat(e.states[r].state),cpuTemp:parseFloat(e.states[a].state),cpuUsage:parseFloat(e.states[_].state),gpuUsage:parseFloat(e.states[n].state),memoryUsage:parseFloat(e.states[o].state)};return t.html`<pc-stats .stats=${s}></pc-stats>`})}}exports.default=p;
-},{"lit-element":"bhxD","./PCStats":"UY11","../../res/dial.png":"ML5B"}],"t5Rq":[function(require,module,exports) {
+"use strict";var e=this&&this.__importDefault||function(e){return e&&e.__esModule?e:{default:e}};Object.defineProperty(exports,"__esModule",{value:!0});const t=require("lit-element");require("./PCStats");const s=e(require("../../res/dial.png")),_="sensor.gannon_sff_amd_ryzen_9_5900x_temperatures_cpu_ccd_average",n="sensor.gannon_sff_nvidia_geforce_rtx_2070_super_temperatures_gpu_core",r="sensor.gannon_sff_amd_ryzen_9_5900x_load_cpu_total",a="sensor.gannon_sff_nvidia_geforce_rtx_2070_super_load_gpu_core",o="sensor.gannon_sff_generic_memory_load_memory";function u(e,t,s){const _=t[s],n=e.states[_];return n?parseFloat(n.state):null}class c{constructor(e){const{index:_=-1}=e;this.name="Spotify",this.icon=s.default,this.index=_,this.active=!0,this.component=((e,s)=>{let _=null;const n=s.pc_stats;return n&&(_={gpuTemp:u(e,n,"gpu_temp"),cpuTemp:u(e,n,"cpu_temp"),cpuUsage:u(e,n,"cpu_usage"),gpuUsage:u(e,n,"gpu_usage"),memoryUsage:u(e,n,"memory_usage")}),t.html`<pc-stats .stats=${_}></pc-stats>`})}}exports.default=c;
+},{"lit-element":"bhxD","./PCStats":"UY11","../../res/dial.png":"ML5B"}],"qinj":[function(require,module,exports) {
+"use strict";var e=this&&this.__decorate||function(e,t,i,r){var a,s=arguments.length,o=s<3?t:null===r?r=Object.getOwnPropertyDescriptor(t,i):r;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)o=Reflect.decorate(e,t,i,r);else for(var n=e.length-1;n>=0;n--)(a=e[n])&&(o=(s<3?a(o):s>3?a(t,i,o):a(t,i))||o);return s>3&&o&&Object.defineProperty(t,i,o),o},t=this&&this.__importDefault||function(e){return e&&e.__esModule?e:{default:e}};Object.defineProperty(exports,"__esModule",{value:!0});const i=require("lit-element"),r=t(require("../../ImageButton")),a=t(require("../../res/play.png")),s=t(require("../../res/pause.png")),o=t(require("../../res/next-song.png")),n=require("../../BottomRow/MediaControl");class l extends i.LitElement{previousClicked(){n.callSpotifyService(this.hass,this.mediaPlayerId,"media_previous_track")}playPauseClicked(){n.callSpotifyService(this.hass,this.mediaPlayerId,"media_play_pause")}nextClicked(){n.callSpotifyService(this.hass,this.mediaPlayerId,"media_next_track")}shuffleClicked(){}repeatClicked(){}render(){const e=this.song.isPlaying?s.default:a.default;return i.html`
+      <div>
+        <div id="track">
+            <img
+              id="album-cover"
+              src=${this.song.albumArt} 
+              alt="album-cover"
+            ></img>
+          <div id="track-info">
+            <span id="current-track">
+              ${this.song.title}
+            </span>
+            <span id="current-artist">
+              ${this.song.artistName}
+            </span>
+          </div>
+        </div>
+        <div id="spotify-playback">
+          <div id="playback-container">
+            ${r.default(this.previousClicked,o.default,"previous-song")}
+            ${r.default(this.playPauseClicked,e,"play-pause")}
+            ${r.default(this.nextClicked,o.default,"next-song")}
+          </div>
+        </div>
+      </div>
+    `}static get styles(){return i.css`
+      #track {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-end;
+        width: 100%;
+        height: 100%;
+        /* margin: 8px 0px 16px; */
+      }
+      #album-cover-container {
+      }
+      #album-cover {
+        object-fit: contain;
+        max-height: 64px;
+      }
+
+      #track-info {
+        display: flex;
+        flex-direction: column;
+        margin-left: 5px;
+      }
+      #current-track {
+        font-size: 16px;
+        margin-bottom: 4px;
+      }
+
+      #current-artist {
+        font-size: 13px;
+      }
+
+      #spotify-playback {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        align-items: center;
+      }
+
+      #playback-container {
+        /* TODO: Make this to use the template value */
+        border: 1px solid #00C8C8 !important;
+        border-radius: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-content: center;
+        width: 250px !important;
+      }
+
+      #play-pause {
+        width: 48px;
+        height: 48px;
+        margin: 7px auto;
+      }
+
+      #previous-song {
+        width: 32px;
+        height: 32px;
+        transform: rotate(180deg);
+        margin: 0 auto;
+      }
+
+      #previous-song:active {
+        transform: rotate(180deg) scale(0.85);
+      }
+
+      #next-song {
+        width: 32px;
+        height: 32px;
+        margin: 0 auto;
+      }
+    `}}e([i.property({type:Object})],l.prototype,"hass",void 0),e([i.property({type:Object})],l.prototype,"song",void 0),e([i.property({type:String})],l.prototype,"mediaPlayerId",void 0),exports.default=l,customElements.get("spotify-view")||customElements.define("spotify-view",l);
+},{"lit-element":"bhxD","../../ImageButton":"HxTM","../../res/play.png":"jUO8","../../res/pause.png":"h2IA","../../res/next-song.png":"XsgK","../../BottomRow/MediaControl":"C6La"}],"jCgS":[function(require,module,exports) {
+"use strict";var e=this&&this.__importDefault||function(e){return e&&e.__esModule?e:{default:e}};Object.defineProperty(exports,"__esModule",{value:!0});const t=require("lit-element"),o=require("../../BottomRow/BottomRow"),i=e(require("../../res/play.png"));require("./SpotifyView");class s{constructor(e){const{index:s=-1}=e;this.name="Spotify",this.icon=i.default,this.index=s,this.active=!0,this.component=((e,i)=>{const s=o.getSongFromSpotify(e,i);return t.html`
+        <spotify-view .hass=${e} .song=${s} .mediaPlayerId=${i.spotify_name} />
+      `})}}exports.default=s;
+},{"lit-element":"bhxD","../../BottomRow/BottomRow":"XFkt","../../res/play.png":"jUO8","./SpotifyView":"qinj"}],"t5Rq":[function(require,module,exports) {
 "use strict";var e=this&&this.__decorate||function(e,t,s,i){var l,o=arguments.length,r=o<3?t:null===i?i=Object.getOwnPropertyDescriptor(t,s):i;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)r=Reflect.decorate(e,t,s,i);else for(var n=e.length-1;n>=0;n--)(l=e[n])&&(r=(o<3?l(r):o>3?l(t,s,r):l(t,s))||r);return o>3&&r&&Object.defineProperty(t,s,r),r},t=this&&this.__importDefault||function(e){return e&&e.__esModule?e:{default:e}};Object.defineProperty(exports,"__esModule",{value:!0});const s=require("lit-element"),i=t(require("../../Slider"));class l extends s.LitElement{render(){if(!this.volumeProcess)return s.html`<div> empty </div>`;const e=`/local/icons/${this.volumeProcess.name}.png`;return s.html`
       <div class="volume-slider-container">
         ${i.default(e=>{this.setVolume(this.volumeProcess.pid,e),this.volumeProcess={...this.volumeProcess,volume:e}},null,this.volumeProcess.volume,0,100,"override")}
@@ -828,21 +969,27 @@ module.exports="/dial.dd16d943.png";
 },{"lit-element":"bhxD","./VolumeSlider":"t5Rq"}],"e1m1":[function(require,module,exports) {
 module.exports="/levels-adjustment.5a50fb25.png";
 },{}],"iZUv":[function(require,module,exports) {
-"use strict";var e=this&&this.__importDefault||function(e){return e&&e.__esModule?e:{default:e}};Object.defineProperty(exports,"__esModule",{value:!0});const t=require("lit-element");require("./VolumeMixer");const s=e(require("../../res/levels-adjustment.png")),r=e(require("../../constants"));class i{constructor(e){const{index:i=-1}=e;this.name="Volume Mixer",this.icon=s.default,this.index=i,this.active=!0,this.component=(e=>{const s=e.panels[r.default].config.desktop_name;let i=null;return s&&e.states[s]&&(i=e.states[s].attributes.processes),t.html`
+"use strict";var e=this&&this.__importDefault||function(e){return e&&e.__esModule?e:{default:e}};Object.defineProperty(exports,"__esModule",{value:!0});const t=require("lit-element");require("./VolumeMixer");const s=e(require("../../res/levels-adjustment.png"));class r{constructor(e){const{index:r=-1}=e;this.name="Volume Mixer",this.icon=s.default,this.index=r,this.active=!0,this.component=((e,s)=>{const r=s.desktop_name;let i=null;return r&&e.states[r]&&(i=e.states[r].attributes.processes),t.html`
         <volume-mixer .hass=${e} .volumeProcesses=${i}></volume-mixer>
-      `})}}exports.default=i;
-},{"lit-element":"bhxD","./VolumeMixer":"fg5f","../../res/levels-adjustment.png":"e1m1","../../constants":"eKDL"}],"Jx17":[function(require,module,exports) {
-"use strict";var e=this&&this.__importDefault||function(e){return e&&e.__esModule?e:{default:e}};Object.defineProperty(exports,"__esModule",{value:!0});const t=e(require("../src/modules/LightControl/LightControlModule")),r=e(require("../src/modules/PCStats/PCStatsModule")),o=e(require("../src/modules/VolumeMixer/VolumeMixerModule"));function u(e){const u=new o.default({index:0}),l=new t.default({index:0}),n=new r.default({index:0}),s=new Map(Object.entries({volume_mixer:u,light_control:l,pc_stats:n}));return e.map(e=>{const t=s.get(e);return t||(console.error(`${e} not in module map!`),null)}).filter(e=>e)}exports.default=u;
-},{"../src/modules/LightControl/LightControlModule":"qBI7","../src/modules/PCStats/PCStatsModule":"M4iw","../src/modules/VolumeMixer/VolumeMixerModule":"iZUv"}],"QCba":[function(require,module,exports) {
-"use strict";var e=this&&this.__decorate||function(e,t,o,r){var s,d=arguments.length,l=d<3?t:null===r?r=Object.getOwnPropertyDescriptor(t,o):r;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)l=Reflect.decorate(e,t,o,r);else for(var i=e.length-1;i>=0;i--)(s=e[i])&&(l=(d<3?s(l):d>3?s(t,o,l):s(t,o))||l);return d>3&&l&&Object.defineProperty(t,o,l),l},t=this&&this.__importDefault||function(e){return e&&e.__esModule?e:{default:e}};Object.defineProperty(exports,"__esModule",{value:!0});const o=require("lit-element");require("./TopRow/TopRow"),require("./MiddleRow/MiddleRow"),require("./BottomRow/BottomRow");const r=t(require("../types/ModulesManager"));class s extends o.LitElement{constructor(){super(),this.currentModule=null,this.addEventListener("update-current-module",this.handleUpdateCurrentModule)}handleUpdateCurrentModule(e){const{detail:t}=e;if(!t.module)throw Error("did not receive module in current-module CustomEvent");this.currentModule=t.module}render(){return this.modules||(this.modules=r.default(this.panel.config.modules),[this.currentModule=null]=this.modules),o.html`
+      `})}}exports.default=r;
+},{"lit-element":"bhxD","./VolumeMixer":"fg5f","../../res/levels-adjustment.png":"e1m1"}],"Jx17":[function(require,module,exports) {
+"use strict";var e=this&&this.__importDefault||function(e){return e&&e.__esModule?e:{default:e}};Object.defineProperty(exports,"__esModule",{value:!0});const t=e(require("../src/modules/LightControl/LightControlModule")),o=e(require("../src/modules/PCStats/PCStatsModule")),r=e(require("../src/modules/Spotify/SpotifyModule")),u=e(require("../src/modules/VolumeMixer/VolumeMixerModule"));function l(e){const l=new u.default({index:0}),n=new t.default({index:0}),i=new o.default({index:0}),s=new r.default({index:0}),d=new Map(Object.entries({volume_mixer:l,light_control:n,pc_stats:i,spotify:s}));return e.map(e=>{const t=d.get(e);return t||(console.error(`${e} not in module map!`),null)}).filter(e=>e)}exports.default=l;
+},{"../src/modules/LightControl/LightControlModule":"qBI7","../src/modules/PCStats/PCStatsModule":"M4iw","../src/modules/Spotify/SpotifyModule":"jCgS","../src/modules/VolumeMixer/VolumeMixerModule":"iZUv"}],"QCba":[function(require,module,exports) {
+"use strict";var e=this&&this.__decorate||function(e,t,o,r){var i,s=arguments.length,d=s<3?t:null===r?r=Object.getOwnPropertyDescriptor(t,o):r;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)d=Reflect.decorate(e,t,o,r);else for(var l=e.length-1;l>=0;l--)(i=e[l])&&(d=(s<3?i(d):s>3?i(t,o,d):i(t,o))||d);return s>3&&d&&Object.defineProperty(t,o,d),d},t=this&&this.__importDefault||function(e){return e&&e.__esModule?e:{default:e}};Object.defineProperty(exports,"__esModule",{value:!0});const o=require("lit-element");require("./TopRow/TopRow"),require("./MiddleRow/MiddleRow"),require("./BottomRow/BottomRow");const r=t(require("../types/ModulesManager"));class i extends o.LitElement{constructor(){super(),this.currentModule=null,this.addEventListener("update-current-module",this.handleUpdateCurrentModule)}handleUpdateCurrentModule(e){const{detail:t}=e;if(!t.module)throw Error("did not receive module in current-module CustomEvent");this.currentModule=t.module}render(){return this.modules||(this.modules=r.default(this.panel.config.modules),[this.currentModule=null]=this.modules),o.html`
       <div class="grid-container">
-        <top-row .hass=${this.hass}></top-row>
-        <middle-row .hass=${this.hass} .currentModule=${this.currentModule} id="middle-row"></middle-row>
+        <top-row .hass=${this.hass} .config=${this.panel.config}></top-row>
+        <middle-row
+          .hass=${this.hass}
+          .currentModule=${this.currentModule}
+          .config=${this.panel.config}
+          id="middle-row">
+        </middle-row>
         <bottom-row
           .hass=${this.hass}
           .config=${this.panel.config}
           .modules=${this.modules}
           .currentModule=${this.currentModule}
+          id="bottom-row"
         >
         </bottom-row>
       </div>
@@ -859,6 +1006,10 @@ module.exports="/levels-adjustment.5a50fb25.png";
       #middle-row {
         flex-grow: 2;
       }
-    `}}e([o.property({type:Object})],s.prototype,"hass",void 0),e([o.property({type:Boolean})],s.prototype,"narrow",void 0),e([o.property({type:Object})],s.prototype,"panel",void 0),e([o.property({type:Array})],s.prototype,"modules",void 0),e([o.property({type:Object})],s.prototype,"currentModule",void 0),exports.default=s,customElements.get("desktop-control")||customElements.define("desktop-control",s);
+
+      #bottom-row {
+        flex-shrink: 1;
+      }
+    `}}e([o.property({type:Object})],i.prototype,"hass",void 0),e([o.property({type:Boolean})],i.prototype,"narrow",void 0),e([o.property({type:Object})],i.prototype,"panel",void 0),e([o.property({type:Array})],i.prototype,"modules",void 0),e([o.property({type:Object})],i.prototype,"currentModule",void 0),exports.default=i,customElements.get("desktop-control")||customElements.define("desktop-control",i);
 },{"lit-element":"bhxD","./TopRow/TopRow":"kLvr","./MiddleRow/MiddleRow":"KEHX","./BottomRow/BottomRow":"XFkt","../types/ModulesManager":"Jx17"}]},{},["QCba"], null)
 //# sourceMappingURL=/dcp.js.map

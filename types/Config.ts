@@ -1,17 +1,25 @@
+/* eslint-disable camelcase */
 export interface LightConfig {
   name: string;
   priority?: number;
 }
 
+export interface PCStatsConfig {
+  [key: string]: string;
+  cpu_temp?: string;
+  gpu_temp?: string;
+  cpu_usage?: string;
+  gpu_usage?: string;
+  memory_usage?: string;
+}
+
 export default interface DCPConfig {
-  // eslint-disable-next-line camelcase
   desktop_name: string;
-  // eslint-disable-next-line camelcase
   spotify_name: string;
-  // eslint-disable-next-line camelcase
   weather_name: string;
   modules: string[];
   lights: LightConfig[];
+  pc_stats: PCStatsConfig;
 };
 
 // The configs that are passed to use

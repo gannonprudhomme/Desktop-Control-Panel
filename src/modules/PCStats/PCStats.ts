@@ -14,12 +14,20 @@ export default class PCStats extends LitElement {
   @property({ type: Object }) public stats: PCStatData;
 
   protected render(): TemplateResult {
+    if (!this.stats) {
+      return html`
+        <div class="unavailable-text">
+          PC Stat data not provided.
+        </div>
+      `;
+    }
+
     // TODO: Format these depending on what unit we're using
     const conv = new Map<string, string>(Object.entries({
-      'CPU Temp': `${this.stats.cpuTemp}°C`,
-      'GPU Temp': `${this.stats.gpuTemp}°C`,
-      'CPU Usage': `${this.stats.cpuUsage}%`,
-      'Memory Usage': `${this.stats.memoryUsage}%`,
+      'CPU Temp': `${this.stats.cpuTemp ?? -1}°C`,
+      'GPU Temp': `${this.stats.gpuTemp ?? -1}°C`,
+      'CPU Usage': `${this.stats.cpuUsage ?? -1}%`,
+      'Memory Usage': `${this.stats.memoryUsage ?? -1}%`,
     }));
 
     const rows: TemplateResult[] = [];
@@ -45,11 +53,20 @@ export default class PCStats extends LitElement {
       #pc-stats {
         display: flex;
         flex-direction: column;
+        padding: 8px 8px;
       }
 
       .stat-row {
         font-size: 24px;
         padding-bottom: 8px;
+      }
+
+      .unavailable-text {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        font-size: 20px;
       }
     `;
   }

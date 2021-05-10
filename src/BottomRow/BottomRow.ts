@@ -9,7 +9,7 @@ import './ModuleSwitcher';
 import DCPConfig from '../../types/Config';
 import Module from '../../types/Module';
 
-function getSpotifyAttributes(hass: HomeAssistant, config: DCPConfig): Song {
+export function getSongFromSpotify(hass: HomeAssistant, config: DCPConfig): Song {
   if (!config.spotify_name) {
     console.log('ERROR: No spotify_name passed in as argument');
     return null;
@@ -41,7 +41,7 @@ export default class BottomRow extends LitElement {
   @property({ type: Array }) public modules: Module[]
 
   protected render(): TemplateResult {
-    const song = getSpotifyAttributes(this.hass, this.config);
+    const song = getSongFromSpotify(this.hass, this.config);
 
     return html`
       <div id="bottom-row">
