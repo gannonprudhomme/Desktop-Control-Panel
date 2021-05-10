@@ -15,6 +15,14 @@ export default class VolumeMixer extends LitElement {
       this.hass.callService('desktop_processes', 'set_process_volume', { pid, volume });
     };
 
+    if (!this.volumeProcesses) {
+      return html`
+        <div class="invalid-entry">
+          desktop_name was either not passed or is invalid.
+        </div>
+      `;
+    }
+
     const sortedProcs = this.volumeProcesses.sort((a, b) => {
       if (a.priority === b.priority) {
         return a.name.localeCompare(b.name); // ascending (alphabetical)
@@ -45,6 +53,14 @@ export default class VolumeMixer extends LitElement {
         overflow-x: auto;
         overflow-y: hidden;
         margin-bottom: 2px;
+      }
+
+      .invalid-entry {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 20px;
+        height: 100%;
       }
     `;
   }

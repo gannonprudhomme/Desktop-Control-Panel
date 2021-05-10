@@ -5,6 +5,7 @@ import './VolumeMixer';
 
 import icon from '../../res/levels-adjustment.png';
 import VolumeProcess from '../../../types/VolumeProcess';
+import PANEL_NAME from '../../constants';
 
 export default class VolumeMixerModule implements Module {
   icon: string;
@@ -21,9 +22,13 @@ export default class VolumeMixerModule implements Module {
     this.index = index; // We don't assign this
     this.active = true; // This will change
     this.component = (hass: HomeAssistant): TemplateResult => {
-      // TODO: Retrieve desktop_processes.desktop from somewhere
-      // map it
-      const procs: VolumeProcess[] = hass.states['desktop_processes.desktop'].attributes.processes;
+      const desktopName: string = hass.panels[PANEL_NAME].config.desktop_name;
+
+      let procs: VolumeProcess[] = null;
+
+      if (desktopName && hass.states[desktopName]) {
+        procs = hass.states[desktopName].attributes.processes;
+      }
 
       return html`
         <volume-mixer .hass=${hass} .volumeProcesses=${procs}></volume-mixer>
