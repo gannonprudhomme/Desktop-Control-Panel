@@ -1,3 +1,5 @@
+/* eslint-disable no-underscore-dangle */
+/* eslint-disable vars-on-top */
 /* eslint-disable camelcase */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {

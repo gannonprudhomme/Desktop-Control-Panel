@@ -15,12 +15,9 @@ export default class VolumeMixerModule implements Module {
   index: number;
   active: boolean;
 
-  constructor(data: { index: number }) {
-    const { index = -1 } = data;
-
+  constructor() {
     this.name = 'Volume Mixer';
     this.icon = icon;
-    this.index = index; // We don't assign this
     this.active = true; // This will change
     this.component = (hass: HomeAssistant, config: DCPConfig): TemplateResult => {
       const desktopName: string = config.desktop_name;

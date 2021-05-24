@@ -6,7 +6,6 @@ export default interface Module {
   icon: string;
   name: string;
   component: (hass: HomeAssistant, config: DCPConfig) => TemplateResult;
-  index: number; // Determined by the config
   active: boolean; // If it's currently active (and should be shown as an option)
 };
 

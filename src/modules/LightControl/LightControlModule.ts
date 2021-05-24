@@ -5,8 +5,7 @@ import Light from '../../../types/Light';
 import './LightControl';
 
 import icon from '../../res/light-bulb.png';
-import PANEL_NAME from '../../constants';
-import DCPConfig, { LightConfig } from '../../../types/Config';
+import DCPConfig from '../../../types/Config';
 
 export default class LightControlModule implements Module {
   icon: string;
@@ -15,12 +14,9 @@ export default class LightControlModule implements Module {
   index: number;
   active: boolean;
 
-  constructor(data: { index: number }) {
-    const { index = -1 } = data;
-
+  constructor() {
     this.name = 'Light Control';
     this.icon = icon;
-    this.index = index; // We don't assign this
     this.active = true; // This will change
     this.component = (hass: HomeAssistant, config: DCPConfig): TemplateResult => {
       const lightsConfig = config.lights;

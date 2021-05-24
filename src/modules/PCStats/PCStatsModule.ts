@@ -37,12 +37,9 @@ export default class PCStatsModule implements Module {
   index: number;
   active: boolean;
 
-  constructor(data: { index: number }) {
-    const { index = -1 } = data;
-
+  constructor() {
     this.name = 'Spotify';
     this.icon = icon;
-    this.index = index; // We don't assign this
     this.active = true; // This will change
     this.component = (hass: HomeAssistant, config: DCPConfig): TemplateResult => {
       let pcData: PCStatData = null;

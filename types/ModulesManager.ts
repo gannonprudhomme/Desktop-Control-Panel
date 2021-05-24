@@ -4,9 +4,9 @@ import VolumeMixerModule from '../src/modules/VolumeMixer/VolumeMixerModule';
 import Module from './Module';
 
 export default function getModules(modulesIn: string[]): Module[] {
-  const vm = new VolumeMixerModule({ index: 0 });
-  const lc = new LightControlModule({ index: 0 });
-  const pc = new PCStatsModule({ index: 0 });
+  const vm = new VolumeMixerModule();
+  const lc = new LightControlModule();
+  const pc = new PCStatsModule();
 
   const mapped = new Map(Object.entries({
     volume_mixer: vm,
