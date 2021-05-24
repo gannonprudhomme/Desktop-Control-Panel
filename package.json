@@ -17,13 +17,9 @@
     "eslint-plugin-jsx-a11y": "^6.4.1",
     "home-assistant-js-websocket": "^5.9.0",
     "lit-element": "^2.4.0",
-    "preact": "^10.5.13",
-    "preact-custom-element": "^4.2.1",
     "source-map-loader": "^2.0.1",
     "style-loader": "^2.0.0",
-    "ts-loader": "^8.0.18",
-    "webpack": "^5.26.2",
-    "webpack-cli": "^4.5.0"
+    "ts-loader": "^8.0.18"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^4.18.0",
@@ -33,5 +29,8 @@
     "typescript": "^4.2.3"
   },
   "author": "",
-  "license": "GNU GPL v3"
+  "license": "GNU GPL v3",
+  "browserslist": [
+    "last 1 Chrome version"
+  ]
 }
