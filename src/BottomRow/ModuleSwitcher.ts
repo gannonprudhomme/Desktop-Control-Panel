@@ -20,12 +20,17 @@ export default class ModuleSwitcher extends LitElement {
   }
 
   protected render(): TemplateResult {
-    const moduleButtons = this.modules.map((mod) => createImageButton(
-      () => {
-        // TODO: send an event to App so it changes MiddleRow
+    const moduleButtons = this.modules.map((mod) => {
+      const button = createImageButton(() => {
         this.updateCurrentModule(mod);
-      }, mod.icon, 'toggle-button',
-    ));
+      }, mod.icon, 'toggle-button');
+
+      return html`
+        <div class="button-container">
+          ${button}
+        </div> 
+      `;
+    });
 
     return html`
       <div id="module-swapper">
@@ -53,6 +58,11 @@ export default class ModuleSwitcher extends LitElement {
         border-radius: 20px;
         min-width: 200px;
         height: 100%;
+      }
+
+      /* Add greater gaps between buttons to force container to grow */
+      .button-container {
+        padding: 0 4px;
       }
       
       #toggle-button {

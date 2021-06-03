@@ -35,7 +35,6 @@ export default class TrackDisplay extends LitElement {
         align-items: flex-end;
         width: 100%;
         height: 100%;
-        /* margin: 8px 0px 16px; */
       }
       #album-cover-container {
       }
@@ -48,6 +47,8 @@ export default class TrackDisplay extends LitElement {
         display: flex;
         flex-direction: column;
         margin-left: 5px;
+        /* 48px is for the image, 5px is for left margin */
+        width: calc(100% - 48px - 5px);
       }
       #current-track {
         font-size: 16px;
@@ -56,6 +57,9 @@ export default class TrackDisplay extends LitElement {
 
       #current-artist {
         font-size: 13px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
       }
     `;
   }

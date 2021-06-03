@@ -15,7 +15,7 @@ import nextImage from '../res/next-song.png';
  * @param mediaPlayerId The entity ID , e.g. media_player.spotify_first_last
  * @param type Either media_previous_track, media_play_pause, or media_next_track
  */
-function callSpotifyService(hass: HomeAssistant, mediaPlayerId: string, type: string) {
+export function callSpotifyService(hass: HomeAssistant, mediaPlayerId: string, type: string): void {
   hass.callService('media_player', type, { entity_id: mediaPlayerId }).catch((err) => {
     console.log(err);
   });

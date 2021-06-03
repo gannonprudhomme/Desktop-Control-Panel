@@ -13,17 +13,17 @@ import createImageButton from '../../ImageButton';
  */
 export default class LightSlider extends LitElement {
   @property({ type: Object }) public light: Light;
+  @property({ type: Function }) public toggleLight: (lightID: string) => void;
   @property({ type: Function }) public setLightState: (
     lightID: string, state: Record<string, unknown>,
   ) => void;
-  @property({ type: Function }) public toggleLight: (lightID: string) => void;
 
   protected render(): TemplateResult {
-    /** 
+    /**
      * Convert the value from [0, 100] to [0, 255] and update the value so its rendered on screen
     */
     const onBrightnessSlide = (value: number) => {
-      const shifted = value / 100 * 255;
+      const shifted = (value / 100) * 255;
       this.light = { ...this.light, brightness: shifted };
     };
 

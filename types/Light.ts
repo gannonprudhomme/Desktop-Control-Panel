@@ -15,4 +15,3 @@ export default interface Light {
   maxMireds?: number; // warmest colorTemp possible for this light
   // hsColor?: number[]; // hue, saturation
 };
-

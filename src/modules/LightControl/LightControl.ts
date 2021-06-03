@@ -26,7 +26,12 @@ export default class LightControl extends LitElement {
     };
 
     const rows = this.lights.map((light) => html`
-      <light-slider .light=${light} .setLightState=${setLightState} .toggleLight=${toggleLight} class="light-slider-margin">
+      <!-- Spread & recreate light so it will always re-render (hopefully) -->
+      <light-slider
+        .light=${{ ...light }}
+        .setLightState=${setLightState}
+        .toggleLight=${toggleLight}
+        class="light-slider-margin">
       </light-slider>
     `);
 
