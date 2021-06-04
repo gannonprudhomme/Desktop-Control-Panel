@@ -309,7 +309,71 @@ parcelRequire=function(e,r,t,n){var i,o="function"==typeof parcelRequire&&parcel
         overflow: hidden;
       }
     `}}e([t.property({type:Object})],r.prototype,"song",void 0),exports.default=r,customElements.get("track-display")||customElements.define("track-display",r);
-},{"lit-element":"bhxD"}],"eKDL":[function(require,module,exports) {
+},{"lit-element":"bhxD"}],"AczT":[function(require,module,exports) {
+"use strict";Object.defineProperty(exports,"__esModule",{value:!0});const e=require("lit-element"),t=e.css`
+  div {
+    --theme-color: rgb(0, 200, 200);
+  }
+`;exports.default=t;
+},{"lit-element":"bhxD"}],"C6La":[function(require,module,exports) {
+"use strict";var e=this&&this.__decorate||function(e,t,i,o){var c,n=arguments.length,s=n<3?t:null===o?o=Object.getOwnPropertyDescriptor(t,i):o;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)s=Reflect.decorate(e,t,i,o);else for(var r=e.length-1;r>=0;r--)(c=e[r])&&(s=(n<3?c(s):n>3?c(t,i,s):c(t,i))||s);return n>3&&s&&Object.defineProperty(t,i,s),s},t=this&&this.__importDefault||function(e){return e&&e.__esModule?e:{default:e}};Object.defineProperty(exports,"__esModule",{value:!0}),exports.callSpotifyService=void 0;const i=require("lit-element"),o=t(require("../theme"));function c(e,t,i){e.callService("media_player",i,{entity_id:t}).catch(e=>{console.log(e)})}exports.callSpotifyService=c;class n extends i.LitElement{previousClicked(){c(this.hass,this.mediaPlayerId,"media_previous_track")}playPauseClicked(){c(this.hass,this.mediaPlayerId,"media_play_pause")}nextClicked(){c(this.hass,this.mediaPlayerId,"media_next_track")}render(){const e=this.song.isPlaying?"mdi:pause-circle-outline":"mdi:play-circle-outline";return i.html`
+      <div id="spotify-playback">
+        <div id="playback-container">
+          <ha-icon-button
+            @click=${this.previousClicked}
+            icon="mdi:skip-previous"
+            class="icon-button skip-button"
+          >
+          </ha-icon-button>
+          <ha-icon-button
+            @click=${this.playPauseClicked}
+            icon=${e}
+            class="icon-button"
+          >
+          </ha-icon-button>
+          <ha-icon-button
+            @click=${this.nextClicked}
+            icon="mdi:skip-next"
+            class="icon-button skip-button"
+          >
+          </ha-icon-button>
+        </div>
+      </div>
+    `}static get styles(){const e=i.css`
+      #spotify-playback {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        align-items: center;
+        height: 100%;
+      }
+
+      #playback-container {
+        border: 1px solid var(--theme-color) !important;
+        border-radius: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 250px;
+        height: 100%;
+      }
+
+      .icon-button {
+        --mdc-icon-size: 56px;
+        --mdc-icon-button-size: 60px;
+        /* 8 is mostly arbitrary - but it's 56 - 48 px */
+        color: var(--theme-color);
+      }
+
+      /* Skip buttons have more empty space than pause, so reduce their size to match the
+         icon size */
+      .skip-button {
+        --mdc-icon-button-size: 56px;
+      }
+    `;return[o.default,e]}}e([i.property({type:Object})],n.prototype,"hass",void 0),e([i.property({type:Object})],n.prototype,"song",void 0),e([i.property({type:String})],n.prototype,"mediaPlayerId",void 0),exports.default=n,customElements.get("media-control")||customElements.define("media-control",n);
+},{"lit-element":"bhxD","../theme":"AczT"}],"WwXa":[function(require,module,exports) {
+"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.updateCurrentModuleEventName=void 0,exports.updateCurrentModuleEventName="update-current-module";
+},{}],"eKDL":[function(require,module,exports) {
 "use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.ROOT_URL=void 0;const e="desktop-control";exports.ROOT_URL="/local/community/Desktop-Control-Panel",exports.default=e;
 },{}],"HxTM":[function(require,module,exports) {
 "use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.createIconButton=void 0;const t=require("lit-element"),i=require("./constants");function e(e,n,o){const c=t.css`
@@ -337,65 +401,7 @@ parcelRequire=function(e,r,t,n){var i,o="function"==typeof parcelRequire&&parcel
     <ha-icon-button @click=${i} class=${n} icon=${e}>
     </ha-icon-button>
   `}exports.default=e,exports.createIconButton=n;
-},{"lit-element":"bhxD","./constants":"eKDL"}],"jUO8":[function(require,module,exports) {
-module.exports="/play.07f2dcff.png";
-},{}],"h2IA":[function(require,module,exports) {
-module.exports="/pause.5c453d4d.png";
-},{}],"XsgK":[function(require,module,exports) {
-module.exports="/next-song.c0cd0cf6.png";
-},{}],"C6La":[function(require,module,exports) {
-"use strict";var e=this&&this.__decorate||function(e,t,i,r){var a,s=arguments.length,o=s<3?t:null===r?r=Object.getOwnPropertyDescriptor(t,i):r;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)o=Reflect.decorate(e,t,i,r);else for(var n=e.length-1;n>=0;n--)(a=e[n])&&(o=(s<3?a(o):s>3?a(t,i,o):a(t,i))||o);return s>3&&o&&Object.defineProperty(t,i,o),o},t=this&&this.__importDefault||function(e){return e&&e.__esModule?e:{default:e}};Object.defineProperty(exports,"__esModule",{value:!0}),exports.callSpotifyService=void 0;const i=require("lit-element"),r=t(require("../ImageButton")),a=t(require("../res/play.png")),s=t(require("../res/pause.png")),o=t(require("../res/next-song.png"));function n(e,t,i){e.callService("media_player",i,{entity_id:t}).catch(e=>{console.log(e)})}exports.callSpotifyService=n;class l extends i.LitElement{previousClicked(){n(this.hass,this.mediaPlayerId,"media_previous_track")}playPauseClicked(){n(this.hass,this.mediaPlayerId,"media_play_pause")}nextClicked(){n(this.hass,this.mediaPlayerId,"media_next_track")}render(){const e=this.song.isPlaying?s.default:a.default;return i.html`
-      <div id="spotify-playback">
-        <div id="playback-container">
-          ${r.default(this.previousClicked,o.default,"previous-song")}
-          ${r.default(this.playPauseClicked,e,"play-pause")}
-          ${r.default(this.nextClicked,o.default,"next-song")}
-        </div>
-      </div>
-    `}static get styles(){return i.css`
-      #spotify-playback {
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-end;
-        align-items: center;
-      }
-
-      #playback-container {
-        /* TODO: Make this to use the template value */
-        border: 1px solid #00C8C8 !important;
-        border-radius: 20px;
-        display: flex;
-        justify-content: space-between;
-        align-content: center;
-        width: 250px !important;
-      }
-
-      #play-pause {
-        width: 48px;
-        height: 48px;
-        margin: 7px auto;
-      }
-
-      #previous-song {
-        width: 32px;
-        height: 32px;
-        transform: rotate(180deg);
-        margin: 0 auto;
-      }
-
-      #previous-song:active {
-        transform: rotate(180deg) scale(0.85);
-      }
-
-      #next-song {
-        width: 32px;
-        height: 32px;
-        margin: 0 auto;
-      }
-    `}}e([i.property({type:Object})],l.prototype,"hass",void 0),e([i.property({type:Object})],l.prototype,"song",void 0),e([i.property({type:String})],l.prototype,"mediaPlayerId",void 0),exports.default=l,customElements.get("media-control")||customElements.define("media-control",l);
-},{"lit-element":"bhxD","../ImageButton":"HxTM","../res/play.png":"jUO8","../res/pause.png":"h2IA","../res/next-song.png":"XsgK"}],"WwXa":[function(require,module,exports) {
-"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.updateCurrentModuleEventName=void 0,exports.updateCurrentModuleEventName="update-current-module";
-},{}],"yX0n":[function(require,module,exports) {
+},{"lit-element":"bhxD","./constants":"eKDL"}],"yX0n":[function(require,module,exports) {
 "use strict";var e=this&&this.__decorate||function(e,t,o,r){var n,i=arguments.length,d=i<3?t:null===r?r=Object.getOwnPropertyDescriptor(t,o):r;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)d=Reflect.decorate(e,t,o,r);else for(var s=e.length-1;s>=0;s--)(n=e[s])&&(d=(i<3?n(d):i>3?n(t,o,d):n(t,o))||d);return i>3&&d&&Object.defineProperty(t,o,d),d},t=this&&this.__importDefault||function(e){return e&&e.__esModule?e:{default:e}};Object.defineProperty(exports,"__esModule",{value:!0});const o=require("lit-element"),r=require("../../types/Module"),n=t(require("../ImageButton"));class i extends o.LitElement{updateCurrentModule(e){const t=new CustomEvent(r.updateCurrentModuleEventName,{detail:{module:e},bubbles:!0,composed:!0});this.dispatchEvent(t)}render(){const e=this.modules.map(e=>{const t=n.default(()=>{this.updateCurrentModule(e)},e.icon,"toggle-button");return o.html`
         <div class="button-container">
           ${t}
@@ -783,7 +789,7 @@ module.exports="/dial.dd16d943.png";
 },{}],"M4iw":[function(require,module,exports) {
 "use strict";var t=this&&this.__importDefault||function(t){return t&&t.__esModule?t:{default:t}};Object.defineProperty(exports,"__esModule",{value:!0});const e=require("lit-element");require("./PCStats");const s=t(require("../../res/dial.png"));function u(t){return(t-32)/1.8}function r(t,e,s){const u=e[s],r=t.states[u];return r?parseFloat(r.state):null}class a{constructor(){this.name="Spotify",this.icon=s.default,this.active=!0,this.component=((t,s)=>{let a=null;const n=s.pc_stats;return n&&(a={gpuTemp:u(r(t,n,"gpu_temp")),cpuTemp:u(r(t,n,"cpu_temp")),cpuUsage:r(t,n,"cpu_usage"),gpuUsage:r(t,n,"gpu_usage"),memoryUsage:r(t,n,"memory_usage")}),e.html`<pc-stats .stats=${a}></pc-stats>`})}}exports.default=a;
 },{"lit-element":"bhxD","./PCStats":"UY11","../../res/dial.png":"ML5B"}],"HcSy":[function(require,module,exports) {
-"use strict";var e=this&&this.__decorate||function(e,t,r,i){var s,n=arguments.length,o=n<3?t:null===i?i=Object.getOwnPropertyDescriptor(t,r):i;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)o=Reflect.decorate(e,t,r,i);else for(var l=e.length-1;l>=0;l--)(s=e[l])&&(o=(n<3?s(o):n>3?s(t,r,o):s(t,r))||o);return n>3&&o&&Object.defineProperty(t,r,o),o},t=this&&this.__importDefault||function(e){return e&&e.__esModule?e:{default:e}};Object.defineProperty(exports,"__esModule",{value:!0});const r=require("lit-element"),i=t(require("../../Slider"));class s extends r.LitElement{render(){return this.raspberryPi&&null!==this.raspberryPi.brightness&&null!==this.raspberryPi.power?r.html`
+"use strict";var e=this&&this.__decorate||function(e,t,r,i){var s,n=arguments.length,l=n<3?t:null===i?i=Object.getOwnPropertyDescriptor(t,r):i;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)l=Reflect.decorate(e,t,r,i);else for(var o=e.length-1;o>=0;o--)(s=e[o])&&(l=(n<3?s(l):n>3?s(t,r,l):s(t,r))||l);return n>3&&l&&Object.defineProperty(t,r,l),l},t=this&&this.__importDefault||function(e){return e&&e.__esModule?e:{default:e}};Object.defineProperty(exports,"__esModule",{value:!0});const r=require("lit-element"),i=t(require("../../Slider")),s=t(require("../../theme"));class n extends r.LitElement{render(){return this.raspberryPi&&null!==this.raspberryPi.brightness&&null!==this.raspberryPi.power?r.html`
       <div id="tablet-control">
         <div class="brightness-slider-container">
           ${i.default(e=>{this.hass.callService("rpi_backlight","set_brightness",{brightness:e}),this.raspberryPi={...this.raspberryPi,brightness:e}},null,this.raspberryPi.brightness,4,100,null)}
@@ -803,7 +809,7 @@ module.exports="/dial.dd16d943.png";
         <div class="invalid-entry">
           RaspberryPi is not active or is configured incorrectly.
         </div>
-      `}static get styles(){return r.css`
+      `}static get styles(){const e=r.css`
       #tablet-control {
         display: flex;
         flex-direction: column;
@@ -825,10 +831,9 @@ module.exports="/dial.dd16d943.png";
       }
 
       .sleep-button, .power-button {
-        /* TODO: Get this color from the theme */
-        color: rgb(0, 200, 200);
         --mdc-icon-size: 48px;
         --mdc-icon-button-size: 56px;
+        color: var(--theme-color);
       }
 
       .brightness-slider-container {
@@ -845,12 +850,12 @@ module.exports="/dial.dd16d943.png";
         width: 0;
         margin-left: -25%;
       }
-    `}}e([r.property({type:Array})],s.prototype,"hass",void 0),e([r.property({type:Object})],s.prototype,"raspberryPi",void 0),exports.default=s,customElements.get("tablet-control")||customElements.define("tablet-control",s);
-},{"lit-element":"bhxD","../../Slider":"OL9p"}],"wYKA":[function(require,module,exports) {
+    `;return[s.default,e]}}e([r.property({type:Array})],n.prototype,"hass",void 0),e([r.property({type:Object})],n.prototype,"raspberryPi",void 0),exports.default=n,customElements.get("tablet-control")||customElements.define("tablet-control",n);
+},{"lit-element":"bhxD","../../Slider":"OL9p","../../theme":"AczT"}],"wYKA":[function(require,module,exports) {
 module.exports="/settings.c35e9bc3.png";
 },{}],"PVvG":[function(require,module,exports) {
-"use strict";var t=this&&this.__importDefault||function(t){return t&&t.__esModule?t:{default:t}};Object.defineProperty(exports,"__esModule",{value:!0});const e=require("lit-element");require("./TabletControlView");const s=t(require("../../res/settings.png"));class r{constructor(){this.name="Volume Mixer",this.icon=s.default,this.active=!0,this.component=((t,s)=>{const r=s.pi_brightness_name,i=s.pi_power_name,o={power:null,brightness:null};if(r){const e=t.states[r];void 0!==e&&e.state}if(i){const e=t.states[i];void 0!==e&&e.state}return o.brightness=100,o.power=!1,e.html`
-        <tablet-control .hass=${t} .raspberryPi=${o}>
+"use strict";var t=this&&this.__importDefault||function(t){return t&&t.__esModule?t:{default:t}};Object.defineProperty(exports,"__esModule",{value:!0});const e=require("lit-element");require("./TabletControlView");const s=t(require("../../res/settings.png"));class r{constructor(){this.name="Volume Mixer",this.icon=s.default,this.active=!0,this.component=((t,s)=>{const r=s.pi_brightness_name,i=s.pi_power_name,n={power:null,brightness:null};if(r){const e=t.states[r];void 0!==e&&"unavailable"!==e.state&&(n.brightness=parseInt(e.state,10))}if(i){const e=t.states[i];void 0!==e&&"unavailable"!==e.state&&(n.power="True"===e.state)}return e.html`
+        <tablet-control .hass=${t} .raspberryPi=${n}>
         </tablet-control>
       `})}}exports.default=r;
 },{"lit-element":"bhxD","./TabletControlView":"HcSy","../../res/settings.png":"wYKA"}],"t5Rq":[function(require,module,exports) {

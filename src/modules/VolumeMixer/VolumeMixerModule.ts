@@ -5,7 +5,6 @@ import './VolumeMixer';
 
 import icon from '../../res/levels-adjustment.png';
 import VolumeProcess from '../../../types/VolumeProcess';
-import PANEL_NAME from '../../constants';
 import DCPConfig from '../../../types/Config';
 
 export default class VolumeMixerModule implements Module {

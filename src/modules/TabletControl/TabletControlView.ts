@@ -4,6 +4,7 @@ import {
 import RaspberryPi from '../../../types/RaspberryPi';
 import { HomeAssistant } from '../../../types/types';
 import createSlider from '../../Slider';
+import themeColor from '../../theme';
 
 // We probably need to get this type from somewhere
 export default class TabletControlView extends LitElement {
@@ -61,8 +62,8 @@ export default class TabletControlView extends LitElement {
     `;
   }
 
-  static get styles(): CSSResult {
-    return css`
+  static get styles(): CSSResult[] {
+    const styles = css`
       #tablet-control {
         display: flex;
         flex-direction: column;
@@ -84,10 +85,9 @@ export default class TabletControlView extends LitElement {
       }
 
       .sleep-button, .power-button {
-        /* TODO: Get this color from the theme */
-        color: rgb(0, 200, 200);
         --mdc-icon-size: 48px;
         --mdc-icon-button-size: 56px;
+        color: var(--theme-color);
       }
 
       .brightness-slider-container {
@@ -105,6 +105,8 @@ export default class TabletControlView extends LitElement {
         margin-left: -25%;
       }
     `;
+
+    return [themeColor, styles];
   }
 }
 

@@ -3,11 +3,8 @@ import {
 } from 'lit-element';
 import { HomeAssistant } from '../../types/types';
 import Song from '../../types/Song';
-import createImageButton from '../ImageButton';
 
-import playImage from '../res/play.png';
-import pauseImage from '../res/pause.png';
-import nextImage from '../res/next-song.png';
+import themeColor from '../theme';
 
 /**
  * Calls the according Spotify service using hass.callService
@@ -39,61 +36,70 @@ export default class MediaControl extends LitElement {
   }
 
   protected render(): TemplateResult {
-    const playPauseIcon = this.song.isPlaying ? pauseImage : playImage;
+    const playPauseIcon = this.song.isPlaying
+      ? 'mdi:pause-circle-outline' : 'mdi:play-circle-outline';
 
     return html`
       <div id="spotify-playback">
         <div id="playback-container">
-          ${createImageButton(this.previousClicked, nextImage, 'previous-song')}
-          ${createImageButton(this.playPauseClicked, playPauseIcon, 'play-pause')}
-          ${createImageButton(this.nextClicked, nextImage, 'next-song')}
+          <ha-icon-button
+            @click=${this.previousClicked}
+            icon="mdi:skip-previous"
+            class="icon-button skip-button"
+          >
+          </ha-icon-button>
+          <ha-icon-button
+            @click=${this.playPauseClicked}
+            icon=${playPauseIcon}
+            class="icon-button"
+          >
+          </ha-icon-button>
+          <ha-icon-button
+            @click=${this.nextClicked}
+            icon="mdi:skip-next"
+            class="icon-button skip-button"
+          >
+          </ha-icon-button>
         </div>
       </div>
     `;
   }
 
-  static get styles(): CSSResult {
-    return css`
+  static get styles(): CSSResult[] {
+    const styles = css`
       #spotify-playback {
         display: flex;
         flex-direction: column;
         justify-content: flex-end;
         align-items: center;
+        height: 100%;
       }
 
       #playback-container {
-        /* TODO: Make this to use the template value */
-        border: 1px solid #00C8C8 !important;
+        border: 1px solid var(--theme-color) !important;
         border-radius: 20px;
         display: flex;
         justify-content: space-between;
-        align-content: center;
-        width: 250px !important;
+        align-items: center;
+        width: 250px;
+        height: 100%;
       }
 
-      #play-pause {
-        width: 48px;
-        height: 48px;
-        margin: 7px auto;
+      .icon-button {
+        --mdc-icon-size: 56px;
+        --mdc-icon-button-size: 60px;
+        /* 8 is mostly arbitrary - but it's 56 - 48 px */
+        color: var(--theme-color);
       }
 
-      #previous-song {
-        width: 32px;
-        height: 32px;
-        transform: rotate(180deg);
-        margin: 0 auto;
-      }
-
-      #previous-song:active {
-        transform: rotate(180deg) scale(0.85);
-      }
-
-      #next-song {
-        width: 32px;
-        height: 32px;
-        margin: 0 auto;
+      /* Skip buttons have more empty space than pause, so reduce their size to match the
+         icon size */
+      .skip-button {
+        --mdc-icon-button-size: 56px;
       }
     `;
+
+    return [themeColor, styles];
   }
 }
 
