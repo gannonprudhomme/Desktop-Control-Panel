@@ -12,7 +12,6 @@ export default class VolumeMixerModule implements Module {
   icon: string;
   name: string;
   component: (hass: HomeAssistant, config: DCPConfig) => TemplateResult;
-  index: number;
   active: boolean;
 
   constructor() {

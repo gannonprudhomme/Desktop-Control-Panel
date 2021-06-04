@@ -69,6 +69,7 @@ export default class VolumeSlider extends LitElement {
         min-width: 34px; /* So the text doesn't shift when it changes digits */
       }
 
+      /* Override styles from the slider */
       .slider-container {
         padding: -40% 0;
         width: 0;
