@@ -1,6 +1,6 @@
 import LightControlModule from '../src/modules/LightControl/LightControlModule';
 import PCStatsModule from '../src/modules/PCStats/PCStatsModule';
-import TabletControlModule from '../src/modules/TabletControl/TabletControlModule';
+import RpiBacklightModule from '../src/modules/RpiBacklight/RpiBacklightModule';
 import VolumeMixerModule from '../src/modules/VolumeMixer/VolumeMixerModule';
 import Module from './Module';
 
@@ -8,7 +8,7 @@ export default function getModules(modulesIn: string[]): Module[] {
   const vm = new VolumeMixerModule();
   const lc = new LightControlModule();
   const pc = new PCStatsModule();
-  const tablet = new TabletControlModule();
+  const tablet = new RpiBacklightModule();
 
   const mapped = new Map(Object.entries({
     volume_mixer: vm,

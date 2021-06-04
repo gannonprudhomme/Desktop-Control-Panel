@@ -1,12 +1,12 @@
 import { html, TemplateResult } from 'lit-element';
 import Module from '../../../types/Module';
 import { HomeAssistant } from '../../../types/types';
-import './TabletControlView';
+import './RpiBacklightView';
 
 import DCPConfig from '../../../types/Config';
 import RaspberryPi from '../../../types/RaspberryPi';
 
-export default class TabletControlModule implements Module {
+export default class RpiBacklightModule implements Module {
   icon: string;
   name: string;
   component: (hass: HomeAssistant, config: DCPConfig) => TemplateResult;
@@ -37,8 +37,8 @@ export default class TabletControlModule implements Module {
       }
 
       return html`
-        <tablet-control .hass=${hass} .raspberryPi=${pi}>
-        </tablet-control>
+        <rpi-backlight .hass=${hass} .raspberryPi=${pi}>
+        </rpi-backlight>
       `;
     };
   }

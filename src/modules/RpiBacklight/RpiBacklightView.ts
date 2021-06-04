@@ -7,7 +7,7 @@ import createSlider from '../../Slider';
 import themeColor from '../../theme';
 
 // We probably need to get this type from somewhere
-export default class TabletControlView extends LitElement {
+export default class RpiBacklightView extends LitElement {
   @property({ type: Array }) public hass: HomeAssistant;
   @property({ type: Object }) public raspberryPi: RaspberryPi;
 
@@ -110,6 +110,6 @@ export default class TabletControlView extends LitElement {
   }
 }
 
-if (!customElements.get('tablet-control')) {
-  customElements.define('tablet-control', TabletControlView);
+if (!customElements.get('rpi-backlight')) {
+  customElements.define('rpi-backlight', RpiBacklightView);
 }
