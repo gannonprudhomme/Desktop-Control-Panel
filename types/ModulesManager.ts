@@ -14,7 +14,7 @@ export default function getModules(modulesIn: string[]): Module[] {
     volume_mixer: vm,
     light_control: lc,
     pc_stats: pc,
-    tablet,
+    tablet_control: tablet,
   }));
 
   // TODO: Add filtering of modules we don't want

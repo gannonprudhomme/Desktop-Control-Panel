@@ -4,7 +4,6 @@ import { HomeAssistant } from '../../../types/types';
 import Light from '../../../types/Light';
 import './LightControl';
 
-import icon from '../../res/light-bulb.png';
 import DCPConfig from '../../../types/Config';
 
 export default class LightControlModule implements Module {
@@ -16,7 +15,7 @@ export default class LightControlModule implements Module {
 
   constructor() {
     this.name = 'Light Control';
-    this.icon = icon;
+    this.icon = 'mdi:lightbulb-on';
     this.active = true; // This will change
     this.component = (hass: HomeAssistant, config: DCPConfig): TemplateResult => {
       const lightsConfig = config.lights;

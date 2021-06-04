@@ -3,8 +3,7 @@ import {
 } from 'lit-element';
 import Light from '../../../types/Light';
 import createSlider from '../../Slider';
-import icon from '../../res/light-bulb.png';
-import createImageButton from '../../ImageButton';
+import themeColor from '../../theme';
 
 /**
  * Displays a single light, with multiple sliders (one for brigttness, one for color temp or hue)
@@ -90,7 +89,8 @@ export default class LightSlider extends LitElement {
           </div>
         </div>
         <div class="power-button-container">
-          ${createImageButton(onPowerClick, icon, 'power-button')}
+          <ha-icon-button @click=${onPowerClick} icon="mdi:lightbulb-on" class="power-button">
+          </ha-icon-button>
         </div>
         <div class="light-name-container">
           <span class="light-name">
@@ -102,8 +102,8 @@ export default class LightSlider extends LitElement {
   }
 
   // TODO: See if we can get some of these from elsewhere? slider-info-container should be common
-  static get styles(): CSSResult {
-    return css`
+  static get styles(): CSSResult[] {
+    const styles = css`
       .smart-light-slider-container {
         display: flex;
         flex-direction: column;
@@ -161,15 +161,18 @@ export default class LightSlider extends LitElement {
         flex-grow: 0;
       }
 
-      #power-button {
-        width: 32px;
-        height: 32px;
+      .power-button {
+        --mdc-icon-size: 32px;
+        --mdc-icon-button-size: 36px;
+        color: var(--theme-color);
       }
 
       .temperature-slider-container > .slider {
         background-image: -webkit-linear-gradient( right, rgb(255, 160, 0) 0%, white 50%, rgb(166, 209, 255) 100% );
       }
     `;
+
+    return [themeColor, styles];
   }
 }
 

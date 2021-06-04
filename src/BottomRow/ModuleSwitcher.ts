@@ -2,7 +2,7 @@ import {
   css, CSSResult, html, LitElement, TemplateResult, property,
 } from 'lit-element';
 import Module, { updateCurrentModuleEventName } from '../../types/Module';
-import createImageButton from '../ImageButton';
+import themeColor from '../theme';
 
 export default class ModuleSwitcher extends LitElement {
   @property({ type: Array }) public modules: Module[];
@@ -21,13 +21,12 @@ export default class ModuleSwitcher extends LitElement {
 
   protected render(): TemplateResult {
     const moduleButtons = this.modules.map((mod) => {
-      const button = createImageButton(() => {
-        this.updateCurrentModule(mod);
-      }, mod.icon, 'toggle-button');
+      const action = () => this.updateCurrentModule(mod);
 
       return html`
         <div class="button-container">
-          ${button}
+          <ha-icon-button @click=${action} icon=${mod.icon} class="icon-button">
+          </ha-icon-button>
         </div> 
       `;
     });
@@ -41,13 +40,14 @@ export default class ModuleSwitcher extends LitElement {
     `;
   }
 
-  static get styles(): CSSResult {
-    return css`
+  static get styles(): CSSResult[] {
+    const styles = css`
       #module-swapper {
         display: flex;
         justify-content: flex-end;
         align-items: flex-end;
         width: 100%;
+        height: 100%;
       }
 
       #control-container {
@@ -64,13 +64,15 @@ export default class ModuleSwitcher extends LitElement {
       .button-container {
         padding: 0 4px;
       }
-      
-      #toggle-button {
-        width: 32px;
-        height: 32px;
-        margin: 16px 0;
+
+      .icon-button {
+        --mdc-icon-size: 36px;
+        --mdc-icon-button-size: 40px;
+        color: var(--theme-color);
       }
     `;
+
+    return [themeColor, styles];
   }
 }
 

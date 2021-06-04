@@ -3,7 +3,6 @@ import Module from '../../../types/Module';
 import { HomeAssistant } from '../../../types/types';
 import './TabletControlView';
 
-import icon from '../../res/settings.png';
 import DCPConfig from '../../../types/Config';
 import RaspberryPi from '../../../types/RaspberryPi';
 
@@ -14,8 +13,8 @@ export default class TabletControlModule implements Module {
   active: boolean;
 
   constructor() {
-    this.name = 'Volume Mixer';
-    this.icon = icon;
+    this.name = 'Tablet Control';
+    this.icon = 'mdi:cog-outline';
     this.active = true; // This will change
     this.component = (hass: HomeAssistant, config: DCPConfig): TemplateResult => {
       const piBrightnessName = config.pi_brightness_name;

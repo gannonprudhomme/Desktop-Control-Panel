@@ -226,9 +226,9 @@ parcelRequire=function(e,r,t,n){var i,o="function"==typeof parcelRequire&&parcel
       }
     `]}}n([i.property({type:Object})],o.prototype,"hass",void 0),n([i.property({type:Object})],o.prototype,"config",void 0),exports.default=o,customElements.get("weather-display")||customElements.define("weather-display",o);
 },{"lit-element":"bhxD","../external/weatherIcons":"wpZ5"}],"kLvr":[function(require,module,exports) {
-"use strict";var e=this&&this.__decorate||function(e,t,r,i){var o,s=arguments.length,p=s<3?t:null===i?i=Object.getOwnPropertyDescriptor(t,r):i;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)p=Reflect.decorate(e,t,r,i);else for(var l=e.length-1;l>=0;l--)(o=e[l])&&(p=(s<3?o(p):s>3?o(t,r,p):o(t,r))||p);return s>3&&p&&Object.defineProperty(t,r,p),p};Object.defineProperty(exports,"__esModule",{value:!0});const t=require("lit-element");require("./TimeDisplay"),require("./WeatherDisplay");class r extends t.LitElement{render(){return t.html`
+"use strict";var e=this&&this.__decorate||function(e,t,r,i){var o,s=arguments.length,p=s<3?t:null===i?i=Object.getOwnPropertyDescriptor(t,r):i;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)p=Reflect.decorate(e,t,r,i);else for(var c=e.length-1;c>=0;c--)(o=e[c])&&(p=(s<3?o(p):s>3?o(t,r,p):o(t,r))||p);return s>3&&p&&Object.defineProperty(t,r,p),p};Object.defineProperty(exports,"__esModule",{value:!0});const t=require("lit-element");require("./TimeDisplay"),require("./WeatherDisplay");class r extends t.LitElement{render(){return t.html`
       <div id="top-row">
-        <div>PC Controls</div>
+        <div></div>
         <time-display></time-display>
         <weather-display .hass=${this.hass} .config=${this.config}></weather-display>
       </div>
@@ -373,38 +373,11 @@ parcelRequire=function(e,r,t,n){var i,o="function"==typeof parcelRequire&&parcel
     `;return[o.default,e]}}e([i.property({type:Object})],n.prototype,"hass",void 0),e([i.property({type:Object})],n.prototype,"song",void 0),e([i.property({type:String})],n.prototype,"mediaPlayerId",void 0),exports.default=n,customElements.get("media-control")||customElements.define("media-control",n);
 },{"lit-element":"bhxD","../theme":"AczT"}],"WwXa":[function(require,module,exports) {
 "use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.updateCurrentModuleEventName=void 0,exports.updateCurrentModuleEventName="update-current-module";
-},{}],"eKDL":[function(require,module,exports) {
-"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.ROOT_URL=void 0;const e="desktop-control";exports.ROOT_URL="/local/community/Desktop-Control-Panel",exports.default=e;
-},{}],"HxTM":[function(require,module,exports) {
-"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.createIconButton=void 0;const t=require("lit-element"),i=require("./constants");function e(e,n,o){const c=t.css`
-    .image-button {
-      border: initial;
-      outline: none;
-      background-color: initial;
-      align-items: initial;
-      display: initial;
-      box-sizing: initial;
-    }
-
-    .image-button:active {
-      transform: scale(0.8);
-      filter: grayscale(0.8);
-    }
-  `;return t.html`
-    <style>
-      ${c}
-    </style>
-    <button type="button" @click=${e} class="image-button">
-      <img src=${`${i.ROOT_URL}/${n}`} alt=${o} id=${o}></img>
-    </button> 
-  `}function n(i,e,n){return t.html`
-    <ha-icon-button @click=${i} class=${n} icon=${e}>
-    </ha-icon-button>
-  `}exports.default=e,exports.createIconButton=n;
-},{"lit-element":"bhxD","./constants":"eKDL"}],"yX0n":[function(require,module,exports) {
-"use strict";var e=this&&this.__decorate||function(e,t,o,r){var n,i=arguments.length,d=i<3?t:null===r?r=Object.getOwnPropertyDescriptor(t,o):r;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)d=Reflect.decorate(e,t,o,r);else for(var s=e.length-1;s>=0;s--)(n=e[s])&&(d=(i<3?n(d):i>3?n(t,o,d):n(t,o))||d);return i>3&&d&&Object.defineProperty(t,o,d),d},t=this&&this.__importDefault||function(e){return e&&e.__esModule?e:{default:e}};Object.defineProperty(exports,"__esModule",{value:!0});const o=require("lit-element"),r=require("../../types/Module"),n=t(require("../ImageButton"));class i extends o.LitElement{updateCurrentModule(e){const t=new CustomEvent(r.updateCurrentModuleEventName,{detail:{module:e},bubbles:!0,composed:!0});this.dispatchEvent(t)}render(){const e=this.modules.map(e=>{const t=n.default(()=>{this.updateCurrentModule(e)},e.icon,"toggle-button");return o.html`
+},{}],"yX0n":[function(require,module,exports) {
+"use strict";var e=this&&this.__decorate||function(e,t,o,r){var n,i=arguments.length,s=i<3?t:null===r?r=Object.getOwnPropertyDescriptor(t,o):r;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)s=Reflect.decorate(e,t,o,r);else for(var c=e.length-1;c>=0;c--)(n=e[c])&&(s=(i<3?n(s):i>3?n(t,o,s):n(t,o))||s);return i>3&&s&&Object.defineProperty(t,o,s),s},t=this&&this.__importDefault||function(e){return e&&e.__esModule?e:{default:e}};Object.defineProperty(exports,"__esModule",{value:!0});const o=require("lit-element"),r=require("../../types/Module"),n=t(require("../theme"));class i extends o.LitElement{updateCurrentModule(e){const t=new CustomEvent(r.updateCurrentModuleEventName,{detail:{module:e},bubbles:!0,composed:!0});this.dispatchEvent(t)}render(){const e=this.modules.map(e=>{return o.html`
         <div class="button-container">
-          ${t}
+          <ha-icon-button @click=${()=>this.updateCurrentModule(e)} icon=${e.icon} class="icon-button">
+          </ha-icon-button>
         </div> 
       `});return o.html`
       <div id="module-swapper">
@@ -412,12 +385,13 @@ parcelRequire=function(e,r,t,n){var i,o="function"==typeof parcelRequire&&parcel
           ${e}
         </div>
       </div>
-    `}static get styles(){return o.css`
+    `}static get styles(){const e=o.css`
       #module-swapper {
         display: flex;
         justify-content: flex-end;
         align-items: flex-end;
         width: 100%;
+        height: 100%;
       }
 
       #control-container {
@@ -434,14 +408,14 @@ parcelRequire=function(e,r,t,n){var i,o="function"==typeof parcelRequire&&parcel
       .button-container {
         padding: 0 4px;
       }
-      
-      #toggle-button {
-        width: 32px;
-        height: 32px;
-        margin: 16px 0;
+
+      .icon-button {
+        --mdc-icon-size: 36px;
+        --mdc-icon-button-size: 40px;
+        color: var(--theme-color);
       }
-    `}}e([o.property({type:Array})],i.prototype,"modules",void 0),e([o.property({type:Object})],i.prototype,"currentModule",void 0),exports.default=i,customElements.get("module-switcher")||customElements.define("module-switcher",i);
-},{"lit-element":"bhxD","../../types/Module":"WwXa","../ImageButton":"HxTM"}],"XFkt":[function(require,module,exports) {
+    `;return[n.default,e]}}e([o.property({type:Array})],i.prototype,"modules",void 0),e([o.property({type:Object})],i.prototype,"currentModule",void 0),exports.default=i,customElements.get("module-switcher")||customElements.define("module-switcher",i);
+},{"lit-element":"bhxD","../../types/Module":"WwXa","../theme":"AczT"}],"XFkt":[function(require,module,exports) {
 "use strict";var t=this&&this.__decorate||function(t,e,o,r){var i,s=arguments.length,n=s<3?e:null===r?r=Object.getOwnPropertyDescriptor(e,o):r;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)n=Reflect.decorate(t,e,o,r);else for(var l=t.length-1;l>=0;l--)(i=t[l])&&(n=(s<3?i(n):s>3?i(e,o,n):i(e,o))||n);return s>3&&n&&Object.defineProperty(e,o,n),n};Object.defineProperty(exports,"__esModule",{value:!0}),exports.getSongFromSpotify=void 0;const e=require("lit-element");function o(t,e){if(!e.spotify_name)return console.log("ERROR: No spotify_name passed in as argument"),null;const o=t.states[e.spotify_name];if(!o)return console.log("ERROR: no state"),null;const r=o.attributes;return{title:r.media_title,artistName:r.media_artist,albumArt:r.entity_picture,isPlaying:"playing"===o.state}}require("./TrackDisplay"),require("./MediaControl"),require("./ModuleSwitcher"),exports.getSongFromSpotify=o;class r extends e.LitElement{render(){const t=o(this.hass,this.config);return e.html`
       <div id="bottom-row">
         <track-display .song=${t}></track-display>
@@ -619,18 +593,16 @@ parcelRequire=function(e,r,t,n){var i,o="function"==typeof parcelRequire&&parcel
       </input>
     </div>
   `}exports.default=t;
-},{"lit-element":"bhxD"}],"SgXa":[function(require,module,exports) {
-module.exports="/light-bulb.05b0d28e.png";
-},{}],"kf7s":[function(require,module,exports) {
-"use strict";var t=this&&this.__decorate||function(t,e,i,n){var r,s=arguments.length,l=s<3?e:null===n?n=Object.getOwnPropertyDescriptor(e,i):n;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)l=Reflect.decorate(t,e,i,n);else for(var o=t.length-1;o>=0;o--)(r=t[o])&&(l=(s<3?r(l):s>3?r(e,i,l):r(e,i))||l);return s>3&&l&&Object.defineProperty(e,i,l),l},e=this&&this.__importDefault||function(t){return t&&t.__esModule?t:{default:t}};Object.defineProperty(exports,"__esModule",{value:!0});const i=require("lit-element"),n=e(require("../../Slider")),r=e(require("../../res/light-bulb.png")),s=e(require("../../ImageButton"));class l extends i.LitElement{render(){const t=t=>{const e=t/100*255;this.light={...this.light,brightness:e}},e=t=>{this.light={...this.light,colorTemp:t}},l=this.light.brightness/255*100,o=l?`${l.toFixed(0)}%`:"Off",a=this.light.colorTemp?`${this.light.colorTemp}K`:"Off";return i.html`
+},{"lit-element":"bhxD"}],"kf7s":[function(require,module,exports) {
+"use strict";var t=this&&this.__decorate||function(t,e,i,n){var s,r=arguments.length,l=r<3?e:null===n?n=Object.getOwnPropertyDescriptor(e,i):n;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)l=Reflect.decorate(t,e,i,n);else for(var o=t.length-1;o>=0;o--)(s=t[o])&&(l=(r<3?s(l):r>3?s(e,i,l):s(e,i))||l);return r>3&&l&&Object.defineProperty(e,i,l),l},e=this&&this.__importDefault||function(t){return t&&t.__esModule?t:{default:t}};Object.defineProperty(exports,"__esModule",{value:!0});const i=require("lit-element"),n=e(require("../../Slider")),s=e(require("../../theme"));class r extends i.LitElement{render(){const t=t=>{const e=t/100*255;this.light={...this.light,brightness:e}},e=t=>{this.light={...this.light,colorTemp:t}},s=this.light.brightness/255*100,r=s?`${s.toFixed(0)}%`:"Off",l=this.light.colorTemp?`${this.light.colorTemp}K`:"Off";return i.html`
       <div class="smart-light-slider-container">
         <div class="multi-light-slider-container">
           <div class="light-slider-container">
-            ${n.default(t,e=>{t(e),this.setLightState(this.light.entityId,{brightness_pct:e,entity_id:this.light.entityId})},l,1,100)}
+            ${n.default(t,e=>{t(e),this.setLightState(this.light.entityId,{brightness_pct:e,entity_id:this.light.entityId})},s,1,100)}
 
             <div class="slider-info-container">
               <span class="brightness-value">
-                ${o}
+                ${r}
               </span>
             </div>
           </div>
@@ -640,13 +612,14 @@ module.exports="/light-bulb.05b0d28e.png";
 
             <div class="slider-info-container">
               <span class="brightness-value">
-                ${a}
+                ${l}
               </span>
             </div>
           </div>
         </div>
         <div class="power-button-container">
-          ${s.default(()=>{this.toggleLight(this.light.entityId)},r.default,"power-button")}
+          <ha-icon-button @click=${()=>{this.toggleLight(this.light.entityId)}} icon="mdi:lightbulb-on" class="power-button">
+          </ha-icon-button>
         </div>
         <div class="light-name-container">
           <span class="light-name">
@@ -654,7 +627,7 @@ module.exports="/light-bulb.05b0d28e.png";
           </span>
         </div>
       </div>
-    `}static get styles(){return i.css`
+    `}static get styles(){const t=i.css`
       .smart-light-slider-container {
         display: flex;
         flex-direction: column;
@@ -712,16 +685,17 @@ module.exports="/light-bulb.05b0d28e.png";
         flex-grow: 0;
       }
 
-      #power-button {
-        width: 32px;
-        height: 32px;
+      .power-button {
+        --mdc-icon-size: 32px;
+        --mdc-icon-button-size: 36px;
+        color: var(--theme-color);
       }
 
       .temperature-slider-container > .slider {
         background-image: -webkit-linear-gradient( right, rgb(255, 160, 0) 0%, white 50%, rgb(166, 209, 255) 100% );
       }
-    `}}t([i.property({type:Object})],l.prototype,"light",void 0),t([i.property({type:Function})],l.prototype,"toggleLight",void 0),t([i.property({type:Function})],l.prototype,"setLightState",void 0),exports.default=l,customElements.get("light-slider")||customElements.define("light-slider",l);
-},{"lit-element":"bhxD","../../Slider":"OL9p","../../res/light-bulb.png":"SgXa","../../ImageButton":"HxTM"}],"rmHj":[function(require,module,exports) {
+    `;return[s.default,t]}}t([i.property({type:Object})],r.prototype,"light",void 0),t([i.property({type:Function})],r.prototype,"toggleLight",void 0),t([i.property({type:Function})],r.prototype,"setLightState",void 0),exports.default=r,customElements.get("light-slider")||customElements.define("light-slider",r);
+},{"lit-element":"bhxD","../../Slider":"OL9p","../../theme":"AczT"}],"rmHj":[function(require,module,exports) {
 "use strict";var t=this&&this.__decorate||function(t,e,l,r){var i,o=arguments.length,s=o<3?e:null===r?r=Object.getOwnPropertyDescriptor(e,l):r;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)s=Reflect.decorate(t,e,l,r);else for(var c=t.length-1;c>=0;c--)(i=t[c])&&(s=(o<3?i(s):o>3?i(e,l,s):i(e,l))||s);return o>3&&s&&Object.defineProperty(e,l,s),s};Object.defineProperty(exports,"__esModule",{value:!0});const e=require("lit-element");require("./LightSlider");class l extends e.LitElement{render(){const t=(t,e)=>{this.hass.callService("light","turn_on",{...e,entity_id:t})},l=t=>{this.hass.callService("light","toggle",{entity_id:t})},r=this.lights.map(r=>e.html`
       <!-- Spread & recreate light so it will always re-render (hopefully) -->
       <light-slider
@@ -746,10 +720,10 @@ module.exports="/light-bulb.05b0d28e.png";
       }
     `}}t([e.property({type:Object})],l.prototype,"hass",void 0),t([e.property({type:Array})],l.prototype,"lights",void 0),exports.default=l,customElements.get("light-control")||customElements.define("light-control",l);
 },{"lit-element":"bhxD","./LightSlider":"kf7s"}],"qBI7":[function(require,module,exports) {
-"use strict";var t=this&&this.__importDefault||function(t){return t&&t.__esModule?t:{default:t}};Object.defineProperty(exports,"__esModule",{value:!0});const e=require("lit-element");require("./LightControl");const r=t(require("../../res/light-bulb.png"));class i{constructor(){this.name="Light Control",this.icon=r.default,this.active=!0,this.component=((t,r)=>{const i=r.lights,s=new Map;i.forEach(t=>s.set(t.name,t.priority));const n=i.map(e=>t.states[e.name]).map(t=>{var e;const{brightness:r,color_temp:i,friendly_name:n,min_mireds:o,max_mireds:l}=t.attributes,a=t.entity_id,c=null!==(e=s.get(a))&&void 0!==e?e:0;return{name:n,colorTemp:i,isOn:"on"===t.state,minMireds:o,maxMireds:l,brightness:r,entityId:a,priority:c}});return n.sort((t,e)=>e.priority-t.priority),e.html`
-        <light-control .hass=${t} .lights=${n}></light-control>
-      `})}}exports.default=i;
-},{"lit-element":"bhxD","./LightControl":"rmHj","../../res/light-bulb.png":"SgXa"}],"UY11":[function(require,module,exports) {
+"use strict";Object.defineProperty(exports,"__esModule",{value:!0});const t=require("lit-element");require("./LightControl");class e{constructor(){this.name="Light Control",this.icon="mdi:lightbulb-on",this.active=!0,this.component=((e,i)=>{const r=i.lights,s=new Map;r.forEach(t=>s.set(t.name,t.priority));const o=r.map(t=>e.states[t.name]).map(t=>{var e;const{brightness:i,color_temp:r,friendly_name:o,min_mireds:n,max_mireds:l}=t.attributes,a=t.entity_id,m=null!==(e=s.get(a))&&void 0!==e?e:0;return{name:o,colorTemp:r,isOn:"on"===t.state,minMireds:n,maxMireds:l,brightness:i,entityId:a,priority:m}});return o.sort((t,e)=>e.priority-t.priority),t.html`
+        <light-control .hass=${e} .lights=${o}></light-control>
+      `})}}exports.default=e;
+},{"lit-element":"bhxD","./LightControl":"rmHj"}],"UY11":[function(require,module,exports) {
 "use strict";var t=this&&this.__decorate||function(t,e,s,a){var n,i=arguments.length,r=i<3?e:null===a?a=Object.getOwnPropertyDescriptor(e,s):a;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)r=Reflect.decorate(t,e,s,a);else for(var o=t.length-1;o>=0;o--)(n=t[o])&&(r=(i<3?n(r):i>3?n(e,s,r):n(e,s))||r);return i>3&&r&&Object.defineProperty(e,s,r),r};Object.defineProperty(exports,"__esModule",{value:!0});const e=require("lit-element");class s extends e.LitElement{render(){if(!this.stats)return e.html`
         <div class="unavailable-text">
           PC Stat data not provided.
@@ -784,11 +758,9 @@ module.exports="/light-bulb.05b0d28e.png";
         font-size: 20px;
       }
     `}}t([e.property({type:Object})],s.prototype,"stats",void 0),exports.default=s,customElements.get("pc-stats")||customElements.define("pc-stats",s);
-},{"lit-element":"bhxD"}],"ML5B":[function(require,module,exports) {
-module.exports="/dial.dd16d943.png";
-},{}],"M4iw":[function(require,module,exports) {
-"use strict";var t=this&&this.__importDefault||function(t){return t&&t.__esModule?t:{default:t}};Object.defineProperty(exports,"__esModule",{value:!0});const e=require("lit-element");require("./PCStats");const s=t(require("../../res/dial.png"));function u(t){return(t-32)/1.8}function r(t,e,s){const u=e[s],r=t.states[u];return r?parseFloat(r.state):null}class a{constructor(){this.name="Spotify",this.icon=s.default,this.active=!0,this.component=((t,s)=>{let a=null;const n=s.pc_stats;return n&&(a={gpuTemp:u(r(t,n,"gpu_temp")),cpuTemp:u(r(t,n,"cpu_temp")),cpuUsage:r(t,n,"cpu_usage"),gpuUsage:r(t,n,"gpu_usage"),memoryUsage:r(t,n,"memory_usage")}),e.html`<pc-stats .stats=${a}></pc-stats>`})}}exports.default=a;
-},{"lit-element":"bhxD","./PCStats":"UY11","../../res/dial.png":"ML5B"}],"HcSy":[function(require,module,exports) {
+},{"lit-element":"bhxD"}],"M4iw":[function(require,module,exports) {
+"use strict";Object.defineProperty(exports,"__esModule",{value:!0});const t=require("lit-element");function e(t){return(t-32)/1.8}function s(t,e,s){const u=e[s],p=t.states[u];return p?parseFloat(p.state):null}require("./PCStats");class u{constructor(){this.name="Spotify",this.icon="mdi:speedometer-slow",this.active=!0,this.component=((u,p)=>{let r=null;const a=p.pc_stats;return a&&(r={gpuTemp:e(s(u,a,"gpu_temp")),cpuTemp:e(s(u,a,"cpu_temp")),cpuUsage:s(u,a,"cpu_usage"),gpuUsage:s(u,a,"gpu_usage"),memoryUsage:s(u,a,"memory_usage")}),t.html`<pc-stats .stats=${r}></pc-stats>`})}}exports.default=u;
+},{"lit-element":"bhxD","./PCStats":"UY11"}],"HcSy":[function(require,module,exports) {
 "use strict";var e=this&&this.__decorate||function(e,t,r,i){var s,n=arguments.length,l=n<3?t:null===i?i=Object.getOwnPropertyDescriptor(t,r):i;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)l=Reflect.decorate(e,t,r,i);else for(var o=e.length-1;o>=0;o--)(s=e[o])&&(l=(n<3?s(l):n>3?s(t,r,l):s(t,r))||l);return n>3&&l&&Object.defineProperty(t,r,l),l},t=this&&this.__importDefault||function(e){return e&&e.__esModule?e:{default:e}};Object.defineProperty(exports,"__esModule",{value:!0});const r=require("lit-element"),i=t(require("../../Slider")),s=t(require("../../theme"));class n extends r.LitElement{render(){return this.raspberryPi&&null!==this.raspberryPi.brightness&&null!==this.raspberryPi.power?r.html`
       <div id="tablet-control">
         <div class="brightness-slider-container">
@@ -851,14 +823,12 @@ module.exports="/dial.dd16d943.png";
         margin-left: -25%;
       }
     `;return[s.default,e]}}e([r.property({type:Array})],n.prototype,"hass",void 0),e([r.property({type:Object})],n.prototype,"raspberryPi",void 0),exports.default=n,customElements.get("tablet-control")||customElements.define("tablet-control",n);
-},{"lit-element":"bhxD","../../Slider":"OL9p","../../theme":"AczT"}],"wYKA":[function(require,module,exports) {
-module.exports="/settings.c35e9bc3.png";
-},{}],"PVvG":[function(require,module,exports) {
-"use strict";var t=this&&this.__importDefault||function(t){return t&&t.__esModule?t:{default:t}};Object.defineProperty(exports,"__esModule",{value:!0});const e=require("lit-element");require("./TabletControlView");const s=t(require("../../res/settings.png"));class r{constructor(){this.name="Volume Mixer",this.icon=s.default,this.active=!0,this.component=((t,s)=>{const r=s.pi_brightness_name,i=s.pi_power_name,n={power:null,brightness:null};if(r){const e=t.states[r];void 0!==e&&"unavailable"!==e.state&&(n.brightness=parseInt(e.state,10))}if(i){const e=t.states[i];void 0!==e&&"unavailable"!==e.state&&(n.power="True"===e.state)}return e.html`
-        <tablet-control .hass=${t} .raspberryPi=${n}>
+},{"lit-element":"bhxD","../../Slider":"OL9p","../../theme":"AczT"}],"PVvG":[function(require,module,exports) {
+"use strict";Object.defineProperty(exports,"__esModule",{value:!0});const t=require("lit-element");require("./TabletControlView");class e{constructor(){this.name="Tablet Control",this.icon="mdi:cog-outline",this.active=!0,this.component=((e,s)=>{const o=s.pi_brightness_name,r=s.pi_power_name,n={power:null,brightness:null};if(o){const t=e.states[o];void 0!==t&&"unavailable"!==t.state&&(n.brightness=parseInt(t.state,10))}if(r){const t=e.states[r];void 0!==t&&"unavailable"!==t.state&&(n.power="True"===t.state)}return t.html`
+        <tablet-control .hass=${e} .raspberryPi=${n}>
         </tablet-control>
-      `})}}exports.default=r;
-},{"lit-element":"bhxD","./TabletControlView":"HcSy","../../res/settings.png":"wYKA"}],"t5Rq":[function(require,module,exports) {
+      `})}}exports.default=e;
+},{"lit-element":"bhxD","./TabletControlView":"HcSy"}],"t5Rq":[function(require,module,exports) {
 "use strict";var e=this&&this.__decorate||function(e,t,s,i){var l,o=arguments.length,r=o<3?t:null===i?i=Object.getOwnPropertyDescriptor(t,s):i;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)r=Reflect.decorate(e,t,s,i);else for(var n=e.length-1;n>=0;n--)(l=e[n])&&(r=(o<3?l(r):o>3?l(t,s,r):l(t,s))||r);return o>3&&r&&Object.defineProperty(t,s,r),r},t=this&&this.__importDefault||function(e){return e&&e.__esModule?e:{default:e}};Object.defineProperty(exports,"__esModule",{value:!0});const s=require("lit-element"),i=t(require("../../Slider"));class l extends s.LitElement{render(){if(!this.volumeProcess)return s.html`<div> empty </div>`;const e=`/local/icons/${this.volumeProcess.name}.png`;return s.html`
       <div class="volume-slider-container">
         ${i.default(e=>{this.setVolume(this.volumeProcess.pid,e),this.volumeProcess={...this.volumeProcess,volume:e}},null,this.volumeProcess.volume,0,100,"override")}
@@ -947,14 +917,12 @@ module.exports="/settings.c35e9bc3.png";
         height: 100%;
       }
     `}}e([t.property({type:Array})],r.prototype,"hass",void 0),e([t.property({type:Array})],r.prototype,"volumeProcesses",void 0),exports.default=r,customElements.get("volume-mixer")||customElements.define("volume-mixer",r);
-},{"lit-element":"bhxD","./VolumeSlider":"t5Rq"}],"e1m1":[function(require,module,exports) {
-module.exports="/levels-adjustment.5a50fb25.png";
-},{}],"iZUv":[function(require,module,exports) {
-"use strict";var e=this&&this.__importDefault||function(e){return e&&e.__esModule?e:{default:e}};Object.defineProperty(exports,"__esModule",{value:!0});const t=require("lit-element");require("./VolumeMixer");const s=e(require("../../res/levels-adjustment.png"));class r{constructor(){this.name="Volume Mixer",this.icon=s.default,this.active=!0,this.component=((e,s)=>{const r=s.desktop_name;let o=null;return r&&e.states[r]&&(o=e.states[r].attributes.processes),t.html`
-        <volume-mixer .hass=${e} .volumeProcesses=${o}></volume-mixer>
-      `})}}exports.default=r;
-},{"lit-element":"bhxD","./VolumeMixer":"fg5f","../../res/levels-adjustment.png":"e1m1"}],"Jx17":[function(require,module,exports) {
-"use strict";var e=this&&this.__importDefault||function(e){return e&&e.__esModule?e:{default:e}};Object.defineProperty(exports,"__esModule",{value:!0});const t=e(require("../src/modules/LightControl/LightControlModule")),r=e(require("../src/modules/PCStats/PCStatsModule")),o=e(require("../src/modules/TabletControl/TabletControlModule")),l=e(require("../src/modules/VolumeMixer/VolumeMixerModule"));function u(e){const u=new l.default,n=new t.default,s=new r.default,i=new o.default,a=new Map(Object.entries({volume_mixer:u,light_control:n,pc_stats:s,tablet:i}));return e.map(e=>{const t=a.get(e);return t||(console.error(`${e} not in module map!`),null)}).filter(e=>e)}exports.default=u;
+},{"lit-element":"bhxD","./VolumeSlider":"t5Rq"}],"iZUv":[function(require,module,exports) {
+"use strict";Object.defineProperty(exports,"__esModule",{value:!0});const e=require("lit-element");require("./VolumeMixer");class t{constructor(){this.name="Volume Mixer",this.icon="mdi:tune-vertical",this.active=!0,this.component=((t,s)=>{const r=s.desktop_name;let o=null;return r&&t.states[r]&&(o=t.states[r].attributes.processes),e.html`
+        <volume-mixer .hass=${t} .volumeProcesses=${o}></volume-mixer>
+      `})}}exports.default=t;
+},{"lit-element":"bhxD","./VolumeMixer":"fg5f"}],"Jx17":[function(require,module,exports) {
+"use strict";var e=this&&this.__importDefault||function(e){return e&&e.__esModule?e:{default:e}};Object.defineProperty(exports,"__esModule",{value:!0});const t=e(require("../src/modules/LightControl/LightControlModule")),o=e(require("../src/modules/PCStats/PCStatsModule")),r=e(require("../src/modules/TabletControl/TabletControlModule")),l=e(require("../src/modules/VolumeMixer/VolumeMixerModule"));function u(e){const u=new l.default,n=new t.default,s=new o.default,i=new r.default,a=new Map(Object.entries({volume_mixer:u,light_control:n,pc_stats:s,tablet_control:i}));return e.map(e=>{const t=a.get(e);return t||(console.error(`${e} not in module map!`),null)}).filter(e=>e)}exports.default=u;
 },{"../src/modules/LightControl/LightControlModule":"qBI7","../src/modules/PCStats/PCStatsModule":"M4iw","../src/modules/TabletControl/TabletControlModule":"PVvG","../src/modules/VolumeMixer/VolumeMixerModule":"iZUv"}],"QCba":[function(require,module,exports) {
 "use strict";var e=this&&this.__decorate||function(e,t,o,r){var s,i=arguments.length,d=i<3?t:null===r?r=Object.getOwnPropertyDescriptor(t,o):r;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)d=Reflect.decorate(e,t,o,r);else for(var l=e.length-1;l>=0;l--)(s=e[l])&&(d=(i<3?s(d):i>3?s(t,o,d):s(t,o))||d);return i>3&&d&&Object.defineProperty(t,o,d),d},t=this&&this.__importDefault||function(e){return e&&e.__esModule?e:{default:e}};Object.defineProperty(exports,"__esModule",{value:!0});const o=require("lit-element");require("./TopRow/TopRow"),require("./MiddleRow/MiddleRow"),require("./BottomRow/BottomRow");const r=t(require("../types/ModulesManager"));class s extends o.LitElement{constructor(){super(),this.currentModule=null,this.addEventListener("update-current-module",this.handleUpdateCurrentModule)}handleUpdateCurrentModule(e){const{detail:t}=e;if(!t.module)throw Error("did not receive module in current-module CustomEvent");this.currentModule=t.module}render(){return this.modules||(this.modules=r.default(this.panel.config.modules),[this.currentModule=null]=this.modules),o.html`
       <div class="grid-container">

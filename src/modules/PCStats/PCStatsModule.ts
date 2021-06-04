@@ -3,7 +3,6 @@ import Module from '../../../types/Module';
 import { HomeAssistant } from '../../../types/types';
 import './PCStats';
 
-import icon from '../../res/dial.png';
 import PCStatData from '../../../types/PCStats';
 import DCPConfig, { PCStatsConfig } from '../../../types/Config';
 
@@ -39,7 +38,7 @@ export default class PCStatsModule implements Module {
 
   constructor() {
     this.name = 'Spotify';
-    this.icon = icon;
+    this.icon = 'mdi:speedometer-slow';
     this.active = true; // This will change
     this.component = (hass: HomeAssistant, config: DCPConfig): TemplateResult => {
       let pcData: PCStatData = null;

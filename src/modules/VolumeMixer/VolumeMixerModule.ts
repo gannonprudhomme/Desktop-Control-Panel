@@ -3,7 +3,6 @@ import Module from '../../../types/Module';
 import { HomeAssistant } from '../../../types/types';
 import './VolumeMixer';
 
-import icon from '../../res/levels-adjustment.png';
 import VolumeProcess from '../../../types/VolumeProcess';
 import DCPConfig from '../../../types/Config';
 
@@ -15,7 +14,7 @@ export default class VolumeMixerModule implements Module {
 
   constructor() {
     this.name = 'Volume Mixer';
-    this.icon = icon;
+    this.icon = 'mdi:tune-vertical';
     this.active = true; // This will change
     this.component = (hass: HomeAssistant, config: DCPConfig): TemplateResult => {
       const desktopName: string = config.desktop_name;
