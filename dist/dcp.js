@@ -760,7 +760,7 @@ parcelRequire=function(e,r,t,n){var i,o="function"==typeof parcelRequire&&parcel
     `}}t([e.property({type:Object})],s.prototype,"stats",void 0),exports.default=s,customElements.get("pc-stats")||customElements.define("pc-stats",s);
 },{"lit-element":"bhxD"}],"M4iw":[function(require,module,exports) {
 "use strict";Object.defineProperty(exports,"__esModule",{value:!0});const t=require("lit-element");function e(t){return(t-32)/1.8}function s(t,e,s){const u=e[s],p=t.states[u];return p?parseFloat(p.state):null}require("./PCStats");class u{constructor(){this.name="Spotify",this.icon="mdi:speedometer-slow",this.active=!0,this.component=((u,p)=>{let r=null;const a=p.pc_stats;return a&&(r={gpuTemp:e(s(u,a,"gpu_temp")),cpuTemp:e(s(u,a,"cpu_temp")),cpuUsage:s(u,a,"cpu_usage"),gpuUsage:s(u,a,"gpu_usage"),memoryUsage:s(u,a,"memory_usage")}),t.html`<pc-stats .stats=${r}></pc-stats>`})}}exports.default=u;
-},{"lit-element":"bhxD","./PCStats":"UY11"}],"HcSy":[function(require,module,exports) {
+},{"lit-element":"bhxD","./PCStats":"UY11"}],"cNX6":[function(require,module,exports) {
 "use strict";var e=this&&this.__decorate||function(e,t,r,i){var s,n=arguments.length,l=n<3?t:null===i?i=Object.getOwnPropertyDescriptor(t,r):i;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)l=Reflect.decorate(e,t,r,i);else for(var o=e.length-1;o>=0;o--)(s=e[o])&&(l=(n<3?s(l):n>3?s(t,r,l):s(t,r))||l);return n>3&&l&&Object.defineProperty(t,r,l),l},t=this&&this.__importDefault||function(e){return e&&e.__esModule?e:{default:e}};Object.defineProperty(exports,"__esModule",{value:!0});const r=require("lit-element"),i=t(require("../../Slider")),s=t(require("../../theme"));class n extends r.LitElement{render(){return this.raspberryPi&&null!==this.raspberryPi.brightness&&null!==this.raspberryPi.power?r.html`
       <div id="tablet-control">
         <div class="brightness-slider-container">
@@ -822,13 +822,13 @@ parcelRequire=function(e,r,t,n){var i,o="function"==typeof parcelRequire&&parcel
         width: 0;
         margin-left: -25%;
       }
-    `;return[s.default,e]}}e([r.property({type:Array})],n.prototype,"hass",void 0),e([r.property({type:Object})],n.prototype,"raspberryPi",void 0),exports.default=n,customElements.get("tablet-control")||customElements.define("tablet-control",n);
-},{"lit-element":"bhxD","../../Slider":"OL9p","../../theme":"AczT"}],"PVvG":[function(require,module,exports) {
-"use strict";Object.defineProperty(exports,"__esModule",{value:!0});const t=require("lit-element");require("./TabletControlView");class e{constructor(){this.name="Tablet Control",this.icon="mdi:cog-outline",this.active=!0,this.component=((e,s)=>{const o=s.pi_brightness_name,r=s.pi_power_name,n={power:null,brightness:null};if(o){const t=e.states[o];void 0!==t&&"unavailable"!==t.state&&(n.brightness=parseInt(t.state,10))}if(r){const t=e.states[r];void 0!==t&&"unavailable"!==t.state&&(n.power="True"===t.state)}return t.html`
-        <tablet-control .hass=${e} .raspberryPi=${n}>
-        </tablet-control>
+    `;return[s.default,e]}}e([r.property({type:Array})],n.prototype,"hass",void 0),e([r.property({type:Object})],n.prototype,"raspberryPi",void 0),exports.default=n,customElements.get("rpi-backlight")||customElements.define("rpi-backlight",n);
+},{"lit-element":"bhxD","../../Slider":"OL9p","../../theme":"AczT"}],"VntG":[function(require,module,exports) {
+"use strict";Object.defineProperty(exports,"__esModule",{value:!0});const t=require("lit-element");require("./RpiBacklightView");class e{constructor(){this.name="Tablet Control",this.icon="mdi:cog-outline",this.active=!0,this.component=((e,s)=>{const i=s.pi_brightness_name,r=s.pi_power_name,a={power:null,brightness:null};if(i){const t=e.states[i];void 0!==t&&"unavailable"!==t.state&&(a.brightness=parseInt(t.state,10))}if(r){const t=e.states[r];void 0!==t&&"unavailable"!==t.state&&(a.power="True"===t.state)}return t.html`
+        <rpi-backlight .hass=${e} .raspberryPi=${a}>
+        </rpi-backlight>
       `})}}exports.default=e;
-},{"lit-element":"bhxD","./TabletControlView":"HcSy"}],"t5Rq":[function(require,module,exports) {
+},{"lit-element":"bhxD","./RpiBacklightView":"cNX6"}],"fgA5":[function(require,module,exports) {
 "use strict";var e=this&&this.__decorate||function(e,t,s,i){var l,o=arguments.length,r=o<3?t:null===i?i=Object.getOwnPropertyDescriptor(t,s):i;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)r=Reflect.decorate(e,t,s,i);else for(var n=e.length-1;n>=0;n--)(l=e[n])&&(r=(o<3?l(r):o>3?l(t,s,r):l(t,s))||r);return o>3&&r&&Object.defineProperty(t,s,r),r},t=this&&this.__importDefault||function(e){return e&&e.__esModule?e:{default:e}};Object.defineProperty(exports,"__esModule",{value:!0});const s=require("lit-element"),i=t(require("../../Slider"));class l extends s.LitElement{render(){if(!this.volumeProcess)return s.html`<div> empty </div>`;const e=`/local/icons/${this.volumeProcess.name}.png`;return s.html`
       <div class="volume-slider-container">
         ${i.default(e=>{this.setVolume(this.volumeProcess.pid,e),this.volumeProcess={...this.volumeProcess,volume:e}},null,this.volumeProcess.volume,0,100,"override")}
@@ -886,17 +886,17 @@ parcelRequire=function(e,r,t,n){var i,o="function"==typeof parcelRequire&&parcel
         max-width: 6rem;
       }
     `}}e([s.property({type:Object})],l.prototype,"volumeProcess",void 0),e([s.property({type:Function})],l.prototype,"setVolume",void 0),exports.default=l,customElements.get("volume-slider")||customElements.define("volume-slider",l);
-},{"lit-element":"bhxD","../../Slider":"OL9p"}],"fg5f":[function(require,module,exports) {
-"use strict";var e=this&&this.__decorate||function(e,t,r,o){var s,i=arguments.length,l=i<3?t:null===o?o=Object.getOwnPropertyDescriptor(t,r):o;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)l=Reflect.decorate(e,t,r,o);else for(var n=e.length-1;n>=0;n--)(s=e[n])&&(l=(i<3?s(l):i>3?s(t,r,l):s(t,r))||l);return i>3&&l&&Object.defineProperty(t,r,l),l};Object.defineProperty(exports,"__esModule",{value:!0});const t=require("lit-element");require("./VolumeSlider");class r extends t.LitElement{render(){const e=(e,t)=>{this.hass.callService("desktop_processes","set_process_volume",{pid:e,volume:t})};if(!this.volumeProcesses)return t.html`
+},{"lit-element":"bhxD","../../Slider":"OL9p"}],"iGlQ":[function(require,module,exports) {
+"use strict";var e=this&&this.__decorate||function(e,t,s,r){var o,i=arguments.length,l=i<3?t:null===r?r=Object.getOwnPropertyDescriptor(t,s):r;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)l=Reflect.decorate(e,t,s,r);else for(var c=e.length-1;c>=0;c--)(o=e[c])&&(l=(i<3?o(l):i>3?o(t,s,l):o(t,s))||l);return i>3&&l&&Object.defineProperty(t,s,l),l};Object.defineProperty(exports,"__esModule",{value:!0});const t=require("lit-element");require("./VolumeSlider");class s extends t.LitElement{render(){const e=(e,t)=>{this.hass.callService("desktop_processes","set_process_volume",{pid:e,volume:t})};if(!this.volumeProcesses)return t.html`
         <div class="invalid-entry">
           desktop_name was either not passed or is invalid.
         </div>
-      `;const r=this.volumeProcesses.sort((e,t)=>e.priority===t.priority?e.name.localeCompare(t.name):t.priority-e.priority).map(r=>t.html`
-      <volume-slider .volumeProcess=${r} class="volume-slider" .setVolume=${e} />
+      `;const s=this.volumeProcesses.sort((e,t)=>e.priority===t.priority?e.name.localeCompare(t.name):t.priority-e.priority).map(s=>t.html`
+      <volume-slider .volumeProcess=${s} class="volume-slider" .setVolume=${e} />
       <volume-slider>
     `);return t.html`
       <div id="volume-mixer">
-        ${r}
+        ${s}
       </div>
     `}static get styles(){return t.css`
       #volume-mixer {
@@ -916,14 +916,15 @@ parcelRequire=function(e,r,t,n){var i,o="function"==typeof parcelRequire&&parcel
         font-size: 20px;
         height: 100%;
       }
-    `}}e([t.property({type:Array})],r.prototype,"hass",void 0),e([t.property({type:Array})],r.prototype,"volumeProcesses",void 0),exports.default=r,customElements.get("volume-mixer")||customElements.define("volume-mixer",r);
-},{"lit-element":"bhxD","./VolumeSlider":"t5Rq"}],"iZUv":[function(require,module,exports) {
-"use strict";Object.defineProperty(exports,"__esModule",{value:!0});const e=require("lit-element");require("./VolumeMixer");class t{constructor(){this.name="Volume Mixer",this.icon="mdi:tune-vertical",this.active=!0,this.component=((t,s)=>{const r=s.desktop_name;let o=null;return r&&t.states[r]&&(o=t.states[r].attributes.processes),e.html`
-        <volume-mixer .hass=${t} .volumeProcesses=${o}></volume-mixer>
-      `})}}exports.default=t;
-},{"lit-element":"bhxD","./VolumeMixer":"fg5f"}],"Jx17":[function(require,module,exports) {
-"use strict";var e=this&&this.__importDefault||function(e){return e&&e.__esModule?e:{default:e}};Object.defineProperty(exports,"__esModule",{value:!0});const t=e(require("../src/modules/LightControl/LightControlModule")),o=e(require("../src/modules/PCStats/PCStatsModule")),r=e(require("../src/modules/TabletControl/TabletControlModule")),l=e(require("../src/modules/VolumeMixer/VolumeMixerModule"));function u(e){const u=new l.default,n=new t.default,s=new o.default,i=new r.default,a=new Map(Object.entries({volume_mixer:u,light_control:n,pc_stats:s,tablet_control:i}));return e.map(e=>{const t=a.get(e);return t||(console.error(`${e} not in module map!`),null)}).filter(e=>e)}exports.default=u;
-},{"../src/modules/LightControl/LightControlModule":"qBI7","../src/modules/PCStats/PCStatsModule":"M4iw","../src/modules/TabletControl/TabletControlModule":"PVvG","../src/modules/VolumeMixer/VolumeMixerModule":"iZUv"}],"QCba":[function(require,module,exports) {
+    `}}e([t.property({type:Array})],s.prototype,"hass",void 0),e([t.property({type:Array})],s.prototype,"volumeProcesses",void 0),exports.default=s,customElements.get("desktop-processes")||customElements.define("desktop-processes",s);
+},{"lit-element":"bhxD","./VolumeSlider":"fgA5"}],"uUuN":[function(require,module,exports) {
+"use strict";Object.defineProperty(exports,"__esModule",{value:!0});const e=require("lit-element");require("./DesktopProcessesView");class s{constructor(){this.name="Volume Mixer",this.icon="mdi:tune-vertical",this.active=!0,this.component=((s,t)=>{const o=t.desktop_name;let r=null;return o&&s.states[o]&&(r=s.states[o].attributes.processes),e.html`
+        <desktop-processes .hass=${s} .volumeProcesses=${r}>
+        </desktop-processes>
+      `})}}exports.default=s;
+},{"lit-element":"bhxD","./DesktopProcessesView":"iGlQ"}],"Jx17":[function(require,module,exports) {
+"use strict";var e=this&&this.__importDefault||function(e){return e&&e.__esModule?e:{default:e}};Object.defineProperty(exports,"__esModule",{value:!0});const t=e(require("../src/modules/LightControl/LightControlModule")),o=e(require("../src/modules/PCStats/PCStatsModule")),r=e(require("../src/modules/RpiBacklight/RpiBacklightModule")),s=e(require("../src/modules/DesktopProcesses/DesktopProcessesModule"));function l(e){const l=new s.default,u=new t.default,n=new o.default,c=new r.default,i=new Map(Object.entries({desktop_processes:l,light_control:u,pc_stats:n,tablet_control:c}));return e.map(e=>{const t=i.get(e);return t||(console.error(`${e} not in module map!`),null)}).filter(e=>e)}exports.default=l;
+},{"../src/modules/LightControl/LightControlModule":"qBI7","../src/modules/PCStats/PCStatsModule":"M4iw","../src/modules/RpiBacklight/RpiBacklightModule":"VntG","../src/modules/DesktopProcesses/DesktopProcessesModule":"uUuN"}],"QCba":[function(require,module,exports) {
 "use strict";var e=this&&this.__decorate||function(e,t,o,r){var s,i=arguments.length,d=i<3?t:null===r?r=Object.getOwnPropertyDescriptor(t,o):r;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)d=Reflect.decorate(e,t,o,r);else for(var l=e.length-1;l>=0;l--)(s=e[l])&&(d=(i<3?s(d):i>3?s(t,o,d):s(t,o))||d);return i>3&&d&&Object.defineProperty(t,o,d),d},t=this&&this.__importDefault||function(e){return e&&e.__esModule?e:{default:e}};Object.defineProperty(exports,"__esModule",{value:!0});const o=require("lit-element");require("./TopRow/TopRow"),require("./MiddleRow/MiddleRow"),require("./BottomRow/BottomRow");const r=t(require("../types/ModulesManager"));class s extends o.LitElement{constructor(){super(),this.currentModule=null,this.addEventListener("update-current-module",this.handleUpdateCurrentModule)}handleUpdateCurrentModule(e){const{detail:t}=e;if(!t.module)throw Error("did not receive module in current-module CustomEvent");this.currentModule=t.module}render(){return this.modules||(this.modules=r.default(this.panel.config.modules),[this.currentModule=null]=this.modules),o.html`
       <div class="grid-container">
         <top-row .hass=${this.hass} .config=${this.panel.config}></top-row>

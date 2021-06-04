@@ -1,12 +1,12 @@
 import { html, TemplateResult } from 'lit-element';
 import Module from '../../../types/Module';
 import { HomeAssistant } from '../../../types/types';
-import './VolumeMixer';
+import './DesktopProcessesView';
 
 import VolumeProcess from '../../../types/VolumeProcess';
 import DCPConfig from '../../../types/Config';
 
-export default class VolumeMixerModule implements Module {
+export default class DesktopProcessesModule implements Module {
   icon: string;
   name: string;
   component: (hass: HomeAssistant, config: DCPConfig) => TemplateResult;
@@ -26,7 +26,8 @@ export default class VolumeMixerModule implements Module {
       }
 
       return html`
-        <volume-mixer .hass=${hass} .volumeProcesses=${procs}></volume-mixer>
+        <desktop-processes .hass=${hass} .volumeProcesses=${procs}>
+        </desktop-processes>
       `;
     };
   }

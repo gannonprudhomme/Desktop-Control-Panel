@@ -6,7 +6,7 @@ import VolumeProcess from '../../../types/VolumeProcess';
 import './VolumeSlider';
 
 // We probably need to get this type from somewhere
-export default class VolumeMixer extends LitElement {
+export default class DesktopProcessesView extends LitElement {
   @property({ type: Array }) public hass: HomeAssistant;
   @property({ type: Array }) public volumeProcesses: VolumeProcess[];
 
@@ -66,6 +66,6 @@ export default class VolumeMixer extends LitElement {
   }
 }
 
-if (!customElements.get('volume-mixer')) {
-  customElements.define('volume-mixer', VolumeMixer);
+if (!customElements.get('desktop-processes')) {
+  customElements.define('desktop-processes', DesktopProcessesView);
 }
