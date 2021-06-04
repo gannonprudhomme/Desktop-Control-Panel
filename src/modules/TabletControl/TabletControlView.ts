@@ -1,10 +1,8 @@
-import { mdiPower, mdiSleep } from '@mdi/js';
 import {
   css, CSSResult, html, LitElement, TemplateResult, property,
 } from 'lit-element';
 import RaspberryPi from '../../../types/RaspberryPi';
 import { HomeAssistant } from '../../../types/types';
-import { createIconButton } from '../../ImageButton';
 import createSlider from '../../Slider';
 
 // We probably need to get this type from somewhere
