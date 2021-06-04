@@ -8,13 +8,13 @@ export default function getModules(modulesIn: string[]): Module[] {
   const dp = new DesktopProcessesModule();
   const lc = new LightControlModule();
   const pc = new PCStatsModule();
-  const tablet = new RpiBacklightModule();
+  const rpi = new RpiBacklightModule();
 
   const mapped = new Map(Object.entries({
     desktop_processes: dp,
     light_control: lc,
     pc_stats: pc,
-    tablet_control: tablet,
+    rpi_backlight: rpi,
   }));
 
   // TODO: Add filtering of modules we don't want
