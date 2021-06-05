@@ -23,6 +23,14 @@ export default class DesktopProcessesView extends LitElement {
       `;
     }
 
+    if (this.volumeProcesses.length === 0) {
+      return html`
+        <div class="invalid-entry">
+          No available processes
+        </div>
+      `;
+    }
+
     const sortedProcs = this.volumeProcesses.sort((a, b) => {
       if (a.priority === b.priority) {
         return a.name.localeCompare(b.name); // ascending (alphabetical)

@@ -695,7 +695,7 @@ parcelRequire=function(e,r,t,n){var i,o="function"==typeof parcelRequire&&parcel
         background-image: -webkit-linear-gradient( right, rgb(255, 160, 0) 0%, white 50%, rgb(166, 209, 255) 100% );
       }
     `;return[s.default,t]}}t([i.property({type:Object})],r.prototype,"light",void 0),t([i.property({type:Function})],r.prototype,"toggleLight",void 0),t([i.property({type:Function})],r.prototype,"setLightState",void 0),exports.default=r,customElements.get("light-slider")||customElements.define("light-slider",r);
-},{"lit-element":"bhxD","../../Slider":"OL9p","../../theme":"AczT"}],"rmHj":[function(require,module,exports) {
+},{"lit-element":"bhxD","../../Slider":"OL9p","../../theme":"AczT"}],"jcpV":[function(require,module,exports) {
 "use strict";var t=this&&this.__decorate||function(t,e,l,r){var i,o=arguments.length,s=o<3?e:null===r?r=Object.getOwnPropertyDescriptor(e,l):r;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)s=Reflect.decorate(t,e,l,r);else for(var c=t.length-1;c>=0;c--)(i=t[c])&&(s=(o<3?i(s):o>3?i(e,l,s):i(e,l))||s);return o>3&&s&&Object.defineProperty(e,l,s),s};Object.defineProperty(exports,"__esModule",{value:!0});const e=require("lit-element");require("./LightSlider");class l extends e.LitElement{render(){const t=(t,e)=>{this.hass.callService("light","turn_on",{...e,entity_id:t})},l=t=>{this.hass.callService("light","toggle",{entity_id:t})},r=this.lights.map(r=>e.html`
       <!-- Spread & recreate light so it will always re-render (hopefully) -->
       <light-slider
@@ -720,10 +720,10 @@ parcelRequire=function(e,r,t,n){var i,o="function"==typeof parcelRequire&&parcel
       }
     `}}t([e.property({type:Object})],l.prototype,"hass",void 0),t([e.property({type:Array})],l.prototype,"lights",void 0),exports.default=l,customElements.get("light-control")||customElements.define("light-control",l);
 },{"lit-element":"bhxD","./LightSlider":"kf7s"}],"qBI7":[function(require,module,exports) {
-"use strict";Object.defineProperty(exports,"__esModule",{value:!0});const t=require("lit-element");require("./LightControl");class e{constructor(){this.name="Light Control",this.icon="mdi:lightbulb-on",this.active=!0,this.component=((e,i)=>{const r=i.lights,s=new Map;r.forEach(t=>s.set(t.name,t.priority));const o=r.map(t=>e.states[t.name]).map(t=>{var e;const{brightness:i,color_temp:r,friendly_name:o,min_mireds:n,max_mireds:l}=t.attributes,a=t.entity_id,m=null!==(e=s.get(a))&&void 0!==e?e:0;return{name:o,colorTemp:r,isOn:"on"===t.state,minMireds:n,maxMireds:l,brightness:i,entityId:a,priority:m}});return o.sort((t,e)=>e.priority-t.priority),t.html`
+"use strict";Object.defineProperty(exports,"__esModule",{value:!0});const t=require("lit-element");require("./LightControlView");class e{constructor(){this.name="Light Control",this.icon="mdi:lightbulb-on",this.active=!0,this.component=((e,i)=>{const r=i.lights,s=new Map;r.forEach(t=>s.set(t.name,t.priority));const o=r.map(t=>e.states[t.name]).map(t=>{var e;const{brightness:i,color_temp:r,friendly_name:o,min_mireds:n,max_mireds:l}=t.attributes,a=t.entity_id,m=null!==(e=s.get(a))&&void 0!==e?e:0;return{name:o,colorTemp:r,isOn:"on"===t.state,minMireds:n,maxMireds:l,brightness:i,entityId:a,priority:m}});return o.sort((t,e)=>e.priority-t.priority),t.html`
         <light-control .hass=${e} .lights=${o}></light-control>
       `})}}exports.default=e;
-},{"lit-element":"bhxD","./LightControl":"rmHj"}],"UY11":[function(require,module,exports) {
+},{"lit-element":"bhxD","./LightControlView":"jcpV"}],"LGeR":[function(require,module,exports) {
 "use strict";var t=this&&this.__decorate||function(t,e,s,a){var n,i=arguments.length,r=i<3?e:null===a?a=Object.getOwnPropertyDescriptor(e,s):a;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)r=Reflect.decorate(t,e,s,a);else for(var o=t.length-1;o>=0;o--)(n=t[o])&&(r=(i<3?n(r):i>3?n(e,s,r):n(e,s))||r);return i>3&&r&&Object.defineProperty(e,s,r),r};Object.defineProperty(exports,"__esModule",{value:!0});const e=require("lit-element");class s extends e.LitElement{render(){if(!this.stats)return e.html`
         <div class="unavailable-text">
           PC Stat data not provided.
@@ -759,8 +759,8 @@ parcelRequire=function(e,r,t,n){var i,o="function"==typeof parcelRequire&&parcel
       }
     `}}t([e.property({type:Object})],s.prototype,"stats",void 0),exports.default=s,customElements.get("pc-stats")||customElements.define("pc-stats",s);
 },{"lit-element":"bhxD"}],"M4iw":[function(require,module,exports) {
-"use strict";Object.defineProperty(exports,"__esModule",{value:!0});const t=require("lit-element");function e(t){return(t-32)/1.8}function s(t,e,s){const u=e[s],p=t.states[u];return p?parseFloat(p.state):null}require("./PCStats");class u{constructor(){this.name="Spotify",this.icon="mdi:speedometer-slow",this.active=!0,this.component=((u,p)=>{let r=null;const a=p.pc_stats;return a&&(r={gpuTemp:e(s(u,a,"gpu_temp")),cpuTemp:e(s(u,a,"cpu_temp")),cpuUsage:s(u,a,"cpu_usage"),gpuUsage:s(u,a,"gpu_usage"),memoryUsage:s(u,a,"memory_usage")}),t.html`<pc-stats .stats=${r}></pc-stats>`})}}exports.default=u;
-},{"lit-element":"bhxD","./PCStats":"UY11"}],"cNX6":[function(require,module,exports) {
+"use strict";Object.defineProperty(exports,"__esModule",{value:!0});const t=require("lit-element");function e(t){return(t-32)/1.8}function s(t,e,s){const u=e[s],p=t.states[u];return p?parseFloat(p.state):null}require("./PCStatsView");class u{constructor(){this.name="Spotify",this.icon="mdi:speedometer-slow",this.active=!0,this.component=((u,p)=>{let r=null;const a=p.pc_stats;return a&&(r={gpuTemp:e(s(u,a,"gpu_temp")),cpuTemp:e(s(u,a,"cpu_temp")),cpuUsage:s(u,a,"cpu_usage"),gpuUsage:s(u,a,"gpu_usage"),memoryUsage:s(u,a,"memory_usage")}),t.html`<pc-stats .stats=${r}></pc-stats>`})}}exports.default=u;
+},{"lit-element":"bhxD","./PCStatsView":"LGeR"}],"cNX6":[function(require,module,exports) {
 "use strict";var e=this&&this.__decorate||function(e,t,r,i){var s,n=arguments.length,l=n<3?t:null===i?i=Object.getOwnPropertyDescriptor(t,r):i;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)l=Reflect.decorate(e,t,r,i);else for(var o=e.length-1;o>=0;o--)(s=e[o])&&(l=(n<3?s(l):n>3?s(t,r,l):s(t,r))||l);return n>3&&l&&Object.defineProperty(t,r,l),l},t=this&&this.__importDefault||function(e){return e&&e.__esModule?e:{default:e}};Object.defineProperty(exports,"__esModule",{value:!0});const r=require("lit-element"),i=t(require("../../Slider")),s=t(require("../../theme"));class n extends r.LitElement{render(){return this.raspberryPi&&null!==this.raspberryPi.brightness&&null!==this.raspberryPi.power?r.html`
       <div id="tablet-control">
         <div class="brightness-slider-container">
@@ -887,9 +887,13 @@ parcelRequire=function(e,r,t,n){var i,o="function"==typeof parcelRequire&&parcel
       }
     `}}e([s.property({type:Object})],l.prototype,"volumeProcess",void 0),e([s.property({type:Function})],l.prototype,"setVolume",void 0),exports.default=l,customElements.get("volume-slider")||customElements.define("volume-slider",l);
 },{"lit-element":"bhxD","../../Slider":"OL9p"}],"iGlQ":[function(require,module,exports) {
-"use strict";var e=this&&this.__decorate||function(e,t,s,r){var o,i=arguments.length,l=i<3?t:null===r?r=Object.getOwnPropertyDescriptor(t,s):r;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)l=Reflect.decorate(e,t,s,r);else for(var c=e.length-1;c>=0;c--)(o=e[c])&&(l=(i<3?o(l):i>3?o(t,s,l):o(t,s))||l);return i>3&&l&&Object.defineProperty(t,s,l),l};Object.defineProperty(exports,"__esModule",{value:!0});const t=require("lit-element");require("./VolumeSlider");class s extends t.LitElement{render(){const e=(e,t)=>{this.hass.callService("desktop_processes","set_process_volume",{pid:e,volume:t})};if(!this.volumeProcesses)return t.html`
+"use strict";var e=this&&this.__decorate||function(e,t,s,r){var o,i=arguments.length,l=i<3?t:null===r?r=Object.getOwnPropertyDescriptor(t,s):r;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)l=Reflect.decorate(e,t,s,r);else for(var n=e.length-1;n>=0;n--)(o=e[n])&&(l=(i<3?o(l):i>3?o(t,s,l):o(t,s))||l);return i>3&&l&&Object.defineProperty(t,s,l),l};Object.defineProperty(exports,"__esModule",{value:!0});const t=require("lit-element");require("./VolumeSlider");class s extends t.LitElement{render(){const e=(e,t)=>{this.hass.callService("desktop_processes","set_process_volume",{pid:e,volume:t})};if(!this.volumeProcesses)return t.html`
         <div class="invalid-entry">
           desktop_name was either not passed or is invalid.
+        </div>
+      `;if(0===this.volumeProcesses.length)return t.html`
+        <div class="invalid-entry">
+          No available processes
         </div>
       `;const s=this.volumeProcesses.sort((e,t)=>e.priority===t.priority?e.name.localeCompare(t.name):t.priority-e.priority).map(s=>t.html`
       <volume-slider .volumeProcess=${s} class="volume-slider" .setVolume=${e} />

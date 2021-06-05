@@ -1,7 +1,8 @@
 # Desktop Control Panel - Home Assistant Custom Panel
 
-A custom HomeAssistant panel originally for use on a RaspberryPi 7" Touchscreen, but will work
-on any screen size. Based on my previous project, [Desktop Control Tablet](https://github.com/gannonprudhomme/Desktop-Control-Tablet)
+A custom HomeAssistant panel intended to be used in pair with a desktop computer and displayed on a
+tablet. Originally designed to work on a RaspberryPi 7" Touchscreen. Based on my previous project,
+ [Desktop Control Tablet](https://github.com/gannonprudhomme/Desktop-Control-Tablet)
 
 ![volume-mixer](screenshots/volume-mixer.png)
 
@@ -93,6 +94,6 @@ panel_custom:
 
 ## Screenshots
 
-#### Light Control
+### Light Control
 
 ![light-control](screenshots/light-control.png)
