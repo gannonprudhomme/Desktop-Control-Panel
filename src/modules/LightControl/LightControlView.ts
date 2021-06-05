@@ -5,14 +5,7 @@ import Light from '../../../types/Light';
 import { HomeAssistant } from '../../../types/types';
 import './LightSlider';
 
-/*
-function setLightState(hass: HomeAssistant, state: Record<string, unknown>): void {
-  hass.callService('light', 'turn_on', { ...state });
-}
-*/
-
-// We probably need to get this type from somewhere
-export default class LightControl extends LitElement {
+export default class LightControlView extends LitElement {
   @property({ type: Object }) public hass: HomeAssistant;
   @property({ type: Array }) public lights: Light[];
 
@@ -58,5 +51,5 @@ export default class LightControl extends LitElement {
 }
 
 if (!customElements.get('light-control')) {
-  customElements.define('light-control', LightControl);
+  customElements.define('light-control', LightControlView);
 }

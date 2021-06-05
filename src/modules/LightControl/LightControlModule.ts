@@ -2,7 +2,7 @@ import { html, TemplateResult } from 'lit-element';
 import Module from '../../../types/Module';
 import { HomeAssistant } from '../../../types/types';
 import Light from '../../../types/Light';
-import './LightControl';
+import './LightControlView';
 
 import DCPConfig from '../../../types/Config';
 

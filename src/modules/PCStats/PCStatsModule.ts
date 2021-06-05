@@ -1,7 +1,7 @@
 import { html, TemplateResult } from 'lit-element';
 import Module from '../../../types/Module';
 import { HomeAssistant } from '../../../types/types';
-import './PCStats';
+import './PCStatsView';
 
 import PCStatData from '../../../types/PCStats';
 import DCPConfig, { PCStatsConfig } from '../../../types/Config';

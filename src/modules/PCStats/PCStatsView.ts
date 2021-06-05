@@ -8,8 +8,7 @@ import PCStatData from '../../../types/PCStats';
 
 // Could show graphs?
 
-// We probably need to get this type from somewhere
-export default class PCStats extends LitElement {
+export default class PCStatsView extends LitElement {
 //   @property({type: Object }) public hass: Hass;
   @property({ type: Object }) public stats: PCStatData;
 
@@ -81,5 +80,5 @@ export default class PCStats extends LitElement {
 }
 
 if (!customElements.get('pc-stats')) {
-  customElements.define('pc-stats', PCStats);
+  customElements.define('pc-stats', PCStatsView);
 }
