@@ -195,9 +195,9 @@ export default function createSlider(
         class="slider element-to-rotate"
         @input=${callOnSlider}
         @change=${callOnChange}
-        value=${startVal}
         min=${min}
         max=${max}
+        value=${startVal}
       >
       </input>
     </div>
