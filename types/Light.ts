@@ -10,7 +10,7 @@ export default interface Light {
   entityId: string; // ID for this entity. Can also be a group?
   isOn: boolean;
   priority: number; // Sort priority
-  colorTemp?: number;
+  mireds?: number;
   minMireds?: number; // coldest colorTemp possible for this light
   maxMireds?: number; // warmest colorTemp possible for this light
   // hsColor?: number[]; // hue, saturation

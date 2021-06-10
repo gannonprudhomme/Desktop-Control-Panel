@@ -39,7 +39,7 @@ export default class LightControlModule implements Module {
 
         return {
           name: friendly_name,
-          colorTemp: color_temp,
+          mireds: color_temp,
           isOn: light.state === 'on',
           minMireds: min_mireds,
           maxMireds: max_mireds,

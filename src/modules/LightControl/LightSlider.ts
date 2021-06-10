@@ -41,7 +41,7 @@ export default class LightSlider extends LitElement {
      *  Update the value so it's rendered on the screen
      */
     const onTempSlide = (value: number) => {
-      this.light = { ...this.light, colorTemp: value };
+      this.light = { ...this.light, mireds: value };
     };
 
     /**
@@ -63,7 +63,7 @@ export default class LightSlider extends LitElement {
     const brightness = (this.light.brightness / 255) * 100;
 
     const brightnessValue = brightness ? `${brightness.toFixed(0)}%` : 'Off';
-    const temperatureValue = this.light.colorTemp ? `${this.light.colorTemp}K` : 'Off';
+    const temperatureValue = this.light.mireds ? `${this.light.mireds}` : 'Off';
 
     return html`
       <div class="smart-light-slider-container">
@@ -79,7 +79,7 @@ export default class LightSlider extends LitElement {
           </div>
           <div class="light-slider-container">
             <!-- TODO: Note that we do minMireds + 1 - otherwise, it will throw an error for some reason -->
-            ${createSlider(onTempSlide, onTempChange, this.light.colorTemp, this.light.minMireds + 1, this.light.maxMireds, 'temperature-slider-container')}
+            ${createSlider(onTempSlide, onTempChange, this.light.mireds, this.light.minMireds + 1, this.light.maxMireds, 'temperature-slider-container', 'end-lamp')}
 
             <div class="slider-info-container">
               <span class="brightness-value">
