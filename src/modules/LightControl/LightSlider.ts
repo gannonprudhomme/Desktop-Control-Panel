@@ -1,6 +1,7 @@
 import {
   css, CSSResult, html, LitElement, TemplateResult, property,
 } from 'lit-element';
+import { mdiLightbulbOn } from '@mdi/js';
 import Light from '../../../types/Light';
 import createSlider from '../../Slider';
 import themeColor from '../../theme';
@@ -89,7 +90,7 @@ export default class LightSlider extends LitElement {
           </div>
         </div>
         <div class="power-button-container">
-          <ha-icon-button @click=${onPowerClick} icon="mdi:lightbulb-on" class="power-button">
+          <ha-icon-button @click=${onPowerClick} .path=${mdiLightbulbOn} class="power-button">
           </ha-icon-button>
         </div>
         <div class="light-name-container">

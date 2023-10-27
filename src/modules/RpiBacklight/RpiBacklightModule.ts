@@ -1,4 +1,5 @@
 import { html, TemplateResult } from 'lit-element';
+import { mdiCogOutline } from '@mdi/js';
 import Module from '../../../types/Module';
 import { HomeAssistant } from '../../../types/types';
 import './RpiBacklightView';
@@ -14,7 +15,7 @@ export default class RpiBacklightModule implements Module {
 
   constructor() {
     this.name = 'Tablet Control';
-    this.icon = 'mdi:cog-outline';
+    this.icon = mdiCogOutline;
     this.active = true; // This will change
     this.component = (hass: HomeAssistant, config: DCPConfig): TemplateResult => {
       const piBrightnessName = config.pi_brightness_name;

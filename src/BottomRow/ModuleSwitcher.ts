@@ -25,7 +25,7 @@ export default class ModuleSwitcher extends LitElement {
 
       return html`
         <div class="button-container">
-          <ha-icon-button @click=${action} icon=${mod.icon} class="icon-button">
+          <ha-icon-button @click=${action} .path=${mod.icon} class="icon-button">
           </ha-icon-button>
         </div> 
       `;

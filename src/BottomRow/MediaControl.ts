@@ -1,6 +1,9 @@
 import {
   css, CSSResult, html, LitElement, TemplateResult, property,
 } from 'lit-element';
+import {
+  mdiSkipPrevious, mdiPauseCircleOutline, mdiPlayCircleOutline, mdiSkipNext
+} from '@mdi/js';
 import { HomeAssistant } from '../../types/types';
 import Song from '../../types/Song';
 
@@ -37,26 +40,26 @@ export default class MediaControl extends LitElement {
 
   protected render(): TemplateResult {
     const playPauseIcon = this.song.isPlaying
-      ? 'mdi:pause-circle-outline' : 'mdi:play-circle-outline';
+      ? mdiPauseCircleOutline : mdiPlayCircleOutline;
 
     return html`
       <div id="spotify-playback">
         <div id="playback-container">
           <ha-icon-button
             @click=${this.previousClicked}
-            icon="mdi:skip-previous"
+            .path=${mdiSkipPrevious}
             class="icon-button skip-button"
           >
           </ha-icon-button>
           <ha-icon-button
             @click=${this.playPauseClicked}
-            icon=${playPauseIcon}
+            .path=${playPauseIcon}
             class="icon-button"
           >
           </ha-icon-button>
           <ha-icon-button
             @click=${this.nextClicked}
-            icon="mdi:skip-next"
+            .path=${mdiSkipNext}
             class="icon-button skip-button"
           >
           </ha-icon-button>

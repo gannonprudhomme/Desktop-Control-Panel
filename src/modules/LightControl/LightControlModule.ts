@@ -1,4 +1,5 @@
 import { html, TemplateResult } from 'lit-element';
+import { mdiLightbulbOn } from '@mdi/js';
 import Module from '../../../types/Module';
 import { HomeAssistant } from '../../../types/types';
 import Light from '../../../types/Light';
@@ -15,7 +16,7 @@ export default class LightControlModule implements Module {
 
   constructor() {
     this.name = 'Light Control';
-    this.icon = 'mdi:lightbulb-on';
+    this.icon = mdiLightbulbOn;
     this.active = true; // This will change
     this.component = (hass: HomeAssistant, config: DCPConfig): TemplateResult => {
       const lightsConfig = config.lights;

@@ -8,7 +8,7 @@ import { HomeAssistant } from '../../types/types';
 // We probably need to get this type from somewhere
 export default class MiddleRow extends LitElement {
   @property({ type: Object }) public hass: HomeAssistant;
-  @property({ type: Object}) public config: DCPConfig;
+  @property({ type: Object }) public config: DCPConfig;
   @property({ type: Object }) public currentModule: Module;
 
   protected render(): TemplateResult {

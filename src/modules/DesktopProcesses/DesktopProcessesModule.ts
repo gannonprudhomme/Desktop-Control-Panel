@@ -1,3 +1,4 @@
+import { mdiTuneVertical } from '@mdi/js';
 import { html, TemplateResult } from 'lit-element';
 import Module from '../../../types/Module';
 import { HomeAssistant } from '../../../types/types';
@@ -14,7 +15,7 @@ export default class DesktopProcessesModule implements Module {
 
   constructor() {
     this.name = 'Volume Mixer';
-    this.icon = 'mdi:tune-vertical';
+    this.icon = mdiTuneVertical;
     this.active = true; // This will change
     this.component = (hass: HomeAssistant, config: DCPConfig): TemplateResult => {
       const desktopName: string = config.desktop_name;

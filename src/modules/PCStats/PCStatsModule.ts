@@ -1,4 +1,5 @@
 import { html, TemplateResult } from 'lit-element';
+import { mdiSpeedometerSlow } from '@mdi/js';
 import Module from '../../../types/Module';
 import { HomeAssistant } from '../../../types/types';
 import './PCStatsView';
@@ -38,7 +39,7 @@ export default class PCStatsModule implements Module {
 
   constructor() {
     this.name = 'Spotify';
-    this.icon = 'mdi:speedometer-slow';
+    this.icon = mdiSpeedometerSlow;
     this.active = true; // This will change
     this.component = (hass: HomeAssistant, config: DCPConfig): TemplateResult => {
       let pcData: PCStatData = null;
