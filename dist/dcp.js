@@ -840,106 +840,9 @@ parcelRequire=function(e,r,t,n){var i,o="function"==typeof parcelRequire&&parcel
         <desktop-processes .hass=${e} .volumeProcesses=${o}>
         </desktop-processes>
       `})}}exports.default=t;
-},{"@mdi/js":"ndHv","lit-element":"bhxD","./DesktopProcessesView":"iGlQ"}],"qinj":[function(require,module,exports) {
-"use strict";var e=this&&this.__decorate||function(e,t,i,r){var a,o=arguments.length,s=o<3?t:null===r?r=Object.getOwnPropertyDescriptor(t,i):r;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)s=Reflect.decorate(e,t,i,r);else for(var n=e.length-1;n>=0;n--)(a=e[n])&&(s=(o<3?a(s):o>3?a(t,i,s):a(t,i))||s);return o>3&&s&&Object.defineProperty(t,i,s),s};Object.defineProperty(exports,"__esModule",{value:!0});const t=require("lit-element"),i=require("../../BottomRow/MediaControl");class r extends t.LitElement{previousClicked(){i.callSpotifyService(this.hass,this.mediaPlayerId,"media_previous_track")}playPauseClicked(){i.callSpotifyService(this.hass,this.mediaPlayerId,"media_play_pause")}nextClicked(){i.callSpotifyService(this.hass,this.mediaPlayerId,"media_next_track")}shuffleClicked(){let e=null;e=this.song}repeatClicked(){let e=null;e=this.song}render(){return t.html`
-      <div>
-        <div id="track">
-            <img
-              id="album-cover"
-              src=${this.song.albumArt} 
-              alt="album-cover"
-            ></img>
-          <div id="track-info">
-            <span id="current-track">
-              ${this.song.title}
-            </span>
-            <span id="current-artist">
-              ${this.song.artistName}
-            </span>
-          </div>
-        </div>
-        <div id="spotify-playback">
-          <div id="playback-container">
-          </div>
-        </div>
-      </div>
-    `}static get styles(){return t.css`
-      #track {
-        display: flex;
-        flex-direction: row;
-        align-items: flex-end;
-        width: 100%;
-        height: 100%;
-        /* margin: 8px 0px 16px; */
-      }
-      #album-cover-container {
-      }
-      #album-cover {
-        object-fit: contain;
-        max-height: 64px;
-      }
-
-      #track-info {
-        display: flex;
-        flex-direction: column;
-        margin-left: 5px;
-      }
-      #current-track {
-        font-size: 16px;
-        margin-bottom: 4px;
-      }
-
-      #current-artist {
-        font-size: 13px;
-      }
-
-      #spotify-playback {
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-end;
-        align-items: center;
-      }
-
-      #playback-container {
-        /* TODO: Make this to use the template value */
-        border: 1px solid #00C8C8 !important;
-        border-radius: 20px;
-        display: flex;
-        justify-content: space-between;
-        align-content: center;
-        width: 250px !important;
-      }
-
-      #play-pause {
-        width: 48px;
-        height: 48px;
-        margin: 7px auto;
-      }
-
-      #previous-song {
-        width: 32px;
-        height: 32px;
-        transform: rotate(180deg);
-        margin: 0 auto;
-      }
-
-      #previous-song:active {
-        transform: rotate(180deg) scale(0.85);
-      }
-
-      #next-song {
-        width: 32px;
-        height: 32px;
-        margin: 0 auto;
-      }
-    `}}e([t.property({type:Object})],r.prototype,"hass",void 0),e([t.property({type:Object})],r.prototype,"song",void 0),e([t.property({type:String})],r.prototype,"mediaPlayerId",void 0),exports.default=r,customElements.get("spotify-view")||customElements.define("spotify-view",r);
-},{"lit-element":"bhxD","../../BottomRow/MediaControl":"C6La"}],"jCgS":[function(require,module,exports) {
-"use strict";Object.defineProperty(exports,"__esModule",{value:!0});const e=require("lit-element"),t=require("@mdi/js"),o=require("../../BottomRow/BottomRow");require("./SpotifyView");class i{constructor(){this.name="Spotify",this.icon=t.mdiSpotify,this.active=!0,this.component=((t,i)=>{const s=o.getSongFromSpotify(t,i);return e.html`
-        <spotify-view .hass=${t} .song=${s} .mediaPlayerId=${i.spotify_name} />
-      `})}}exports.default=i;
-},{"lit-element":"bhxD","@mdi/js":"ndHv","../../BottomRow/BottomRow":"XFkt","./SpotifyView":"qinj"}],"Jx17":[function(require,module,exports) {
-"use strict";var e=this&&this.__importDefault||function(e){return e&&e.__esModule?e:{default:e}};Object.defineProperty(exports,"__esModule",{value:!0});const t=e(require("../src/modules/LightControl/LightControlModule")),o=e(require("../src/modules/PCStats/PCStatsModule")),r=e(require("../src/modules/RpiBacklight/RpiBacklightModule")),s=e(require("../src/modules/DesktopProcesses/DesktopProcessesModule")),u=e(require("../src/modules/Spotify/SpotifyModule"));function l(e){const l=new s.default,i=new t.default,n=new o.default,c=new r.default,d=new u.default,a=new Map(Object.entries({desktop_processes:l,light_control:i,pc_stats:n,rpi_backlight:c,spotify:d}));return e.map(e=>{const t=a.get(e);return t||(console.error(`${e} not in module map!`),null)}).filter(e=>e)}exports.default=l;
-},{"../src/modules/LightControl/LightControlModule":"qBI7","../src/modules/PCStats/PCStatsModule":"M4iw","../src/modules/RpiBacklight/RpiBacklightModule":"VntG","../src/modules/DesktopProcesses/DesktopProcessesModule":"uUuN","../src/modules/Spotify/SpotifyModule":"jCgS"}],"QCba":[function(require,module,exports) {
+},{"@mdi/js":"ndHv","lit-element":"bhxD","./DesktopProcessesView":"iGlQ"}],"Jx17":[function(require,module,exports) {
+"use strict";var e=this&&this.__importDefault||function(e){return e&&e.__esModule?e:{default:e}};Object.defineProperty(exports,"__esModule",{value:!0});const t=e(require("../src/modules/LightControl/LightControlModule")),r=e(require("../src/modules/PCStats/PCStatsModule")),s=e(require("../src/modules/RpiBacklight/RpiBacklightModule")),o=e(require("../src/modules/DesktopProcesses/DesktopProcessesModule"));function l(e){const l=new o.default,u=new t.default,n=new r.default,i=new s.default,c=new Map(Object.entries({desktop_processes:l,light_control:u,pc_stats:n,rpi_backlight:i}));return e.map(e=>{const t=c.get(e);return t||(console.error(`${e} not in module map!`),null)}).filter(e=>e)}exports.default=l;
+},{"../src/modules/LightControl/LightControlModule":"qBI7","../src/modules/PCStats/PCStatsModule":"M4iw","../src/modules/RpiBacklight/RpiBacklightModule":"VntG","../src/modules/DesktopProcesses/DesktopProcessesModule":"uUuN"}],"QCba":[function(require,module,exports) {
 "use strict";var e=this&&this.__decorate||function(e,t,o,r){var s,i=arguments.length,d=i<3?t:null===r?r=Object.getOwnPropertyDescriptor(t,o):r;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)d=Reflect.decorate(e,t,o,r);else for(var l=e.length-1;l>=0;l--)(s=e[l])&&(d=(i<3?s(d):i>3?s(t,o,d):s(t,o))||d);return i>3&&d&&Object.defineProperty(t,o,d),d},t=this&&this.__importDefault||function(e){return e&&e.__esModule?e:{default:e}};Object.defineProperty(exports,"__esModule",{value:!0});const o=require("lit-element");require("./TopRow/TopRow"),require("./MiddleRow/MiddleRow"),require("./BottomRow/BottomRow");const r=t(require("../types/ModulesManager"));class s extends o.LitElement{constructor(){super(),this.currentModule=null,this.addEventListener("update-current-module",this.handleUpdateCurrentModule)}handleUpdateCurrentModule(e){const{detail:t}=e;if(!t.module)throw Error("did not receive module in current-module CustomEvent");this.currentModule=t.module}render(){return this.modules||(this.modules=r.default(this.panel.config.modules),[this.currentModule=null]=this.modules),o.html`
       <div class="grid-container">
         <top-row .hass=${this.hass} .config=${this.panel.config}></top-row>
@@ -972,4 +875,4 @@ parcelRequire=function(e,r,t,n){var i,o="function"==typeof parcelRequire&&parcel
       }
     `}}e([o.property({type:Object})],s.prototype,"hass",void 0),e([o.property({type:Boolean})],s.prototype,"narrow",void 0),e([o.property({type:Object})],s.prototype,"panel",void 0),e([o.property({type:Array})],s.prototype,"modules",void 0),e([o.property({type:Object})],s.prototype,"currentModule",void 0),exports.default=s,customElements.get("desktop-control")||customElements.define("desktop-control",s);
 },{"lit-element":"bhxD","./TopRow/TopRow":"kLvr","./MiddleRow/MiddleRow":"KEHX","./BottomRow/BottomRow":"XFkt","../types/ModulesManager":"Jx17"}]},{},["QCba"], null)
-//# sourceMappingURL=/dcp.js.map
+//# sourceMappingURL=dcp.js.map

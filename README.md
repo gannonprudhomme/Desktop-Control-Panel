@@ -97,3 +97,22 @@ panel_custom:
 ### Light Control
 
 ![light-control](screenshots/light-control.png)
+
+## Development
+
+### Setting up HA
+
+1. Install homeassistant
+2. ...?
+3. `source env/Source/activate` / `env/bin/activate`
+4. Run `hass -c config`
+
+### Building and running locally
+
+`npm run dev`, then refresh the window
+
+### Deploying new version
+
+1. `npm run build`
+2. Commit & Push
+3. Create a new GitHub release.
