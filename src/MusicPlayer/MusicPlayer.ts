@@ -360,7 +360,7 @@ export default class MusicPlayer extends LitElement {
       #artist {
         margin: 4px 0 0;
         color: var(--dcp-text-muted);
-        font-size: 11px;
+        font-size: 14px;
         line-height: 1.25;
       }
 
@@ -373,7 +373,7 @@ export default class MusicPlayer extends LitElement {
         justify-content: space-between;
         margin-bottom: 4px;
         color: var(--dcp-text-muted);
-        font-size: 14px;
+        font-size: 11px;
         font-variant-numeric: tabular-nums;
       }
 
