@@ -893,19 +893,19 @@ var xt = class extends k {
           Unavailable
         </div>
       `;
-		let e = this.hass.states[this.config.weather_name], { state: t, attributes: n } = e, r = bt(this.hass, e), i = n.temperature ?? -1;
+		let e = this.hass.states[this.config.weather_name], { state: t, attributes: n } = e, r = bt(this.hass, e);
 		return E`
       <div class="weather-container">
-        <div class="weather-icon">
-            ${yt(t)}
-        </div>
         <div class="temperature-weather-container">
           <span id="temperature">
-            ${i.toFixed(0)}°F
+            ${(n.temperature ?? -1).toFixed(0)}°F
           </span>
           <span>
             ${r}
           </span>
+        </div>
+        <div class="weather-icon">
+          ${yt(t)}
         </div>
       </div>
     `;
@@ -979,6 +979,7 @@ var St = class extends k {
         justify-content: space-between;
         gap: 12px;
         height: 100%;
+        padding-top: var(--dcp-radius);
       }
 
       weather-display {
@@ -1919,7 +1920,7 @@ var $t = 500, en = class e extends k {
 
       .track-title {
         color: var(--dcp-text);
-        font-size: 16px;
+        font-size: 18px;
         font-weight: 560;
         line-height: 1.2;
       }

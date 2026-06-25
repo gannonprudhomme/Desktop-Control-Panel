@@ -555,7 +555,7 @@ export default class Recent extends LitElement {
 
       .track-title {
         color: var(--dcp-text);
-        font-size: 16px;
+        font-size: 18px;
         font-weight: 560;
         line-height: 1.2;
       }

@@ -48,9 +48,6 @@ export default class WeatherDisplay extends LitElement {
 
     return html`
       <div class="weather-container">
-        <div class="weather-icon">
-            ${getWeatherStateSVG(state)}
-        </div>
         <div class="temperature-weather-container">
           <span id="temperature">
             ${temperature.toFixed(0)}°F
@@ -58,6 +55,9 @@ export default class WeatherDisplay extends LitElement {
           <span>
             ${weatherType}
           </span>
+        </div>
+        <div class="weather-icon">
+          ${getWeatherStateSVG(state)}
         </div>
       </div>
     `;
