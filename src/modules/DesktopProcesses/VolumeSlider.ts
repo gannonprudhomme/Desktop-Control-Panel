@@ -61,10 +61,13 @@ export default class VolumeSlider extends LitElement {
       }
 
       .volume-slider-container {
+        box-sizing: border-box;
         display: flex;
         flex-direction: column;
         align-items: center;
+        justify-content: flex-end;
         width: 92px;
+        height: 100%;
         padding: 4px 4px 2px;
       }
 
