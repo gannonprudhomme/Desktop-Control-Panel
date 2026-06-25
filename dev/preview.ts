@@ -156,6 +156,10 @@ let hass: HomeAssistant = {
   panels: {},
   dockedSidebar: 'always_hidden',
   localize: (): string => 'Sunny',
+  formatEntityState: (stateObj): string => stateObj.state
+    .split(/[-_]/)
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' '),
   callService: async (
     domain: string,
     service: string,

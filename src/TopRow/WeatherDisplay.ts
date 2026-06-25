@@ -6,9 +6,20 @@ import { HomeAssistant } from '../../types/types';
 import getWeatherStateSVG, { weatherSVGStyles } from '../external/weatherIcons';
 import { borderBoxStyles } from '../theme';
 
-function getWeatherText(hass: HomeAssistant, weatherState: string): string {
-  const localizeUrl = `component.weather.state._.${weatherState}`;
-  return hass.localize(localizeUrl) ?? 'unknown';
+function getWeatherText(
+  hass: HomeAssistant,
+  weather: HomeAssistant['states'][string],
+): string {
+  const formattedState = hass.formatEntityState?.(weather);
+
+  if (formattedState) {
+    return formattedState;
+  }
+
+  return weather.state
+    .split(/[-_]/)
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
 }
 
 // We probably need to get this type from somewhere
@@ -30,8 +41,9 @@ export default class WeatherDisplay extends LitElement {
       `;
     }
 
-    const { state, attributes } = this.hass.states[this.config.weather_name];
-    const weatherType = getWeatherText(this.hass, state);
+    const weather = this.hass.states[this.config.weather_name];
+    const { state, attributes } = weather;
+    const weatherType = getWeatherText(this.hass, weather);
     const temperature: number = attributes.temperature ?? -1;
 
     return html`

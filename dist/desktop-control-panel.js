@@ -884,8 +884,7 @@ var pt = l`
   </svg>`;
 A(), N();
 function bt(e, t) {
-	let n = `component.weather.state._.${t}`;
-	return e.localize(n) ?? "unknown";
+	return e.formatEntityState?.(t) || t.state.split(/[-_]/).map((e) => e.charAt(0).toUpperCase() + e.slice(1)).join(" ");
 }
 var xt = class extends k {
 	render() {
@@ -894,18 +893,18 @@ var xt = class extends k {
           Unavailable
         </div>
       `;
-		let { state: e, attributes: t } = this.hass.states[this.config.weather_name], n = bt(this.hass, e), r = t.temperature ?? -1;
+		let e = this.hass.states[this.config.weather_name], { state: t, attributes: n } = e, r = bt(this.hass, e), i = n.temperature ?? -1;
 		return E`
       <div class="weather-container">
         <div class="weather-icon">
-            ${yt(e)}
+            ${yt(t)}
         </div>
         <div class="temperature-weather-container">
           <span id="temperature">
-            ${r.toFixed(0)}°F
+            ${i.toFixed(0)}°F
           </span>
           <span>
-            ${n}
+            ${r}
           </span>
         </div>
       </div>
