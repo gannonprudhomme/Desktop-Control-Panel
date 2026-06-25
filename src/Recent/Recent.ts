@@ -1,5 +1,6 @@
 import { css, html, LitElement } from 'lit';
 import { property } from 'lit/decorators.js';
+import { repeat } from 'lit/directives/repeat.js';
 import type {
   CSSResult, PropertyValues, TemplateResult,
 } from 'lit';
@@ -36,6 +37,7 @@ interface SpotifyPlusQueueResponse {
 }
 
 interface MediaListItem {
+  key: string;
   title: string;
   artist: string;
   artwork: string;
@@ -43,6 +45,12 @@ interface MediaListItem {
 }
 
 type MediaList = 'recent' | 'queue';
+
+interface ViewTransitionElement extends HTMLElement {
+  startViewTransition(options: {
+    callback: () => Promise<void>;
+  }): ViewTransition;
+}
 
 export default class Recent extends LitElement {
   @property({ type: Object }) public hass?: HomeAssistant;
@@ -55,6 +63,8 @@ export default class Recent extends LitElement {
 
   private loadedEntityId = '';
   private loadedTrackId = '';
+  private hasLoaded = false;
+  private loadRequestId = 0;
 
   protected updated(changedProperties: PropertyValues): void {
     if (
@@ -89,15 +99,49 @@ export default class Recent extends LitElement {
     }
   }
 
-  private static normalizeTrack(track: SpotifyTrack): MediaListItem {
-    return {
-      title: track.name || 'Unknown title',
-      artist: (track.artists || []).map((artist) => artist.name).join(', ')
-        || (track.show && track.show.name)
-        || 'Unknown artist',
-      artwork: track.image_url || '',
-      uri: track.uri || '',
+  private static normalizeTracks(tracks: SpotifyTrack[]): MediaListItem[] {
+    const occurrences = new Map<string, number>();
+
+    return tracks.map((track) => {
+      const identity = track.uri || `${track.name}\u0000${(track.artists || [])
+        .map((artist) => artist.name).join(',')}`;
+      const occurrence = occurrences.get(identity) || 0;
+      occurrences.set(identity, occurrence + 1);
+
+      return {
+        key: `${encodeURIComponent(identity)}::${occurrence}`,
+        title: track.name || 'Unknown title',
+        artist: (track.artists || []).map((artist) => artist.name).join(', ')
+          || (track.show && track.show.name)
+          || 'Unknown artist',
+        artwork: track.image_url || '',
+        uri: track.uri || '',
+      };
+    });
+  }
+
+  private async updateMediaLists(
+    recentItems: MediaListItem[],
+    queueItems: MediaListItem[],
+  ): Promise<void> {
+    const update = async (): Promise<void> => {
+      this.recentItems = recentItems;
+      this.queueItems = queueItems;
+      this.hasLoaded = true;
+      await this.updateComplete;
     };
+    const list = this.renderRoot.querySelector<ViewTransitionElement>('#media-list');
+
+    if (
+      !this.hasLoaded
+      || !list?.startViewTransition
+      || window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    ) {
+      await update();
+      return;
+    }
+
+    await list.startViewTransition({ callback: update }).updateCallbackDone;
   }
 
   private async callSpotifyPlus<T>(
@@ -128,6 +172,7 @@ export default class Recent extends LitElement {
   }
 
   private async loadMediaLists(): Promise<void> {
+    const requestId = ++this.loadRequestId;
     this.isLoading = true;
     this.loadFailed = false;
 
@@ -137,17 +182,27 @@ export default class Recent extends LitElement {
         this.callSpotifyPlus<SpotifyPlusQueueResponse>('get_player_queue_info'),
       ]);
 
-      this.recentItems = (recent.result.items || [])
-        .map((item) => Recent.normalizeTrack(item.track));
-      this.queueItems = (queue.result.queue || [])
-        .map((item) => Recent.normalizeTrack(item));
+      if (requestId !== this.loadRequestId) {
+        return;
+      }
+
+      await this.updateMediaLists(
+        Recent.normalizeTracks(
+          (recent.result.items || []).map((item) => item.track),
+        ),
+        Recent.normalizeTracks(queue.result.queue || []),
+      );
     } catch (error) {
+      if (requestId !== this.loadRequestId) {
+        return;
+      }
+
       console.log(error);
-      this.recentItems = [];
-      this.queueItems = [];
       this.loadFailed = true;
     } finally {
-      this.isLoading = false;
+      if (requestId === this.loadRequestId) {
+        this.isLoading = false;
+      }
     }
   }
 
@@ -174,11 +229,11 @@ export default class Recent extends LitElement {
       return html`<p class="status">SpotifyPlus is not configured</p>`;
     }
 
-    if (this.isLoading) {
+    if (this.isLoading && !this.hasLoaded) {
       return html`<p class="status">Loading Spotify…</p>`;
     }
 
-    if (this.loadFailed) {
+    if (this.loadFailed && !this.hasLoaded) {
       return html`
         <div class="status-block">
           <p class="status">Spotify lists unavailable</p>
@@ -196,9 +251,10 @@ export default class Recent extends LitElement {
 
     return html`
       <div id="media-list">
-        ${items.map((item) => html`
+        ${repeat(items, (item) => item.key, (item) => html`
           <button
             class="media-item"
+            data-item-key=${item.key}
             type="button"
             aria-label=${`Play ${item.title}${item.artist ? ` by ${item.artist}` : ''}`}
             @click=${(): void => this.playItem(item)}
@@ -254,6 +310,8 @@ export default class Recent extends LitElement {
       }
 
       #recent {
+        --media-list-edge-offset: 20px;
+
         display: grid;
         grid-template-rows: auto minmax(0, 1fr);
         gap: 12px;
@@ -289,12 +347,20 @@ export default class Recent extends LitElement {
         background: transparent;
       }
 
+      .tab:first-child {
+        border-radius: 11px 0 0 11px;
+      }
+
+      .tab:last-child {
+        border-radius: 0 11px 11px 0;
+      }
+
       .tab.selected {
         color: var(--dcp-text);
-        background:
-          linear-gradient(rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.12)),
-          var(--dcp-media-surface);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.24);
+        background: rgba(255, 255, 255, 0.16);
+        box-shadow:
+          inset 0 0 0 1px rgba(255, 255, 255, 0.08),
+          0 4px 12px rgba(0, 0, 0, 0.24);
       }
 
       .tab:focus-visible,
@@ -311,7 +377,8 @@ export default class Recent extends LitElement {
         overflow-x: hidden;
         overflow-y: auto;
         overscroll-behavior: contain;
-        padding-right: 4px;
+        margin-right: calc(-1 * var(--media-list-edge-offset));
+        padding-right: calc(var(--media-list-edge-offset) - 4px);
         scrollbar-gutter: stable;
         -webkit-overflow-scrolling: touch;
       }
@@ -332,6 +399,8 @@ export default class Recent extends LitElement {
       }
 
       .media-item {
+        view-transition-name: match-element;
+        view-transition-class: media-item;
         display: grid;
         flex: 0 0 56px;
         grid-template-columns: 56px minmax(0, 1fr);
@@ -352,6 +421,22 @@ export default class Recent extends LitElement {
 
       .media-item:active {
         transform: scale(0.98);
+      }
+
+      ::view-transition-group(*.media-item) {
+        animation-duration: 320ms;
+        animation-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
+      }
+
+      ::view-transition-old(*.media-item):only-child {
+        animation: 220ms ease-in both pop-from-queue;
+      }
+
+      @keyframes pop-from-queue {
+        to {
+          opacity: 0;
+          transform: translateY(-12px) scale(0.94);
+        }
       }
 
       .artwork {
@@ -434,6 +519,8 @@ export default class Recent extends LitElement {
 
       @media (max-width: 760px) {
         #recent {
+          --media-list-edge-offset: 16px;
+
           padding: 16px;
         }
 
