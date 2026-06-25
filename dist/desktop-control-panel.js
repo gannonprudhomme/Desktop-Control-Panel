@@ -652,6 +652,7 @@ var lt = l`
     --dcp-surface: var(--card-background-color, #121d26);
     --dcp-surface-raised: #1a2833;
     --dcp-surface-soft: #15242d;
+    --dcp-media-surface: rgba(24, 24, 24, 0.7);
     --dcp-border: rgba(162, 198, 211, 0.18);
     --dcp-text: var(--primary-text-color, #f2f7f8);
     --dcp-text-muted: var(--secondary-text-color, #9db0ba);
@@ -1247,7 +1248,7 @@ var At = class extends k {
       #artist {
         margin: 4px 0 0;
         color: var(--dcp-text-muted);
-        font-size: 14px;
+        font-size: 11px;
         line-height: 1.25;
       }
 
@@ -1260,7 +1261,7 @@ var At = class extends k {
         justify-content: space-between;
         margin-bottom: 4px;
         color: var(--dcp-text-muted);
-        font-size: 11px;
+        font-size: 14px;
         font-variant-numeric: tabular-nums;
       }
 
@@ -1384,7 +1385,7 @@ var At = class extends k {
         width: 80px;
         height: 80px;
         border-radius: 50%;
-        background: var(--dcp-surface-raised);
+        background: var(--dcp-media-surface);
         box-shadow: 0 10px 28px rgba(0, 0, 0, 0.28);
       }
 
@@ -1415,7 +1416,7 @@ var jt = class e extends k {
 		super(...e), this.recentItems = [], this.queueItems = [], this.selectedList = "recent", this.isLoading = !1, this.loadFailed = !1, this.loadedEntityId = "", this.loadedTrackId = "";
 	}
 	updated(e) {
-		if (!this.hass || !this.config?.spotify_name || !this.config.spotifyplus_name) return;
+		if (!this.hass || !this.config?.spotify_name || !this.config.spotifyplus_name || !this.hass.states[this.config.spotifyplus_name]) return;
 		let t = this.hass.states[this.config.spotify_name], n = t && t.attributes && (t.attributes.media_content_id || t.attributes.media_title) || "", r = this.loadedEntityId !== this.config.spotifyplus_name, i = this.loadedTrackId !== n;
 		(e.has("hass") || e.has("config")) && (r || i) && (this.loadedEntityId = this.config.spotifyplus_name, this.loadedTrackId = n, queueMicrotask(() => {
 			this.loadMediaLists();
@@ -1424,7 +1425,7 @@ var jt = class e extends k {
 	static normalizeTrack(e) {
 		return {
 			title: e.name || "Unknown title",
-			artist: (e.artists || []).map((e) => e.name).join(", ") || e.show && e.show.name || "",
+			artist: (e.artists || []).map((e) => e.name).join(", ") || e.show && e.show.name || "Unknown artist",
 			artwork: e.image_url || "",
 			uri: e.uri || ""
 		};
@@ -1441,8 +1442,8 @@ var jt = class e extends k {
 	async loadMediaLists() {
 		this.isLoading = !0, this.loadFailed = !1;
 		try {
-			let [t, n] = await Promise.all([this.callSpotifyPlus("get_player_recent_tracks", { limit: 6 }), this.callSpotifyPlus("get_player_queue_info")]);
-			this.recentItems = (t.result.items || []).map((t) => e.normalizeTrack(t.track)).slice(0, 6), this.queueItems = (n.result.queue || []).map((t) => e.normalizeTrack(t)).slice(0, 6);
+			let [t, n] = await Promise.all([this.callSpotifyPlus("get_player_recent_tracks", { limit: 50 }), this.callSpotifyPlus("get_player_queue_info")]);
+			this.recentItems = (t.result.items || []).map((t) => e.normalizeTrack(t.track)), this.queueItems = (n.result.queue || []).map((t) => e.normalizeTrack(t));
 		} catch (e) {
 			console.log(e), this.recentItems = [], this.queueItems = [], this.loadFailed = !0;
 		} finally {
@@ -1487,7 +1488,7 @@ var jt = class e extends k {
             </span>
             <span class="track-details">
               <span class="track-title">${e.title}</span>
-              ${e.artist ? E`<span class="track-artist">${e.artist}</span>` : ""}
+              <span class="track-artist">${e.artist}</span>
             </span>
           </button>
         `)}
@@ -1496,29 +1497,26 @@ var jt = class e extends k {
 	}
 	render() {
 		return E`
-      <section id="recent" aria-labelledby="recent-title">
-        <div class="header">
-          <h2 id="recent-title">Spotify</h2>
-          <div class="tabs" role="tablist" aria-label="Spotify lists">
-            <button
-              class=${this.selectedList === "recent" ? "tab selected" : "tab"}
-              type="button"
-              role="tab"
-              aria-selected=${this.selectedList === "recent" ? "true" : "false"}
-              @click=${() => this.selectList("recent")}
-            >
-              Recent
-            </button>
-            <button
-              class=${this.selectedList === "queue" ? "tab selected" : "tab"}
-              type="button"
-              role="tab"
-              aria-selected=${this.selectedList === "queue" ? "true" : "false"}
-              @click=${() => this.selectList("queue")}
-            >
-              Queue
-            </button>
-          </div>
+      <section id="recent" aria-label="Spotify">
+        <div class="tabs" role="tablist" aria-label="Spotify lists">
+          <button
+            class=${this.selectedList === "recent" ? "tab selected" : "tab"}
+            type="button"
+            role="tab"
+            aria-selected=${this.selectedList === "recent" ? "true" : "false"}
+            @click=${() => this.selectList("recent")}
+          >
+            Recents
+          </button>
+          <button
+            class=${this.selectedList === "queue" ? "tab selected" : "tab"}
+            type="button"
+            role="tab"
+            aria-selected=${this.selectedList === "queue" ? "true" : "false"}
+            @click=${() => this.selectList("queue")}
+          >
+            Queue
+          </button>
         </div>
         ${this.renderContent()}
       </section>
@@ -1543,43 +1541,25 @@ var jt = class e extends k {
         border-radius: var(--dcp-radius);
         background:
           linear-gradient(145deg, rgba(255, 255, 255, 0.025), transparent 55%),
-          var(--dcp-surface);
+          var(--dcp-media-surface);
         box-shadow: var(--dcp-shadow);
-      }
-
-      .header {
-        display: grid;
-        gap: 8px;
-      }
-
-      #recent-title {
-        margin: 0;
-        color: var(--dcp-text);
-        font-size: 22px;
-        font-weight: 560;
-        line-height: 1;
-        letter-spacing: -0.025em;
       }
 
       .tabs {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 4px;
-        padding: 4px;
+        overflow: hidden;
         border: 1px solid var(--dcp-border);
         border-radius: 12px;
-        background: rgba(0, 0, 0, 0.18);
+        background: rgba(0, 0, 0, 0.32);
       }
 
       .tab {
-        min-width: 0;
-        min-height: 36px;
-        padding: 0 12px;
+        padding: 8px;
         border: 0;
-        border-radius: 8px;
-        color: var(--dcp-text-muted);
+        color: rgba(242, 247, 248, 0.58);
         font: inherit;
-        font-size: 13px;
+        font-size: 14px;
         font-weight: 600;
         cursor: pointer;
         background: transparent;
@@ -1587,8 +1567,10 @@ var jt = class e extends k {
 
       .tab.selected {
         color: var(--dcp-text);
-        background: var(--dcp-surface-raised);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        background:
+          linear-gradient(rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.12)),
+          var(--dcp-media-surface);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.24);
       }
 
       .tab:focus-visible,
@@ -1602,10 +1584,32 @@ var jt = class e extends k {
         flex-direction: column;
         gap: 8px;
         min-height: 0;
+        overflow-x: hidden;
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        padding-right: 4px;
+        scrollbar-gutter: stable;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      #media-list::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      #media-list::-webkit-scrollbar-thumb {
+        border: 2px solid transparent;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.24);
+        background-clip: padding-box;
+      }
+
+      #media-list::-webkit-scrollbar-track {
+        background: transparent;
       }
 
       .media-item {
         display: grid;
+        flex: 0 0 56px;
         grid-template-columns: 56px minmax(0, 1fr);
         align-items: center;
         gap: 12px;
@@ -6316,10 +6320,18 @@ var Ho = class extends k {
 	constructor(...e) {
 		super(...e), this.narrow = !1;
 	}
+	getAlbumArt(e) {
+		return e.spotify_name && (this.hass?.states[e.spotify_name])?.attributes.entity_picture || "";
+	}
 	render() {
 		if (!this.hass || !this.panel) return E``;
-		let { config: e } = this.panel;
+		let { config: e } = this.panel, t = this.getAlbumArt(e);
 		return E`
+      ${t ? E`
+          <div class="album-backdrop" aria-hidden="true">
+            <img src=${t} alt="" />
+          </div>
+        ` : ""}
       <div class="app-shell">
         <music-player
           .hass=${this.hass}
@@ -6341,6 +6353,8 @@ var Ho = class extends k {
 			lt,
 			l`
       :host {
+        position: relative;
+        isolation: isolate;
         display: block;
         width: 100%;
         height: 100%;
@@ -6348,7 +6362,41 @@ var Ho = class extends k {
         background: var(--dcp-background);
       }
 
+      .album-backdrop {
+        position: absolute;
+        z-index: 0;
+        inset: 0;
+        overflow: hidden;
+        pointer-events: none;
+        background: var(--dcp-background);
+      }
+
+      .album-backdrop::after {
+        position: absolute;
+        z-index: 1;
+        content: "";
+        inset: 0;
+        background: linear-gradient(
+          90deg,
+          rgba(4, 9, 13, 0.4),
+          rgba(4, 9, 13, 0.64)
+        );
+      }
+
+      .album-backdrop img {
+        position: absolute;
+        width: 120%;
+        height: 120%;
+        top: -10%;
+        left: -10%;
+        object-fit: cover;
+        filter: blur(56px) saturate(1.65) brightness(0.82);
+        transform: scale(1.08);
+      }
+
       .app-shell {
+        position: relative;
+        z-index: 1;
         display: grid;
         grid-template-columns: minmax(0, 1fr) 320px;
         gap: 16px;

@@ -497,7 +497,7 @@ export default class MusicPlayer extends LitElement {
         width: 80px;
         height: 80px;
         border-radius: 50%;
-        background: var(--dcp-surface-raised);
+        background: var(--dcp-media-surface);
         box-shadow: 0 10px 28px rgba(0, 0, 0, 0.28);
       }
 

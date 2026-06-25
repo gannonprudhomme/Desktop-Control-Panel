@@ -229,7 +229,7 @@ export default class Recent extends LitElement {
             aria-selected=${this.selectedList === 'recent' ? 'true' : 'false'}
             @click=${(): void => this.selectList('recent')}
           >
-            Recent
+            Recents
           </button>
           <button
             class=${this.selectedList === 'queue' ? 'tab selected' : 'tab'}
@@ -265,7 +265,7 @@ export default class Recent extends LitElement {
         border-radius: var(--dcp-radius);
         background:
           linear-gradient(145deg, rgba(255, 255, 255, 0.025), transparent 55%),
-          var(--dcp-surface);
+          var(--dcp-media-surface);
         box-shadow: var(--dcp-shadow);
       }
 
@@ -275,17 +275,15 @@ export default class Recent extends LitElement {
         overflow: hidden;
         border: 1px solid var(--dcp-border);
         border-radius: 12px;
-        background: rgba(0, 0, 0, 0.18);
+        background: rgba(0, 0, 0, 0.32);
       }
 
       .tab {
-        min-width: 0;
-        min-height: 44px;
-        padding: 0 12px;
+        padding: 8px;
         border: 0;
-        color: var(--dcp-text-muted);
+        color: rgba(242, 247, 248, 0.58);
         font: inherit;
-        font-size: 13px;
+        font-size: 14px;
         font-weight: 600;
         cursor: pointer;
         background: transparent;
@@ -293,8 +291,10 @@ export default class Recent extends LitElement {
 
       .tab.selected {
         color: var(--dcp-text);
-        background: var(--dcp-surface-raised);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        background:
+          linear-gradient(rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.12)),
+          var(--dcp-media-surface);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.24);
       }
 
       .tab:focus-visible,

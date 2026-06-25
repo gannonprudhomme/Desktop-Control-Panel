@@ -28,6 +28,7 @@ const theme: CSSResult = css`
     --dcp-surface: var(--card-background-color, #121d26);
     --dcp-surface-raised: #1a2833;
     --dcp-surface-soft: #15242d;
+    --dcp-media-surface: rgba(24, 24, 24, 0.7);
     --dcp-border: rgba(162, 198, 211, 0.18);
     --dcp-text: var(--primary-text-color, #f2f7f8);
     --dcp-text-muted: var(--secondary-text-color, #9db0ba);
