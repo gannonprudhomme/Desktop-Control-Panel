@@ -7,7 +7,7 @@
     "vendor:webawesome": "esbuild scripts/webawesome-entry.js --bundle --target=es2018 --format=iife --outfile=.context/webawesome.js && node scripts/inline-webawesome-css.js",
     "dev": "npm run vendor:webawesome && parcel watch src/index.ts --out-dir ./config/www/community/Desktop-Control-Panel/",
     "preview": "npm run vendor:webawesome && parcel dev/index.html --out-dir .context/preview-dist",
-    "build": "npm run vendor:webawesome && parcel build src/index.ts --out-dir ./dist/ --out-file dcp.js --public-url ./",
+    "build": "npm run vendor:webawesome && parcel build src/index.ts --out-dir ./dist/ --out-file dcp.js --public-url ./ && node scripts/make-parcel-bundle-module-safe.js",
     "lint": "eslint src/ types/"
   },
   "dependencies": {
