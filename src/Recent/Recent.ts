@@ -59,6 +59,11 @@ export default class Recent extends LitElement {
       return;
     }
 
+    const spotifyPlus = this.hass.states[this.config.spotifyplus_name];
+    if (!spotifyPlus) {
+      return;
+    }
+
     const playback = this.hass.states[this.config.spotify_name];
     const trackId = playback && playback.attributes
       ? playback.attributes.media_content_id || playback.attributes.media_title || ''
@@ -81,7 +86,7 @@ export default class Recent extends LitElement {
       title: track.name || 'Unknown title',
       artist: (track.artists || []).map((artist) => artist.name).join(', ')
         || (track.show && track.show.name)
-        || '',
+        || 'Unknown artist',
       artwork: track.image_url || '',
       uri: track.uri || '',
     };
@@ -113,16 +118,14 @@ export default class Recent extends LitElement {
 
     try {
       const [recent, queue] = await Promise.all([
-        this.callSpotifyPlus<SpotifyPlusRecentResponse>('get_player_recent_tracks', { limit: 6 }),
+        this.callSpotifyPlus<SpotifyPlusRecentResponse>('get_player_recent_tracks', { limit: 50 }),
         this.callSpotifyPlus<SpotifyPlusQueueResponse>('get_player_queue_info'),
       ]);
 
       this.recentItems = (recent.result.items || [])
-        .map((item) => Recent.normalizeTrack(item.track))
-        .slice(0, 6);
+        .map((item) => Recent.normalizeTrack(item.track));
       this.queueItems = (queue.result.queue || [])
-        .map((item) => Recent.normalizeTrack(item))
-        .slice(0, 6);
+        .map((item) => Recent.normalizeTrack(item));
     } catch (error) {
       console.log(error);
       this.recentItems = [];
@@ -192,7 +195,7 @@ export default class Recent extends LitElement {
             </span>
             <span class="track-details">
               <span class="track-title">${item.title}</span>
-              ${item.artist ? html`<span class="track-artist">${item.artist}</span>` : ''}
+              <span class="track-artist">${item.artist}</span>
             </span>
           </button>
         `)}
@@ -202,29 +205,26 @@ export default class Recent extends LitElement {
 
   protected render(): TemplateResult {
     return html`
-      <section id="recent" aria-labelledby="recent-title">
-        <div class="header">
-          <h2 id="recent-title">Spotify</h2>
-          <div class="tabs" role="tablist" aria-label="Spotify lists">
-            <button
-              class=${this.selectedList === 'recent' ? 'tab selected' : 'tab'}
-              type="button"
-              role="tab"
-              aria-selected=${this.selectedList === 'recent' ? 'true' : 'false'}
-              @click=${(): void => this.selectList('recent')}
-            >
-              Recent
-            </button>
-            <button
-              class=${this.selectedList === 'queue' ? 'tab selected' : 'tab'}
-              type="button"
-              role="tab"
-              aria-selected=${this.selectedList === 'queue' ? 'true' : 'false'}
-              @click=${(): void => this.selectList('queue')}
-            >
-              Queue
-            </button>
-          </div>
+      <section id="recent" aria-label="Spotify">
+        <div class="tabs" role="tablist" aria-label="Spotify lists">
+          <button
+            class=${this.selectedList === 'recent' ? 'tab selected' : 'tab'}
+            type="button"
+            role="tab"
+            aria-selected=${this.selectedList === 'recent' ? 'true' : 'false'}
+            @click=${(): void => this.selectList('recent')}
+          >
+            Recent
+          </button>
+          <button
+            class=${this.selectedList === 'queue' ? 'tab selected' : 'tab'}
+            type="button"
+            role="tab"
+            aria-selected=${this.selectedList === 'queue' ? 'true' : 'false'}
+            @click=${(): void => this.selectList('queue')}
+          >
+            Queue
+          </button>
         </div>
         ${this.renderContent()}
       </section>
@@ -254,25 +254,10 @@ export default class Recent extends LitElement {
         box-shadow: var(--dcp-shadow);
       }
 
-      .header {
-        display: grid;
-        gap: 8px;
-      }
-
-      #recent-title {
-        margin: 0;
-        color: var(--dcp-text);
-        font-size: 22px;
-        font-weight: 560;
-        line-height: 1;
-        letter-spacing: -0.025em;
-      }
-
       .tabs {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 4px;
-        padding: 4px;
+        overflow: hidden;
         border: 1px solid var(--dcp-border);
         border-radius: 12px;
         background: rgba(0, 0, 0, 0.18);
@@ -280,10 +265,9 @@ export default class Recent extends LitElement {
 
       .tab {
         min-width: 0;
-        min-height: 36px;
+        min-height: 44px;
         padding: 0 12px;
         border: 0;
-        border-radius: 8px;
         color: var(--dcp-text-muted);
         font: inherit;
         font-size: 13px;
@@ -309,10 +293,32 @@ export default class Recent extends LitElement {
         flex-direction: column;
         gap: 8px;
         min-height: 0;
+        overflow-x: hidden;
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        padding-right: 4px;
+        scrollbar-gutter: stable;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      #media-list::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      #media-list::-webkit-scrollbar-thumb {
+        border: 2px solid transparent;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.24);
+        background-clip: padding-box;
+      }
+
+      #media-list::-webkit-scrollbar-track {
+        background: transparent;
       }
 
       .media-item {
         display: grid;
+        flex: 0 0 56px;
         grid-template-columns: 56px minmax(0, 1fr);
         align-items: center;
         gap: 12px;

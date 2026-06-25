@@ -77,6 +77,9 @@ const states = {
     media_position: 148,
     media_position_updated_at: new Date().toISOString(),
   }),
+  'media_player.spotifyplus_preview': entity('media_player.spotifyplus_preview', 'playing', {
+    friendly_name: 'SpotifyPlus Preview',
+  }),
   'sensor.desktop_processes': entity('sensor.desktop_processes', 'online', {
     processes: [
       { name: 'Spotify', pid: 101, volume: 68, priority: 3, iconUrl: spotifyIcon },

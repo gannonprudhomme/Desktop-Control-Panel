@@ -659,7 +659,7 @@ var parcelRequire;parcelRequire=function(e,r,t,n){var i,o="function"==typeof par
       }
     `]}}t([i.property({type:Object})],l.prototype,"hass",void 0),t([i.property({type:Object})],l.prototype,"config",void 0),exports.default=l,customElements.get("music-player")||customElements.define("music-player",l);
 },{"lit-element":"bhxD","@mdi/js":"ndHv","../Icon":"BdY9","../theme":"AczT"}],"GE9E":[function(require,module,exports) {
-"use strict";var t=this&&this.__decorate||function(t,e,i,s){var r,a=arguments.length,o=a<3?e:null===s?s=Object.getOwnPropertyDescriptor(e,i):s;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)o=Reflect.decorate(t,e,i,s);else for(var d=t.length-1;d>=0;d--)(r=t[d])&&(o=(a<3?r(o):a>3?r(e,i,o):r(e,i))||o);return a>3&&o&&Object.defineProperty(e,i,o),o};Object.defineProperty(exports,"__esModule",{value:!0});const e=require("lit-element"),i=require("../theme");class s extends e.LitElement{constructor(){super(...arguments),this.recentItems=[],this.queueItems=[],this.selectedList="recent",this.isLoading=!1,this.loadFailed=!1,this.loadedEntityId="",this.loadedTrackId=""}updated(t){if(!this.hass||!this.config||!this.config.spotifyplus_name)return;const e=this.hass.states[this.config.spotify_name],i=e&&e.attributes&&(e.attributes.media_content_id||e.attributes.media_title)||"",s=this.loadedEntityId!==this.config.spotifyplus_name,r=this.loadedTrackId!==i;(t.has("hass")||t.has("config"))&&(s||r)&&(this.loadedEntityId=this.config.spotifyplus_name,this.loadedTrackId=i,this.loadMediaLists())}static normalizeTrack(t){return{title:t.name||"Unknown title",artist:(t.artists||[]).map(t=>t.name).join(", ")||t.show&&t.show.name||"",artwork:t.image_url||"",uri:t.uri||""}}async callSpotifyPlus(t,e={}){const i=await this.hass.callService("spotifyplus",t,{entity_id:this.config.spotifyplus_name,...e},void 0,!0,!0);if(!i.response)throw new Error(`SpotifyPlus ${t} returned no response`);return i.response}async loadMediaLists(){this.isLoading=!0,this.loadFailed=!1;try{const[e,i]=await Promise.all([this.callSpotifyPlus("get_player_recent_tracks",{limit:6}),this.callSpotifyPlus("get_player_queue_info")]);this.recentItems=(e.result.items||[]).map(t=>s.normalizeTrack(t.track)).slice(0,6),this.queueItems=(i.result.queue||[]).map(t=>s.normalizeTrack(t)).slice(0,6)}catch(t){console.log(t),this.recentItems=[],this.queueItems=[],this.loadFailed=!0}finally{this.isLoading=!1}}selectList(t){this.selectedList=t}playItem(t){t.uri&&this.hass.callService("media_player","play_media",{entity_id:this.config.spotify_name,media_content_type:t.uri.startsWith("spotify:episode:")?"episode":"track",media_content_id:t.uri}).catch(t=>{console.log(t)})}renderContent(){if(!this.config||!this.config.spotifyplus_name)return e.html`<p class="status">SpotifyPlus is not configured</p>`;if(this.isLoading)return e.html`<p class="status">Loading Spotify…</p>`;if(this.loadFailed)return e.html`
+"use strict";var t=this&&this.__decorate||function(t,e,i,r){var s,a=arguments.length,o=a<3?e:null===r?r=Object.getOwnPropertyDescriptor(e,i):r;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)o=Reflect.decorate(t,e,i,r);else for(var l=t.length-1;l>=0;l--)(s=t[l])&&(o=(a<3?s(o):a>3?s(e,i,o):s(e,i))||o);return a>3&&o&&Object.defineProperty(e,i,o),o};Object.defineProperty(exports,"__esModule",{value:!0});const e=require("lit-element"),i=require("../theme");class r extends e.LitElement{constructor(){super(...arguments),this.recentItems=[],this.queueItems=[],this.selectedList="recent",this.isLoading=!1,this.loadFailed=!1,this.loadedEntityId="",this.loadedTrackId=""}updated(t){if(!this.hass||!this.config||!this.config.spotifyplus_name)return;if(!this.hass.states[this.config.spotifyplus_name])return;const e=this.hass.states[this.config.spotify_name],i=e&&e.attributes&&(e.attributes.media_content_id||e.attributes.media_title)||"",r=this.loadedEntityId!==this.config.spotifyplus_name,s=this.loadedTrackId!==i;(t.has("hass")||t.has("config"))&&(r||s)&&(this.loadedEntityId=this.config.spotifyplus_name,this.loadedTrackId=i,this.loadMediaLists())}static normalizeTrack(t){return{title:t.name||"Unknown title",artist:(t.artists||[]).map(t=>t.name).join(", ")||t.show&&t.show.name||"Unknown artist",artwork:t.image_url||"",uri:t.uri||""}}async callSpotifyPlus(t,e={}){const i=await this.hass.callService("spotifyplus",t,{entity_id:this.config.spotifyplus_name,...e},void 0,!0,!0);if(!i.response)throw new Error(`SpotifyPlus ${t} returned no response`);return i.response}async loadMediaLists(){this.isLoading=!0,this.loadFailed=!1;try{const[e,i]=await Promise.all([this.callSpotifyPlus("get_player_recent_tracks",{limit:50}),this.callSpotifyPlus("get_player_queue_info")]);this.recentItems=(e.result.items||[]).map(t=>r.normalizeTrack(t.track)),this.queueItems=(i.result.queue||[]).map(t=>r.normalizeTrack(t))}catch(t){console.log(t),this.recentItems=[],this.queueItems=[],this.loadFailed=!0}finally{this.isLoading=!1}}selectList(t){this.selectedList=t}playItem(t){t.uri&&this.hass.callService("media_player","play_media",{entity_id:this.config.spotify_name,media_content_type:t.uri.startsWith("spotify:episode:")?"episode":"track",media_content_id:t.uri}).catch(t=>{console.log(t)})}renderContent(){if(!this.config||!this.config.spotifyplus_name)return e.html`<p class="status">SpotifyPlus is not configured</p>`;if(this.isLoading)return e.html`<p class="status">Loading Spotify…</p>`;if(this.loadFailed)return e.html`
         <div class="status-block">
           <p class="status">Spotify lists unavailable</p>
           <button class="retry-button" type="button" @click=${this.loadMediaLists}>
@@ -680,35 +680,32 @@ var parcelRequire;parcelRequire=function(e,r,t,n){var i,o="function"==typeof par
             </span>
             <span class="track-details">
               <span class="track-title">${t.title}</span>
-              ${t.artist?e.html`<span class="track-artist">${t.artist}</span>`:""}
+              <span class="track-artist">${t.artist}</span>
             </span>
           </button>
         `)}
       </div>
     `:e.html`<p class="status">No ${"recent"===this.selectedList?"recent tracks":"queued tracks"}</p>`}render(){return e.html`
-      <section id="recent" aria-labelledby="recent-title">
-        <div class="header">
-          <h2 id="recent-title">Spotify</h2>
-          <div class="tabs" role="tablist" aria-label="Spotify lists">
-            <button
-              class=${"recent"===this.selectedList?"tab selected":"tab"}
-              type="button"
-              role="tab"
-              aria-selected=${"recent"===this.selectedList?"true":"false"}
-              @click=${()=>this.selectList("recent")}
-            >
-              Recent
-            </button>
-            <button
-              class=${"queue"===this.selectedList?"tab selected":"tab"}
-              type="button"
-              role="tab"
-              aria-selected=${"queue"===this.selectedList?"true":"false"}
-              @click=${()=>this.selectList("queue")}
-            >
-              Queue
-            </button>
-          </div>
+      <section id="recent" aria-label="Spotify">
+        <div class="tabs" role="tablist" aria-label="Spotify lists">
+          <button
+            class=${"recent"===this.selectedList?"tab selected":"tab"}
+            type="button"
+            role="tab"
+            aria-selected=${"recent"===this.selectedList?"true":"false"}
+            @click=${()=>this.selectList("recent")}
+          >
+            Recent
+          </button>
+          <button
+            class=${"queue"===this.selectedList?"tab selected":"tab"}
+            type="button"
+            role="tab"
+            aria-selected=${"queue"===this.selectedList?"true":"false"}
+            @click=${()=>this.selectList("queue")}
+          >
+            Queue
+          </button>
         </div>
         ${this.renderContent()}
       </section>
@@ -734,25 +731,10 @@ var parcelRequire;parcelRequire=function(e,r,t,n){var i,o="function"==typeof par
         box-shadow: var(--dcp-shadow);
       }
 
-      .header {
-        display: grid;
-        gap: 8px;
-      }
-
-      #recent-title {
-        margin: 0;
-        color: var(--dcp-text);
-        font-size: 22px;
-        font-weight: 560;
-        line-height: 1;
-        letter-spacing: -0.025em;
-      }
-
       .tabs {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 4px;
-        padding: 4px;
+        overflow: hidden;
         border: 1px solid var(--dcp-border);
         border-radius: 12px;
         background: rgba(0, 0, 0, 0.18);
@@ -760,10 +742,9 @@ var parcelRequire;parcelRequire=function(e,r,t,n){var i,o="function"==typeof par
 
       .tab {
         min-width: 0;
-        min-height: 36px;
+        min-height: 44px;
         padding: 0 12px;
         border: 0;
-        border-radius: 8px;
         color: var(--dcp-text-muted);
         font: inherit;
         font-size: 13px;
@@ -789,10 +770,32 @@ var parcelRequire;parcelRequire=function(e,r,t,n){var i,o="function"==typeof par
         flex-direction: column;
         gap: 8px;
         min-height: 0;
+        overflow-x: hidden;
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        padding-right: 4px;
+        scrollbar-gutter: stable;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      #media-list::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      #media-list::-webkit-scrollbar-thumb {
+        border: 2px solid transparent;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.24);
+        background-clip: padding-box;
+      }
+
+      #media-list::-webkit-scrollbar-track {
+        background: transparent;
       }
 
       .media-item {
         display: grid;
+        flex: 0 0 56px;
         grid-template-columns: 56px minmax(0, 1fr);
         align-items: center;
         gap: 12px;
@@ -900,7 +903,7 @@ var parcelRequire;parcelRequire=function(e,r,t,n){var i,o="function"==typeof par
           gap: 8px;
         }
       }
-    `]}}t([e.property({type:Object})],s.prototype,"hass",void 0),t([e.property({type:Object})],s.prototype,"config",void 0),t([e.property({attribute:!1})],s.prototype,"recentItems",void 0),t([e.property({attribute:!1})],s.prototype,"queueItems",void 0),t([e.property({type:String,attribute:!1})],s.prototype,"selectedList",void 0),t([e.property({type:Boolean,attribute:!1})],s.prototype,"isLoading",void 0),t([e.property({type:Boolean,attribute:!1})],s.prototype,"loadFailed",void 0),exports.default=s,customElements.get("recent-media")||customElements.define("recent-media",s);
+    `]}}t([e.property({type:Object})],r.prototype,"hass",void 0),t([e.property({type:Object})],r.prototype,"config",void 0),t([e.property({attribute:!1})],r.prototype,"recentItems",void 0),t([e.property({attribute:!1})],r.prototype,"queueItems",void 0),t([e.property({type:String,attribute:!1})],r.prototype,"selectedList",void 0),t([e.property({type:Boolean,attribute:!1})],r.prototype,"isLoading",void 0),t([e.property({type:Boolean,attribute:!1})],r.prototype,"loadFailed",void 0),exports.default=r,customElements.get("recent-media")||customElements.define("recent-media",r);
 },{"lit-element":"bhxD","../theme":"AczT"}],"QCba":[function(require,module,exports) {
 "use strict";var e=this&&this.__createBinding||(Object.create?function(e,t,r,i){void 0===i&&(i=r),Object.defineProperty(e,i,{enumerable:!0,get:function(){return t[r]}})}:function(e,t,r,i){void 0===i&&(i=r),e[i]=t[r]}),t=this&&this.__setModuleDefault||(Object.create?function(e,t){Object.defineProperty(e,"default",{enumerable:!0,value:t})}:function(e,t){e.default=t}),r=this&&this.__decorate||function(e,t,r,i){var o,a=arguments.length,s=a<3?t:null===i?i=Object.getOwnPropertyDescriptor(t,r):i;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)s=Reflect.decorate(e,t,r,i);else for(var n=e.length-1;n>=0;n--)(o=e[n])&&(s=(a<3?o(s):a>3?o(t,r,s):o(t,r))||s);return a>3&&s&&Object.defineProperty(t,r,s),s},i=this&&this.__importStar||function(r){if(r&&r.__esModule)return r;var i={};if(null!=r)for(var o in r)"default"!==o&&Object.prototype.hasOwnProperty.call(r,o)&&e(i,r,o);return t(i,r),i};Object.defineProperty(exports,"__esModule",{value:!0});const o=require("lit-element");require("./TopRow/TopRow"),require("./MusicPlayer/MusicPlayer"),require("./Recent/Recent");const a=i(require("./theme"));class s extends o.LitElement{render(){const e=this.panel?this.panel.config:null;return o.html`
       <div class="app-shell">
