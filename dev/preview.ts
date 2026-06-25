@@ -83,16 +83,15 @@ const entity = (
 
 const states = {
   'weather.home': entity('weather.home', 'sunny', { temperature: 72 }),
-  'media_player.spotify_preview': entity('media_player.spotify_preview', 'playing', {
+  'media_player.spotifyplus_preview': entity('media_player.spotifyplus_preview', 'playing', {
+    friendly_name: 'SpotifyPlus Preview',
     media_title: defaultTrack.title,
     media_artist: defaultTrack.artist,
     entity_picture: albumArt,
+    media_content_id: 'spotify:track:2cGxRwrMyEAp8dEbuZaVv6',
     media_duration: 337,
     media_position: 148,
     media_position_updated_at: new Date().toISOString(),
-  }),
-  'media_player.spotifyplus_preview': entity('media_player.spotifyplus_preview', 'playing', {
-    friendly_name: 'SpotifyPlus Preview',
   }),
   'sensor.desktop_processes': entity('sensor.desktop_processes', 'online', {
     processes: [
@@ -126,7 +125,6 @@ const states = {
 
 const config = {
   desktop_name: 'sensor.desktop_processes',
-  spotify_name: 'media_player.spotify_preview',
   spotifyplus_name: 'media_player.spotifyplus_preview',
   weather_name: 'weather.home',
   pi_brightness_name: 'sensor.screen_brightness',
@@ -172,7 +170,7 @@ let hass: HomeAssistant = {
     window.__previewServiceCalls.push({ domain, service, serviceData });
 
     if (domain === 'media_player' && service === 'media_play_pause') {
-      const mediaPlayer = hass.states[config.spotify_name];
+      const mediaPlayer = hass.states[config.spotifyplus_name];
       const nextState = mediaPlayer.state === 'playing' ? 'paused' : 'playing';
       const lastUpdated = Date.parse(mediaPlayer.attributes.media_position_updated_at);
       const elapsed = mediaPlayer.state === 'playing' && !Number.isNaN(lastUpdated)
@@ -183,7 +181,7 @@ let hass: HomeAssistant = {
         ...hass,
         states: {
           ...hass.states,
-          [config.spotify_name]: {
+          [config.spotifyplus_name]: {
             ...mediaPlayer,
             state: nextState,
             attributes: {
@@ -201,13 +199,13 @@ let hass: HomeAssistant = {
     }
 
     if (domain === 'media_player' && service === 'media_seek') {
-      const mediaPlayer = hass.states[config.spotify_name];
+      const mediaPlayer = hass.states[config.spotifyplus_name];
 
       hass = {
         ...hass,
         states: {
           ...hass.states,
-          [config.spotify_name]: {
+          [config.spotifyplus_name]: {
             ...mediaPlayer,
             attributes: {
               ...mediaPlayer.attributes,
@@ -258,6 +256,29 @@ let hass: HomeAssistant = {
         artists: [{ name: 'Tame Impala' }],
       },
     ];
+
+    if (domain === 'spotifyplus' && service === 'get_player_playback_state' && returnResponse) {
+      const mediaPlayer = hass.states[config.spotifyplus_name];
+
+      return {
+        context: { id: `preview-${Date.now()}` },
+        response: {
+          result: {
+            is_playing: mediaPlayer.state === 'playing',
+            progress_ms: Number(mediaPlayer.attributes.media_position) * 1000,
+            item: {
+              name: mediaPlayer.attributes.media_title,
+              uri: mediaPlayer.attributes.media_content_id,
+              duration_ms: Number(mediaPlayer.attributes.media_duration) * 1000,
+              artists: [{ name: mediaPlayer.attributes.media_artist }],
+              album: {
+                images: [{ url: mediaPlayer.attributes.entity_picture }],
+              },
+            },
+          },
+        },
+      };
+    }
 
     if (domain === 'spotifyplus' && service === 'get_player_recent_tracks' && returnResponse) {
       return {
@@ -382,7 +403,7 @@ if (!toggleTestTrack) {
 const previewToggle = toggleTestTrack;
 
 previewToggle.addEventListener('click', () => {
-  const mediaPlayer = hass.states[config.spotify_name];
+  const mediaPlayer = hass.states[config.spotifyplus_name];
   const isLongTitle = mediaPlayer.attributes.media_title === longTitleTrack.title;
   const nextTrack = isLongTitle ? defaultTrack : longTitleTrack;
 
@@ -390,7 +411,7 @@ previewToggle.addEventListener('click', () => {
     ...hass,
     states: {
       ...hass.states,
-      [config.spotify_name]: {
+      [config.spotifyplus_name]: {
         ...mediaPlayer,
         attributes: {
           ...mediaPlayer.attributes,

@@ -52,6 +52,9 @@ interface ViewTransitionElement extends HTMLElement {
   }): ViewTransition;
 }
 
+const MEDIA_LIST_REFRESH_INTERVAL = 10000;
+const PLAY_ITEM_REFRESH_DELAY = 500;
+
 export default class Recent extends LitElement {
   @property({ type: Object }) public hass?: HomeAssistant;
   @property({ type: Object }) public config?: DCPConfig;
@@ -62,40 +65,43 @@ export default class Recent extends LitElement {
   @property({ type: Boolean, attribute: false }) private loadFailed = false;
 
   private loadedEntityId = '';
-  private loadedTrackId = '';
+  private refreshInterval?: number;
+  private refreshInFlight = false;
   private hasLoaded = false;
   private loadRequestId = 0;
+
+  disconnectedCallback(): void {
+    if (this.refreshInterval !== undefined) {
+      window.clearInterval(this.refreshInterval);
+      this.refreshInterval = undefined;
+    }
+    super.disconnectedCallback();
+  }
 
   protected updated(changedProperties: PropertyValues): void {
     if (
       !this.hass
-      || !this.config?.spotify_name
-      || !this.config.spotifyplus_name
+      || !this.config?.spotifyplus_name
     ) {
       return;
     }
 
-    const spotifyPlus = this.hass.states[this.config.spotifyplus_name];
-    if (!spotifyPlus) {
-      return;
-    }
-
-    const playback = this.hass.states[this.config.spotify_name];
-    const trackId = playback && playback.attributes
-      ? playback.attributes.media_content_id || playback.attributes.media_title || ''
-      : '';
     const entityChanged = this.loadedEntityId !== this.config.spotifyplus_name;
-    const trackChanged = this.loadedTrackId !== trackId;
 
     if (
       (changedProperties.has('hass') || changedProperties.has('config'))
-      && (entityChanged || trackChanged)
+      && entityChanged
     ) {
       this.loadedEntityId = this.config.spotifyplus_name;
-      this.loadedTrackId = trackId;
       queueMicrotask(() => {
         void this.loadMediaLists();
       });
+    }
+
+    if (this.refreshInterval === undefined) {
+      this.refreshInterval = window.setInterval(() => {
+        void this.loadMediaList(this.selectedList);
+      }, MEDIA_LIST_REFRESH_INTERVAL);
     }
   }
 
@@ -144,6 +150,29 @@ export default class Recent extends LitElement {
     await list.startViewTransition({ callback: update }).updateCallbackDone;
   }
 
+  private async updateMediaList(listName: MediaList, items: MediaListItem[]): Promise<void> {
+    const update = async (): Promise<void> => {
+      if (listName === 'recent') {
+        this.recentItems = items;
+      } else {
+        this.queueItems = items;
+      }
+      this.hasLoaded = true;
+      await this.updateComplete;
+    };
+    const list = this.renderRoot.querySelector<ViewTransitionElement>('#media-list');
+
+    if (
+      !list?.startViewTransition
+      || window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    ) {
+      await update();
+      return;
+    }
+
+    await list.startViewTransition({ callback: update }).updateCallbackDone;
+  }
+
   private async callSpotifyPlus<T>(
     service: string,
     data: Record<string, unknown> = {},
@@ -172,6 +201,11 @@ export default class Recent extends LitElement {
   }
 
   private async loadMediaLists(): Promise<void> {
+    if (this.refreshInFlight) {
+      return;
+    }
+
+    this.refreshInFlight = true;
     const requestId = ++this.loadRequestId;
     this.isLoading = true;
     this.loadFailed = false;
@@ -202,26 +236,78 @@ export default class Recent extends LitElement {
     } finally {
       if (requestId === this.loadRequestId) {
         this.isLoading = false;
+        this.refreshInFlight = false;
+      }
+    }
+  }
+
+  private async loadMediaList(listName: MediaList): Promise<void> {
+    if (this.refreshInFlight) {
+      return;
+    }
+
+    this.refreshInFlight = true;
+    const requestId = ++this.loadRequestId;
+
+    try {
+      const items = listName === 'recent'
+        ? Recent.normalizeTracks(
+          ((
+            await this.callSpotifyPlus<SpotifyPlusRecentResponse>(
+              'get_player_recent_tracks',
+              { limit: 50 },
+            )
+          ).result.items || []).map((item) => item.track),
+        )
+        : Recent.normalizeTracks(
+          (
+            await this.callSpotifyPlus<SpotifyPlusQueueResponse>('get_player_queue_info')
+          ).result.queue || [],
+        );
+
+      if (requestId === this.loadRequestId) {
+        await this.updateMediaList(listName, items);
+        this.loadFailed = false;
+      }
+    } catch (error) {
+      if (requestId === this.loadRequestId) {
+        console.log(error);
+        this.loadFailed = true;
+      }
+    } finally {
+      if (requestId === this.loadRequestId) {
+        this.refreshInFlight = false;
       }
     }
   }
 
   private selectList(list: MediaList): void {
+    if (this.selectedList === list) {
+      return;
+    }
+
     this.selectedList = list;
+    void this.loadMediaList(list);
   }
 
   private playItem(item: MediaListItem): void {
-    if (!item.uri || !this.hass || !this.config?.spotify_name) {
+    if (!item.uri || !this.hass || !this.config?.spotifyplus_name) {
       return;
     }
 
     this.hass.callService('media_player', 'play_media', {
-      entity_id: this.config.spotify_name,
+      entity_id: this.config.spotifyplus_name,
       media_content_type: item.uri.startsWith('spotify:episode:') ? 'episode' : 'track',
       media_content_id: item.uri,
-    }).catch((error) => {
-      console.log(error);
-    });
+    })
+      .then(() => {
+        window.setTimeout(() => {
+          void this.loadMediaLists();
+        }, PLAY_ITEM_REFRESH_DELAY);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
   private renderContent(): TemplateResult {

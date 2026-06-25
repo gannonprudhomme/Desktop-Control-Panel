@@ -57,7 +57,6 @@ panel_custom:
     module_url: /hacsfiles/Desktop-Control-Panel/desktop-control-panel.js
     config:
       weather_name: weather.home
-      spotify_name: media_player.spotify_gannon_prudhomme
       spotifyplus_name: media_player.spotifyplus_gannon_prudhomme
 
       # For use with ha-desktop-processes, optional

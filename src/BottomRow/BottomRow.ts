@@ -11,12 +11,12 @@ import Module from '../../types/Module';
 import { borderBoxStyles } from '../theme';
 
 export function getSongFromSpotify(hass: HomeAssistant, config: DCPConfig): Song | null {
-  if (!config.spotify_name) {
-    console.log('ERROR: No spotify_name passed in as argument');
+  if (!config.spotifyplus_name) {
+    console.log('ERROR: No spotifyplus_name passed in as argument');
     return null;
   }
 
-  const spotifyState = hass.states[config.spotify_name];
+  const spotifyState = hass.states[config.spotifyplus_name];
 
   if (!spotifyState) {
     // We need to show this to the user somehow
@@ -50,7 +50,7 @@ export default class BottomRow extends LitElement {
         <media-control
           .hass=${this.hass}
           .song=${song}
-          .mediaPlayerId=${this.config.spotify_name ?? ''}>
+          .mediaPlayerId=${this.config.spotifyplus_name ?? ''}>
         </media-control>
         <module-switcher .modules=${this.modules} .currentModule=${this.currentModule}>
         </module-switcher>

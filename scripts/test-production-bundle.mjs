@@ -25,7 +25,7 @@ const harness = `<!doctype html>
         context: { id: entityId, parent_id: null, user_id: null },
       });
       const config = {
-        spotify_name: 'media_player.test',
+        spotifyplus_name: 'media_player.test',
         weather_name: 'weather.home',
       };
       const serviceCalls = [];
@@ -44,17 +44,82 @@ const harness = `<!doctype html>
         panels: {},
         dockedSidebar: 'always_hidden',
         localize: () => 'Sunny',
-        callService: async (domain, service, serviceData) => {
+        callService: async (domain, service, serviceData, _target, _notifyOnError, returnResponse) => {
           serviceCalls.push({ domain, service, serviceData });
+          if (
+            domain === 'spotifyplus'
+            && service === 'get_player_playback_state'
+            && returnResponse
+          ) {
+            return {
+              context: { id: 'bundle-test' },
+              response: {
+                result: {
+                  is_playing: true,
+                  progress_ms: 15000,
+                  item: {
+                    name: title,
+                    uri: 'spotify:track:test',
+                    duration_ms: 120000,
+                    artists: [{ name: 'Bundle Harness' }],
+                    album: { images: [] },
+                  },
+                },
+              },
+            };
+          }
+          if (
+            domain === 'spotifyplus'
+            && service === 'get_player_recent_tracks'
+            && returnResponse
+          ) {
+            return {
+              context: { id: 'bundle-test' },
+              response: {
+                result: {
+                  items: [{
+                    track: {
+                      name: 'Recent Harness Track',
+                      uri: 'spotify:track:recent',
+                      artists: [{ name: 'Bundle Harness' }],
+                    },
+                  }],
+                },
+              },
+            };
+          }
+          if (
+            domain === 'spotifyplus'
+            && service === 'get_player_queue_info'
+            && returnResponse
+          ) {
+            return {
+              context: { id: 'bundle-test' },
+              response: {
+                result: {
+                  queue: [{
+                    name: 'Queue Harness Track',
+                    uri: 'spotify:track:queue',
+                    artists: [{ name: 'Bundle Harness' }],
+                  }],
+                },
+              },
+            };
+          }
           return { context: { id: 'bundle-test' } };
         },
         callWS: async () => undefined,
       });
       const panel = { name: 'desktop-control', config };
+      const setStage = (stage) => { document.body.dataset.stage = stage; };
 
       const verifyRender = async (element, expectedTitle) => {
+        setStage(\`verify-\${expectedTitle}-element\`);
         await element.updateComplete;
         const player = element.shadowRoot?.querySelector('music-player');
+        setStage(\`verify-\${expectedTitle}-player\`);
+        await player?.updateComplete;
+        await new Promise((resolve) => setTimeout(resolve, 0));
         await player?.updateComplete;
         const title = player?.shadowRoot?.querySelector('#title')?.textContent;
         if (title !== expectedTitle) {
@@ -63,8 +128,10 @@ const harness = `<!doctype html>
       };
 
       try {
+        setStage('import-first');
         await import('/dist/desktop-control-panel.js?first');
 
+        setStage('hass-first');
         const hassFirst = document.createElement('desktop-control');
         document.body.append(hassFirst);
         hassFirst.hass = createHass('Hass First');
@@ -72,6 +139,7 @@ const harness = `<!doctype html>
         hassFirst.panel = panel;
         await verifyRender(hassFirst, 'Hass First');
 
+        setStage('panel-first');
         const panelFirst = document.createElement('desktop-control');
         document.body.append(panelFirst);
         panelFirst.panel = panel;
@@ -79,9 +147,50 @@ const harness = `<!doctype html>
         panelFirst.hass = createHass('Panel First');
         await verifyRender(panelFirst, 'Panel First');
 
+        setStage('updated-hass');
         hassFirst.hass = createHass('Updated Hass');
+        await verifyRender(hassFirst, 'Hass First');
+        const refreshPlayer = hassFirst.shadowRoot?.querySelector('music-player');
+        const refreshButton = refreshPlayer?.shadowRoot?.querySelector('.play-button');
+        if (!(refreshButton instanceof HTMLButtonElement)) {
+          throw new Error('Music player refresh control was not rendered');
+        }
+        refreshButton.click();
+        await new Promise((resolve) => setTimeout(resolve, 600));
         await verifyRender(hassFirst, 'Updated Hass');
 
+        setStage('media-lists');
+        const recentMedia = hassFirst.shadowRoot?.querySelector('recent-media');
+        await recentMedia?.updateComplete;
+        await new Promise((resolve) => setTimeout(resolve, 0));
+        await recentMedia?.updateComplete;
+        const recentTab = [...(recentMedia?.shadowRoot?.querySelectorAll('.tab') ?? [])]
+          .find((tab) => tab.textContent?.trim() === 'Recents');
+        const recentCallsBefore = serviceCalls.filter(({ domain, service }) => (
+          domain === 'spotifyplus' && service === 'get_player_recent_tracks'
+        )).length;
+
+        if (!(recentTab instanceof HTMLButtonElement)) {
+          throw new Error('Recents tab was not rendered');
+        }
+
+        recentTab.click();
+        await new Promise((resolve) => setTimeout(resolve, 0));
+        await recentMedia?.updateComplete;
+
+        const recentCallsAfter = serviceCalls.filter(({ domain, service }) => (
+          domain === 'spotifyplus' && service === 'get_player_recent_tracks'
+        )).length;
+        const recentTitle = recentMedia?.shadowRoot?.querySelector('.track-title')?.textContent;
+
+        if (recentCallsAfter !== recentCallsBefore + 1) {
+          throw new Error('Switching to Recents did not refresh the list');
+        }
+        if (recentTitle !== 'Recent Harness Track') {
+          throw new Error(\`Expected refreshed recent track, received "\${recentTitle}"\`);
+        }
+
+        setStage('timeline');
         const player = hassFirst.shadowRoot?.querySelector('music-player');
         const progress = player?.shadowRoot?.querySelector('#progress');
         const progressControl = player?.shadowRoot?.querySelector('#progress-control');
@@ -123,6 +232,7 @@ const harness = `<!doctype html>
           throw new Error(\`Timeline did not resume after seeking: \${updatedPosition}\`);
         }
 
+        setStage('unavailable');
         const unavailable = document.createElement('desktop-control');
         document.body.append(unavailable);
         unavailable.hass = createHass('Unused');
@@ -134,6 +244,7 @@ const harness = `<!doctype html>
           throw new Error('Missing optional configuration did not render an unavailable state');
         }
 
+        setStage('webawesome');
         await window.dcpWebAwesomeReady;
         for (const name of ['wa-button', 'wa-button-group', 'wa-card', 'wa-slider']) {
           if (!customElements.get(name)) {
@@ -141,12 +252,14 @@ const harness = `<!doctype html>
           }
         }
 
+        setStage('import-second');
         await import('/dist/desktop-control-panel.js?second');
 
         if (document.head.querySelectorAll('style[data-web-awesome]').length !== 1) {
           throw new Error('Web Awesome styles were injected more than once');
         }
 
+        setStage('complete');
         document.body.dataset.status = 'pass';
       } catch (error) {
         document.body.dataset.status = 'fail';

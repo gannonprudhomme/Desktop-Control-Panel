@@ -16,11 +16,11 @@ export default class App extends LitElement {
   @property({ type: Object }) public panel?: BaseConfig;
 
   private getAlbumArt(config: DCPConfig): string {
-    if (!config.spotify_name) {
+    if (!config.spotifyplus_name) {
       return '';
     }
 
-    const mediaPlayer = this.hass?.states[config.spotify_name];
+    const mediaPlayer = this.hass?.states[config.spotifyplus_name];
 
     return mediaPlayer?.attributes.entity_picture || '';
   }
