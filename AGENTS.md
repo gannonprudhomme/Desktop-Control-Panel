@@ -3,7 +3,7 @@
 ## Project overview
 
 Desktop Control Panel is a Home Assistant custom panel written in TypeScript with LitElement. It is
-designed for an 800 × 480 tablet display and provides media, volume, lighting, PC-stat, and
+designed for a 1024 × 600 tablet display and provides media, volume, lighting, PC-stat, and
 Raspberry Pi controls.
 
 ## Development commands
@@ -26,6 +26,8 @@ under `.context/preview-dist` and must not be committed.
 - `dist/`: tracked production bundle consumed by HACS.
 - `config/`: gitignored local Home Assistant configuration and watcher output.
 - `.conductor/settings.toml`: shared Conductor setup and run configuration.
+- `docs/local-ssh-deployment.md`: temporary deployment workflow for testing against a live Home
+  Assistant installation.
 
 ## Implementation guidance
 
@@ -37,6 +39,8 @@ under `.context/preview-dist` and must not be committed.
   Assistant state.
 - Keep the preview self-contained. Do not require a Home Assistant installation for ordinary UI
   development.
+- Follow `docs/local-ssh-deployment.md` when a task explicitly calls for live deployment over SSH.
+  HACS remains the official installation path.
 - Use the workspace-specific Conductor port for servers; do not introduce a fixed port into the
   Conductor run command.
 - Do not commit `.DS_Store`, `node_modules`, `.cache`, `.context` output, `config`, or local
@@ -52,7 +56,7 @@ under `.context/preview-dist` and must not be committed.
 - Keep related content visually grouped: internal spacing should be smaller than spacing between
   separate groups.
 - Make interactive targets at least `44px` in both dimensions.
-- Design and verify the active layout at 800 × 480, ensuring essential controls remain visible
+- Design and verify the active layout at 1024 × 600, ensuring essential controls remain visible
   without accidental overflow.
 
 ## Generated files
