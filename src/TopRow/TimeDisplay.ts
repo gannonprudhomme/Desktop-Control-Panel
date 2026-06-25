@@ -1,6 +1,6 @@
-import {
-  css, CSSResult, html, LitElement, TemplateResult, property,
-} from 'lit-element';
+import { css, html, LitElement } from 'lit';
+import { property } from 'lit/decorators.js';
+import type { CSSResult, TemplateResult } from 'lit';
 import { borderBoxStyles } from '../theme';
 
 function formatTime(now: Date): string {
@@ -17,7 +17,7 @@ function formatTime(now: Date): string {
 // We probably need to get this type from somewhere
 export default class TimeDisplay extends LitElement {
   //   @property({type: Object }) public hass: Hass;
-  @property({ type: Date }) public date: Date;
+  @property({ type: Date }) public date = new Date();
 
   constructor() {
     super();

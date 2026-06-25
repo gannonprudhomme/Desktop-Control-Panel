@@ -1,6 +1,6 @@
-import {
-  css, CSSResult, html, LitElement, TemplateResult, property,
-} from 'lit-element';
+import { css, html, LitElement } from 'lit';
+import { property } from 'lit/decorators.js';
+import type { CSSResult, TemplateResult } from 'lit';
 import DCPConfig from '../../types/Config';
 import { HomeAssistant } from '../../types/types';
 import { borderBoxStyles } from '../theme';
@@ -9,8 +9,8 @@ import './WeatherDisplay';
 
 // We probably need to get this type from somewhere
 export default class TopRow extends LitElement {
-  @property({ type: Object }) public hass: HomeAssistant;
-  @property({ type: Object }) public config: DCPConfig;
+  @property({ type: Object }) public hass?: HomeAssistant;
+  @property({ type: Object }) public config?: DCPConfig;
 
   protected render(): TemplateResult {
     return html`

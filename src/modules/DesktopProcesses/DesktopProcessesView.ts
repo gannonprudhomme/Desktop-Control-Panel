@@ -1,6 +1,6 @@
-import {
-  css, CSSResult, html, LitElement, TemplateResult, property,
-} from 'lit-element';
+import { css, html, LitElement } from 'lit';
+import { property } from 'lit/decorators.js';
+import type { CSSResult, TemplateResult } from 'lit';
 import { HomeAssistant } from '../../../types/types';
 import VolumeProcess from '../../../types/VolumeProcess';
 import { borderBoxStyles } from '../../theme';
@@ -8,8 +8,8 @@ import './VolumeSlider';
 
 // We probably need to get this type from somewhere
 export default class DesktopProcessesView extends LitElement {
-  @property({ type: Array }) public hass: HomeAssistant;
-  @property({ type: Array }) public volumeProcesses: VolumeProcess[];
+  @property({ type: Object }) public hass!: HomeAssistant;
+  @property({ type: Array }) public volumeProcesses: VolumeProcess[] | null = null;
 
   protected render(): TemplateResult {
     const setVolume = (pid: number, volume: number) => {
@@ -32,7 +32,7 @@ export default class DesktopProcessesView extends LitElement {
       `;
     }
 
-    const sortedProcs = this.volumeProcesses.sort((a, b) => {
+    const sortedProcs = [...this.volumeProcesses].sort((a, b) => {
       if (a.priority === b.priority) {
         return a.name.localeCompare(b.name); // ascending (alphabetical)
       }

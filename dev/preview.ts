@@ -9,6 +9,20 @@ interface PreviewElement extends HTMLElement {
   panel?: BaseConfig;
 }
 
+interface PreviewServiceCall {
+  domain: string;
+  service: string;
+  serviceData?: Record<string, unknown>;
+}
+
+declare global {
+  interface Window {
+    __previewServiceCalls: PreviewServiceCall[];
+  }
+}
+
+window.__previewServiceCalls = [];
+
 const albumArt = 'https://image-cdn-ak.spotifycdn.com/image/ab67616d00001e029b9b36b0e22870b9f542d937';
 const defaultTrack = {
   title: 'Instant Crush (feat. Julian Casablancas)',
@@ -110,7 +124,7 @@ const states = {
   'sensor.screen_power': entity('sensor.screen_power', 'True', {}),
 };
 
-const config: DCPConfig = {
+const config = {
   desktop_name: 'sensor.desktop_processes',
   spotify_name: 'media_player.spotify_preview',
   spotifyplus_name: 'media_player.spotifyplus_preview',
@@ -129,13 +143,19 @@ const config: DCPConfig = {
     gpu_usage: 'sensor.gpu_usage',
     memory_usage: 'sensor.memory_usage',
   },
-};
+} satisfies DCPConfig;
+
+const previewApp = document.querySelector<PreviewElement>('desktop-control');
+
+if (!previewApp) {
+  throw new Error('Desktop control preview element was not found');
+}
 
 let hass: HomeAssistant = {
   states: states as HomeAssistant['states'],
   panels: {},
   dockedSidebar: 'always_hidden',
-  localize: (_key: string): string => 'Sunny',
+  localize: (): string => 'Sunny',
   callService: async (
     domain: string,
     service: string,
@@ -145,6 +165,7 @@ let hass: HomeAssistant = {
     returnResponse?: boolean,
   ): Promise<ServiceCallResponse> => {
     console.info('[preview service]', domain, service, serviceData);
+    window.__previewServiceCalls.push({ domain, service, serviceData });
 
     if (domain === 'media_player' && service === 'media_play_pause') {
       const mediaPlayer = hass.states[config.spotify_name];
@@ -172,7 +193,7 @@ let hass: HomeAssistant = {
           },
         },
       };
-      app.hass = hass;
+      previewApp.hass = hass;
     }
 
     if (domain === 'media_player' && service === 'media_seek') {
@@ -186,13 +207,13 @@ let hass: HomeAssistant = {
             ...mediaPlayer,
             attributes: {
               ...mediaPlayer.attributes,
-              media_position: Number(serviceData.seek_position),
+              media_position: Number(serviceData?.seek_position),
               media_position_updated_at: new Date().toISOString(),
             },
           },
         },
       };
-      app.hass = hass;
+      previewApp.hass = hass;
     }
 
     const previewTracks = [
@@ -348,14 +369,15 @@ const panel: BaseConfig = {
   config,
 };
 
-const app = document.querySelector<PreviewElement>('desktop-control');
 const toggleTestTrack = document.querySelector<HTMLButtonElement>('#toggle-test-track');
 
-if (!app || !toggleTestTrack) {
+if (!toggleTestTrack) {
   throw new Error('Preview controls were not found');
 }
 
-toggleTestTrack.addEventListener('click', () => {
+const previewToggle = toggleTestTrack;
+
+previewToggle.addEventListener('click', () => {
   const mediaPlayer = hass.states[config.spotify_name];
   const isLongTitle = mediaPlayer.attributes.media_title === longTitleTrack.title;
   const nextTrack = isLongTitle ? defaultTrack : longTitleTrack;
@@ -377,14 +399,14 @@ toggleTestTrack.addEventListener('click', () => {
     },
   };
 
-  app.hass = hass;
-  toggleTestTrack.textContent = isLongTitle ? 'Test long title' : 'Use default track';
+  previewApp.hass = hass;
+  previewToggle.textContent = isLongTitle ? 'Test long title' : 'Use default track';
 });
 
 // Home Assistant can connect the custom element before injecting these properties. Delay preview
 // injection by one task so the standalone preview exercises that production lifecycle.
 window.setTimeout(() => {
-  app.hass = hass;
-  app.narrow = false;
-  app.panel = panel;
+  previewApp.hass = hass;
+  previewApp.narrow = false;
+  previewApp.panel = panel;
 }, 0);

@@ -3,4 +3,4 @@ export default interface Song {
   artistName: string;
   albumArt: string;
   isPlaying: boolean;
-};
+}

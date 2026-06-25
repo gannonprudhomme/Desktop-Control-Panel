@@ -18,7 +18,7 @@ export default function getModules(modulesIn: string[]): Module[] {
   }));
 
   // TODO: Add filtering of modules we don't want
-  const modules = modulesIn.map((moduleStr) => {
+  const modules = modulesIn.map((moduleStr): Module | null => {
     const module = mapped.get(moduleStr);
 
     if (!module) {
@@ -27,7 +27,7 @@ export default function getModules(modulesIn: string[]): Module[] {
     }
 
     return module;
-  }).filter((val) => val); // Filter out falsy values (null)
+  }).filter((module): module is Module => module !== null);
 
   return modules;
 }

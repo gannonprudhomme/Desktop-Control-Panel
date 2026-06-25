@@ -1,6 +1,6 @@
-/* eslint-disable no-nested-ternary */
 // Directly copied from home assistant-frontend/src/data/weather.ts
-import { css, svg, SVGTemplateResult } from 'lit-element';
+import { css, svg } from 'lit';
+import type { SVGTemplateResult } from 'lit';
 
 export const weatherSVGStyles = css`
   .rain {

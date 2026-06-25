@@ -1,4 +1,5 @@
-import { html, TemplateResult } from 'lit-element';
+import { html } from 'lit';
+import type { TemplateResult } from 'lit';
 import { mdiLightbulbOn } from '@mdi/js';
 import Module from '../../../types/Module';
 import { HomeAssistant } from '../../../types/types';
@@ -11,7 +12,6 @@ export default class LightControlModule implements Module {
   icon: string;
   name: string;
   component: (hass: HomeAssistant, config: DCPConfig) => TemplateResult;
-  index: number;
   active: boolean;
 
   constructor() {
@@ -19,16 +19,15 @@ export default class LightControlModule implements Module {
     this.icon = mdiLightbulbOn;
     this.active = true; // This will change
     this.component = (hass: HomeAssistant, config: DCPConfig): TemplateResult => {
-      const lightsConfig = config.lights;
+      const lightsConfig = config.lights ?? [];
 
       const lightNamesPriorityMap = new Map<string, number>();
-      lightsConfig.forEach((conf) => lightNamesPriorityMap.set(conf.name, conf.priority));
+      lightsConfig.forEach((conf) => lightNamesPriorityMap.set(conf.name, conf.priority ?? 0));
 
       const lights: Light[] = lightsConfig.map(
         (lightConfig) => hass.states[lightConfig.name],
-      ).map((light) => {
+      ).filter((light): light is NonNullable<typeof light> => Boolean(light)).map((light) => {
         const {
-          // eslint-disable-next-line camelcase
           brightness, color_temp, friendly_name, min_mireds, max_mireds,
         } = light.attributes;
         const entityId = light.entity_id;
@@ -39,7 +38,7 @@ export default class LightControlModule implements Module {
         // TODO: Check supported features here, probably
 
         return {
-          name: friendly_name,
+          name: typeof friendly_name === 'string' ? friendly_name : entityId,
           mireds: color_temp,
           isOn: light.state === 'on',
           minMireds: min_mireds,

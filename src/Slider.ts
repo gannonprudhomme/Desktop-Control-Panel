@@ -1,6 +1,5 @@
-import {
-  css, html, TemplateResult,
-} from 'lit-element';
+import { css, html } from 'lit';
+import type { TemplateResult } from 'lit';
 
 // Reference: https://stackoverflow.com/a/61453050/
 /**
@@ -15,8 +14,12 @@ import {
  * @returns TemplateResult (html) of the slider
  */
 export default function createSlider(
-  onSlide: (value: number) => void, onChange: (value: number) => void, startVal: number, min = 0,
-  max = 100, additionalClass: string = null,
+  onSlide: ((value: number) => void) | null,
+  onChange: ((value: number) => void) | null,
+  startVal: number,
+  min = 0,
+  max = 100,
+  additionalClass: string | null = null,
 ): TemplateResult {
   const callOnSlider = (event: Event) => {
     const value = Number((event.target as HTMLElement & { value: number }).value);

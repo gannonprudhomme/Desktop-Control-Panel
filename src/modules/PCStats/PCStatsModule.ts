@@ -1,4 +1,5 @@
-import { html, TemplateResult } from 'lit-element';
+import { html } from 'lit';
+import type { TemplateResult } from 'lit';
 import { mdiSpeedometerSlow } from '@mdi/js';
 import Module from '../../../types/Module';
 import { HomeAssistant } from '../../../types/types';
@@ -7,8 +8,8 @@ import './PCStatsView';
 import PCStatData from '../../../types/PCStats';
 import DCPConfig, { PCStatsConfig } from '../../../types/Config';
 
-function fahrenheitToCelcius(fahrenheit: number): number {
-  return (fahrenheit - 32) / 1.8;
+function fahrenheitToCelcius(fahrenheit: number | null): number | null {
+  return fahrenheit === null ? null : (fahrenheit - 32) / 1.8;
 }
 
 /**
@@ -20,6 +21,10 @@ function parseStatsFloat(
   hass: HomeAssistant, statsConfig: PCStatsConfig, id: string,
 ): number | null {
   const entityId = statsConfig[id];
+
+  if (!entityId) {
+    return null;
+  }
 
   const entity = hass.states[entityId];
   if (entity) {
@@ -34,7 +39,6 @@ export default class PCStatsModule implements Module {
   icon: string;
   name: string;
   component: (hass: HomeAssistant, config: DCPConfig) => TemplateResult;
-  index: number;
   active: boolean;
 
   constructor() {
@@ -42,7 +46,7 @@ export default class PCStatsModule implements Module {
     this.icon = mdiSpeedometerSlow;
     this.active = true; // This will change
     this.component = (hass: HomeAssistant, config: DCPConfig): TemplateResult => {
-      let pcData: PCStatData = null;
+      let pcData: PCStatData | null = null;
       const statsConfig = config.pc_stats;
 
       // Assumes we're in fahrenheit (bad assumption)

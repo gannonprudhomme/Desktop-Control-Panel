@@ -1,8 +1,10 @@
-import {
-  css, CSSResult, html, LitElement, PropertyValues, TemplateResult, property,
-} from 'lit-element';
+import { css, html, LitElement } from 'lit';
+import { property } from 'lit/decorators.js';
+import type {
+  CSSResult, PropertyValues, TemplateResult,
+} from 'lit';
 import DCPConfig from '../../types/Config';
-import { HomeAssistant, ServiceCallResponse } from '../../types/types';
+import { HomeAssistant } from '../../types/types';
 import { borderBoxStyles } from '../theme';
 
 interface SpotifyArtist {
@@ -43,8 +45,8 @@ interface MediaListItem {
 type MediaList = 'recent' | 'queue';
 
 export default class Recent extends LitElement {
-  @property({ type: Object }) public hass: HomeAssistant;
-  @property({ type: Object }) public config: DCPConfig;
+  @property({ type: Object }) public hass?: HomeAssistant;
+  @property({ type: Object }) public config?: DCPConfig;
   @property({ attribute: false }) private recentItems: MediaListItem[] = [];
   @property({ attribute: false }) private queueItems: MediaListItem[] = [];
   @property({ type: String, attribute: false }) private selectedList: MediaList = 'recent';
@@ -55,7 +57,11 @@ export default class Recent extends LitElement {
   private loadedTrackId = '';
 
   protected updated(changedProperties: PropertyValues): void {
-    if (!this.hass || !this.config || !this.config.spotifyplus_name) {
+    if (
+      !this.hass
+      || !this.config?.spotify_name
+      || !this.config.spotifyplus_name
+    ) {
       return;
     }
 
@@ -77,7 +83,9 @@ export default class Recent extends LitElement {
     ) {
       this.loadedEntityId = this.config.spotifyplus_name;
       this.loadedTrackId = trackId;
-      this.loadMediaLists();
+      queueMicrotask(() => {
+        void this.loadMediaLists();
+      });
     }
   }
 
@@ -92,7 +100,14 @@ export default class Recent extends LitElement {
     };
   }
 
-  private async callSpotifyPlus<T>(service: string, data = {}): Promise<T> {
+  private async callSpotifyPlus<T>(
+    service: string,
+    data: Record<string, unknown> = {},
+  ): Promise<T> {
+    if (!this.hass || !this.config?.spotifyplus_name) {
+      throw new Error('SpotifyPlus is not configured');
+    }
+
     const result = await this.hass.callService<T>(
       'spotifyplus',
       service,
@@ -141,7 +156,7 @@ export default class Recent extends LitElement {
   }
 
   private playItem(item: MediaListItem): void {
-    if (!item.uri) {
+    if (!item.uri || !this.hass || !this.config?.spotify_name) {
       return;
     }
 

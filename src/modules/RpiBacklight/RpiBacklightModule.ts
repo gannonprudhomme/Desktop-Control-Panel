@@ -1,4 +1,5 @@
-import { html, TemplateResult } from 'lit-element';
+import { html } from 'lit';
+import type { TemplateResult } from 'lit';
 import { mdiCogOutline } from '@mdi/js';
 import Module from '../../../types/Module';
 import { HomeAssistant } from '../../../types/types';

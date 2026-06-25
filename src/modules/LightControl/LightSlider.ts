@@ -1,6 +1,6 @@
-import {
-  css, CSSResult, html, LitElement, TemplateResult, property,
-} from 'lit-element';
+import { css, html, LitElement } from 'lit';
+import { property } from 'lit/decorators.js';
+import type { CSSResult, TemplateResult } from 'lit';
 import { mdiLightbulbOn, mdiLightbulbOutline } from '@mdi/js';
 import Light from '../../../types/Light';
 import createSlider from '../../Slider';
@@ -13,9 +13,9 @@ import { borderBoxStyles } from '../../theme';
  * to the light when you release the slider.
  */
 export default class LightSlider extends LitElement {
-  @property({ type: Object }) public light: Light;
-  @property({ type: Function }) public toggleLight: (lightID: string) => void;
-  @property({ type: Function }) public setLightState: (
+  @property({ type: Object }) public light!: Light;
+  @property({ type: Function }) public toggleLight!: (lightID: string) => void;
+  @property({ type: Function }) public setLightState!: (
     lightID: string, state: Record<string, unknown>,
   ) => void;
 
@@ -75,7 +75,14 @@ export default class LightSlider extends LitElement {
             <span class="slider-value">${brightnessValue}</span>
           </div>
           <div class="light-slider-container">
-            ${createSlider(onTempSlide, onTempChange, this.light.mireds, this.light.minMireds + 1, this.light.maxMireds, 'temperature-slider-container')}
+            ${createSlider(
+    onTempSlide,
+    onTempChange,
+    this.light.mireds ?? this.light.minMireds ?? 0,
+    (this.light.minMireds ?? 0) + 1,
+    this.light.maxMireds ?? 500,
+    'temperature-slider-container',
+  )}
             <span class="slider-value">${temperatureValue}</span>
           </div>
         </div>
