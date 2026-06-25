@@ -29,12 +29,41 @@
         padding: 24px;
       }
 
+      .preview-toolbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 10px;
+      }
+
       .preview-label {
-        margin: 0 0 10px;
+        margin: 0;
         color: #8ba0ae;
         font-size: 12px;
         letter-spacing: 0.08em;
         text-transform: uppercase;
+      }
+
+      .preview-button {
+        min-width: 124px;
+        min-height: 36px;
+        padding: 0 12px;
+        border: 1px solid #3c515e;
+        border-radius: 8px;
+        background: #1a2833;
+        color: #f4f7f9;
+        font: inherit;
+        cursor: pointer;
+      }
+
+      .preview-button:hover {
+        background: #20333f;
+      }
+
+      .preview-button:focus-visible {
+        outline: 2px solid #4ad7d7;
+        outline-offset: 2px;
       }
 
       .tablet {
@@ -123,7 +152,12 @@
   </head>
   <body>
     <main class="preview-shell">
-      <p class="preview-label">Mock Home Assistant · 1024 × 600 target</p>
+      <div class="preview-toolbar">
+        <p class="preview-label">Mock Home Assistant · 1024 × 600 target</p>
+        <button id="toggle-test-track" class="preview-button" type="button">
+          Test long title
+        </button>
+      </div>
       <section class="tablet">
         <nav class="ha-sidebar" aria-label="Mock Home Assistant sidebar">
           <button class="sidebar-button" type="button" aria-label="Open sidebar">
@@ -162,6 +196,6 @@
         <desktop-control></desktop-control>
       </section>
     </main>
-    <script type="module" src="./preview.ts"></script>
+    <script src="./preview.ts"></script>
   </body>
 </html>

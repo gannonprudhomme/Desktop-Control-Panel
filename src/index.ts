@@ -4,6 +4,7 @@ import {
 import { HomeAssistant } from '../types/types';
 import './TopRow/TopRow';
 import './MusicPlayer/MusicPlayer';
+import './Recent/Recent';
 import { BaseConfig } from '../types/Config';
 import theme, { borderBoxStyles } from './theme';
 
@@ -17,11 +18,17 @@ export default class App extends LitElement {
 
     return html`
       <div class="app-shell">
-        <top-row .hass=${this.hass} .config=${config}></top-row>
         <music-player
           .hass=${this.hass}
           .config=${config}
         ></music-player>
+        <aside class="side-rail" aria-label="Media overview">
+          <top-row .hass=${this.hass} .config=${config}></top-row>
+          <recent-media
+            .hass=${this.hass}
+            .config=${config}
+          ></recent-media>
+        </aside>
       </div>
     `;
   }
@@ -37,21 +44,40 @@ export default class App extends LitElement {
       }
 
       .app-shell {
-        display: flex;
-        flex-direction: column;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 320px;
+        gap: 16px;
         height: 100%;
         width: 100%;
-        gap: 4px;
-        padding: 12px;
+        padding: 16px;
       }
 
       music-player {
-        flex: 1 1 auto;
+        min-height: 0;
+      }
+
+      .side-rail {
+        display: grid;
+        grid-template-rows: 44px minmax(0, 1fr);
+        gap: 12px;
+        min-width: 0;
         min-height: 0;
       }
 
       top-row {
-        flex: 0 0 40px;
+        min-width: 0;
+      }
+
+      @media (max-width: 760px) {
+        .app-shell {
+          grid-template-columns: minmax(0, 1fr) 280px;
+          gap: 12px;
+          padding: 8px;
+        }
+
+        .side-rail {
+          grid-template-rows: 44px minmax(0, 1fr);
+        }
       }
     `];
   }

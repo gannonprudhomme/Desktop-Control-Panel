@@ -1,0 +1,429 @@
+import {
+  css, CSSResult, html, LitElement, PropertyValues, TemplateResult, property,
+} from 'lit-element';
+import DCPConfig from '../../types/Config';
+import { HomeAssistant, ServiceCallResponse } from '../../types/types';
+import { borderBoxStyles } from '../theme';
+
+interface SpotifyArtist {
+  name: string;
+}
+
+interface SpotifyTrack {
+  name: string;
+  uri: string;
+  image_url?: string;
+  artists?: SpotifyArtist[];
+  show?: {
+    name?: string;
+  };
+}
+
+interface SpotifyPlusRecentResponse {
+  result: {
+    items?: Array<{
+      track: SpotifyTrack;
+    }>;
+  };
+}
+
+interface SpotifyPlusQueueResponse {
+  result: {
+    queue?: SpotifyTrack[];
+  };
+}
+
+interface MediaListItem {
+  title: string;
+  artist: string;
+  artwork: string;
+  uri: string;
+}
+
+type MediaList = 'recent' | 'queue';
+
+export default class Recent extends LitElement {
+  @property({ type: Object }) public hass: HomeAssistant;
+  @property({ type: Object }) public config: DCPConfig;
+  @property({ attribute: false }) private recentItems: MediaListItem[] = [];
+  @property({ attribute: false }) private queueItems: MediaListItem[] = [];
+  @property({ type: String, attribute: false }) private selectedList: MediaList = 'recent';
+  @property({ type: Boolean, attribute: false }) private isLoading = false;
+  @property({ type: Boolean, attribute: false }) private loadFailed = false;
+
+  private loadedEntityId = '';
+  private loadedTrackId = '';
+
+  protected updated(changedProperties: PropertyValues): void {
+    if (!this.hass || !this.config || !this.config.spotifyplus_name) {
+      return;
+    }
+
+    const playback = this.hass.states[this.config.spotify_name];
+    const trackId = playback && playback.attributes
+      ? playback.attributes.media_content_id || playback.attributes.media_title || ''
+      : '';
+    const entityChanged = this.loadedEntityId !== this.config.spotifyplus_name;
+    const trackChanged = this.loadedTrackId !== trackId;
+
+    if (
+      (changedProperties.has('hass') || changedProperties.has('config'))
+      && (entityChanged || trackChanged)
+    ) {
+      this.loadedEntityId = this.config.spotifyplus_name;
+      this.loadedTrackId = trackId;
+      this.loadMediaLists();
+    }
+  }
+
+  private static normalizeTrack(track: SpotifyTrack): MediaListItem {
+    return {
+      title: track.name || 'Unknown title',
+      artist: (track.artists || []).map((artist) => artist.name).join(', ')
+        || (track.show && track.show.name)
+        || '',
+      artwork: track.image_url || '',
+      uri: track.uri || '',
+    };
+  }
+
+  private async callSpotifyPlus<T>(service: string, data = {}): Promise<T> {
+    const result = await this.hass.callService<T>(
+      'spotifyplus',
+      service,
+      {
+        entity_id: this.config.spotifyplus_name,
+        ...data,
+      },
+      undefined,
+      true,
+      true,
+    );
+
+    if (!result.response) {
+      throw new Error(`SpotifyPlus ${service} returned no response`);
+    }
+
+    return result.response;
+  }
+
+  private async loadMediaLists(): Promise<void> {
+    this.isLoading = true;
+    this.loadFailed = false;
+
+    try {
+      const [recent, queue] = await Promise.all([
+        this.callSpotifyPlus<SpotifyPlusRecentResponse>('get_player_recent_tracks', { limit: 6 }),
+        this.callSpotifyPlus<SpotifyPlusQueueResponse>('get_player_queue_info'),
+      ]);
+
+      this.recentItems = (recent.result.items || [])
+        .map((item) => Recent.normalizeTrack(item.track))
+        .slice(0, 6);
+      this.queueItems = (queue.result.queue || [])
+        .map((item) => Recent.normalizeTrack(item))
+        .slice(0, 6);
+    } catch (error) {
+      console.log(error);
+      this.recentItems = [];
+      this.queueItems = [];
+      this.loadFailed = true;
+    } finally {
+      this.isLoading = false;
+    }
+  }
+
+  private selectList(list: MediaList): void {
+    this.selectedList = list;
+  }
+
+  private playItem(item: MediaListItem): void {
+    if (!item.uri) {
+      return;
+    }
+
+    this.hass.callService('media_player', 'play_media', {
+      entity_id: this.config.spotify_name,
+      media_content_type: item.uri.startsWith('spotify:episode:') ? 'episode' : 'track',
+      media_content_id: item.uri,
+    }).catch((error) => {
+      console.log(error);
+    });
+  }
+
+  private renderContent(): TemplateResult {
+    if (!this.config || !this.config.spotifyplus_name) {
+      return html`<p class="status">SpotifyPlus is not configured</p>`;
+    }
+
+    if (this.isLoading) {
+      return html`<p class="status">Loading Spotify…</p>`;
+    }
+
+    if (this.loadFailed) {
+      return html`
+        <div class="status-block">
+          <p class="status">Spotify lists unavailable</p>
+          <button class="retry-button" type="button" @click=${this.loadMediaLists}>
+            Retry
+          </button>
+        </div>
+      `;
+    }
+
+    const items = this.selectedList === 'recent' ? this.recentItems : this.queueItems;
+    if (!items.length) {
+      return html`<p class="status">No ${this.selectedList === 'recent' ? 'recent tracks' : 'queued tracks'}</p>`;
+    }
+
+    return html`
+      <div id="media-list">
+        ${items.map((item) => html`
+          <button
+            class="media-item"
+            type="button"
+            aria-label=${`Play ${item.title}${item.artist ? ` by ${item.artist}` : ''}`}
+            @click=${(): void => this.playItem(item)}
+          >
+            <span class="artwork" aria-hidden="true">
+              ${item.artwork
+    ? html`<img src=${item.artwork} alt="" />`
+    : html`<span class="artwork-placeholder"></span>`}
+            </span>
+            <span class="track-details">
+              <span class="track-title">${item.title}</span>
+              ${item.artist ? html`<span class="track-artist">${item.artist}</span>` : ''}
+            </span>
+          </button>
+        `)}
+      </div>
+    `;
+  }
+
+  protected render(): TemplateResult {
+    return html`
+      <section id="recent" aria-labelledby="recent-title">
+        <div class="header">
+          <h2 id="recent-title">Spotify</h2>
+          <div class="tabs" role="tablist" aria-label="Spotify lists">
+            <button
+              class=${this.selectedList === 'recent' ? 'tab selected' : 'tab'}
+              type="button"
+              role="tab"
+              aria-selected=${this.selectedList === 'recent' ? 'true' : 'false'}
+              @click=${(): void => this.selectList('recent')}
+            >
+              Recent
+            </button>
+            <button
+              class=${this.selectedList === 'queue' ? 'tab selected' : 'tab'}
+              type="button"
+              role="tab"
+              aria-selected=${this.selectedList === 'queue' ? 'true' : 'false'}
+              @click=${(): void => this.selectList('queue')}
+            >
+              Queue
+            </button>
+          </div>
+        </div>
+        ${this.renderContent()}
+      </section>
+    `;
+  }
+
+  static get styles(): CSSResult[] {
+    return [borderBoxStyles, css`
+      :host {
+        display: block;
+        min-height: 0;
+      }
+
+      #recent {
+        display: grid;
+        grid-template-rows: auto minmax(0, 1fr);
+        gap: 12px;
+        height: 100%;
+        min-height: 0;
+        padding: 20px;
+        overflow: hidden;
+        border: 1px solid var(--dcp-border);
+        border-radius: var(--dcp-radius);
+        background:
+          linear-gradient(145deg, rgba(255, 255, 255, 0.025), transparent 55%),
+          var(--dcp-surface);
+        box-shadow: var(--dcp-shadow);
+      }
+
+      .header {
+        display: grid;
+        gap: 8px;
+      }
+
+      #recent-title {
+        margin: 0;
+        color: var(--dcp-text);
+        font-size: 22px;
+        font-weight: 560;
+        line-height: 1;
+        letter-spacing: -0.025em;
+      }
+
+      .tabs {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 4px;
+        padding: 4px;
+        border: 1px solid var(--dcp-border);
+        border-radius: 12px;
+        background: rgba(0, 0, 0, 0.18);
+      }
+
+      .tab {
+        min-width: 0;
+        min-height: 36px;
+        padding: 0 12px;
+        border: 0;
+        border-radius: 8px;
+        color: var(--dcp-text-muted);
+        font: inherit;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        background: transparent;
+      }
+
+      .tab.selected {
+        color: var(--dcp-text);
+        background: var(--dcp-surface-raised);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      }
+
+      .tab:focus-visible,
+      .media-item:focus-visible {
+        outline: 2px solid var(--dcp-accent-strong);
+        outline-offset: 2px;
+      }
+
+      #media-list {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        min-height: 0;
+      }
+
+      .media-item {
+        display: grid;
+        grid-template-columns: 56px minmax(0, 1fr);
+        align-items: center;
+        gap: 12px;
+        min-width: 0;
+        min-height: 56px;
+        padding: 0;
+        border: 0;
+        border-radius: 12px;
+        color: inherit;
+        font: inherit;
+        text-align: left;
+        cursor: pointer;
+        background: transparent;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      .media-item:active {
+        transform: scale(0.98);
+      }
+
+      .artwork {
+        display: block;
+        width: 56px;
+        height: 56px;
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        background: var(--dcp-surface-raised);
+        box-shadow: 0 8px 18px rgba(0, 0, 0, 0.24);
+      }
+
+      .artwork img,
+      .artwork-placeholder {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .artwork-placeholder {
+        background:
+          linear-gradient(145deg, rgba(74, 215, 215, 0.22), transparent),
+          var(--dcp-surface-raised);
+      }
+
+      .track-details {
+        display: grid;
+        gap: 4px;
+        min-width: 0;
+      }
+
+      .track-title,
+      .track-artist {
+        display: block;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .track-title {
+        color: var(--dcp-text);
+        font-size: 14px;
+        font-weight: 560;
+        line-height: 1.2;
+      }
+
+      .track-artist {
+        color: var(--dcp-text-muted);
+        font-size: 12px;
+        line-height: 1.2;
+      }
+
+      .status-block {
+        display: flex;
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .status {
+        margin: 0;
+        color: var(--dcp-text-muted);
+        font-size: 13px;
+      }
+
+      .retry-button {
+        min-width: 72px;
+        min-height: 44px;
+        padding: 0 16px;
+        border: 1px solid var(--dcp-border);
+        border-radius: 8px;
+        color: var(--dcp-text);
+        font: inherit;
+        cursor: pointer;
+        background: var(--dcp-surface-raised);
+      }
+
+      @media (max-width: 760px) {
+        #recent {
+          padding: 16px;
+        }
+
+        .media-item {
+          gap: 8px;
+        }
+      }
+    `];
+  }
+}
+
+if (!customElements.get('recent-media')) {
+  customElements.define('recent-media', Recent);
+}

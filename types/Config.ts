@@ -16,6 +16,7 @@ export interface PCStatsConfig {
 export default interface DCPConfig {
   desktop_name: string;
   spotify_name: string;
+  spotifyplus_name?: string;
   weather_name: string;
   pi_brightness_name: string;
   pi_power_name: string;

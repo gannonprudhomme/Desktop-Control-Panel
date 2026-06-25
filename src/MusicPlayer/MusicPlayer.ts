@@ -274,11 +274,11 @@ export default class MusicPlayer extends LitElement {
       #music-player {
         display: grid;
         grid-template-rows: minmax(0, 1fr) auto auto;
-        gap: 16px;
+        gap: 12px;
         width: min(100%, 640px);
         height: 100%;
         margin: 0 auto;
-        padding: 4px 16px 8px;
+        // padding: 8px 16px;
       }
 
       #music-player.unavailable {
@@ -287,20 +287,22 @@ export default class MusicPlayer extends LitElement {
       }
 
       #track {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 24px;
+        display: grid;
+        grid-template-rows: minmax(0, 1fr) auto;
+        gap: 12px;
         min-height: 0;
       }
 
       #artwork-frame {
-        flex: 0 0 148px;
-        width: 148px;
-        height: 148px;
+        width: auto;
+        height: 100%;
+        max-width: 100%;
+        min-height: 0;
+        aspect-ratio: 1;
+        justify-self: center;
         overflow: hidden;
         border: 1px solid rgba(255, 255, 255, 0.14);
-        border-radius: 8px;
+        border-radius: var(--dcp-radius);
         background: var(--dcp-surface);
         box-shadow: 0 14px 34px rgba(0, 0, 0, 0.32);
       }
@@ -310,8 +312,8 @@ export default class MusicPlayer extends LitElement {
         display: block;
         width: 100%;
         height: 100%;
-        border-radius: 8px;
-        object-fit: cover;
+        border-radius: var(--dcp-radius);
+        object-fit: contain;
       }
 
       #album-placeholder {
@@ -320,7 +322,9 @@ export default class MusicPlayer extends LitElement {
 
       #track-info {
         min-width: 0;
-        width: min(360px, 48vw);
+        min-height: 84px;
+        width: 100%;
+        text-align: center;
       }
 
       #title,
@@ -337,14 +341,14 @@ export default class MusicPlayer extends LitElement {
       #title {
         margin: 0;
         color: var(--dcp-text);
-        font-size: clamp(20px, 3vw, 28px);
+        font-size: 28px;
         font-weight: 520;
         line-height: 1.08;
         letter-spacing: -0.025em;
       }
 
       #artist {
-        margin: 12px 0 0;
+        margin: 4px 0 0;
         color: var(--dcp-text-muted);
         font-size: 14px;
         line-height: 1.25;
@@ -494,18 +498,11 @@ export default class MusicPlayer extends LitElement {
 
       @media (max-width: 560px) {
         #music-player {
-          gap: 12px;
           padding-inline: 8px;
         }
 
         #track {
-          gap: 16px;
-        }
-
-        #artwork-frame {
-          flex-basis: 128px;
-          width: 128px;
-          height: 128px;
+          gap: 8px;
         }
 
         #controls {

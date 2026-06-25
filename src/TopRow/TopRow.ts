@@ -15,9 +15,8 @@ export default class TopRow extends LitElement {
   protected render(): TemplateResult {
     return html`
       <div id="top-row">
-        <div></div>
-        <time-display></time-display>
         <weather-display .hass=${this.hass} .config=${this.config}></weather-display>
+        <time-display></time-display>
       </div>
     `;
   }
@@ -25,10 +24,19 @@ export default class TopRow extends LitElement {
   static get styles(): CSSResult[] {
     return [borderBoxStyles, css`
       #top-row {
-        display: grid;
-        grid-template-columns: 1fr auto 1fr;
+        display: flex;
         align-items: center;
+        justify-content: space-between;
+        gap: 12px;
         height: 100%;
+      }
+
+      weather-display {
+        min-width: 0;
+      }
+
+      time-display {
+        flex: 0 0 auto;
       }
     `];
   }

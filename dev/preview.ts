@@ -1,4 +1,5 @@
 import '../src/index';
+import { MessageBase } from 'home-assistant-js-websocket';
 import DCPConfig, { BaseConfig } from '../types/Config';
 import { HomeAssistant, ServiceCallResponse } from '../types/types';
 
@@ -9,6 +10,19 @@ interface PreviewElement extends HTMLElement {
 }
 
 const albumArt = 'https://image-cdn-ak.spotifycdn.com/image/ab67616d00001e029b9b36b0e22870b9f542d937';
+const defaultTrack = {
+  title: 'Instant Crush (feat. Julian Casablancas)',
+  artist: 'Daft Punk, Julian Casablancas',
+};
+const longTitleTrack = {
+  title: 'This Is an Intentionally Long Song Title for Testing Two-Line Wrapping',
+  artist: 'A Preview Artist with a Longer Display Name',
+};
+const recentArtwork = [
+  albumArt,
+  'https://i.scdn.co/image/ab67616d0000b273b3591763154a27326b3f431a',
+  'https://i.scdn.co/image/ab67616d0000b2739e1cfc756886ac782e363d79',
+];
 
 const mockIcon = (svg: string): string => `data:image/svg+xml,${encodeURIComponent(svg)}`;
 
@@ -56,8 +70,8 @@ const entity = (
 const states = {
   'weather.home': entity('weather.home', 'sunny', { temperature: 72 }),
   'media_player.spotify_preview': entity('media_player.spotify_preview', 'playing', {
-    media_title: 'Instant Crush (feat. Julian Casablancas)',
-    media_artist: 'Daft Punk, Julian Casablancas',
+    media_title: defaultTrack.title,
+    media_artist: defaultTrack.artist,
     entity_picture: albumArt,
     media_duration: 337,
     media_position: 148,
@@ -96,6 +110,7 @@ const states = {
 const config: DCPConfig = {
   desktop_name: 'sensor.desktop_processes',
   spotify_name: 'media_player.spotify_preview',
+  spotifyplus_name: 'media_player.spotifyplus_preview',
   weather_name: 'weather.home',
   pi_brightness_name: 'sensor.screen_brightness',
   pi_power_name: 'sensor.screen_power',
@@ -122,6 +137,9 @@ let hass: HomeAssistant = {
     domain: string,
     service: string,
     serviceData?: Record<string, unknown>,
+    _target?: Record<string, unknown>,
+    _notifyOnError?: boolean,
+    returnResponse?: boolean,
   ): Promise<ServiceCallResponse> => {
     console.info('[preview service]', domain, service, serviceData);
 
@@ -174,9 +192,152 @@ let hass: HomeAssistant = {
       app.hass = hass;
     }
 
+    const previewTracks = [
+      {
+        name: 'Instant Crush (feat. Julian Casablancas)',
+        uri: 'spotify:track:2cGxRwrMyEAp8dEbuZaVv6',
+        image_url: recentArtwork[0],
+        artists: [{ name: 'Daft Punk' }],
+      },
+      {
+        name: 'Midnight City',
+        uri: 'spotify:track:1eyzqe2QqGZUmfcPZtrIyt',
+        image_url: recentArtwork[1],
+        artists: [{ name: 'M83' }],
+      },
+      {
+        name: 'The Less I Know The Better',
+        uri: 'spotify:track:6K4t31amVTZDgR3sKmwUJJ',
+        image_url: recentArtwork[2],
+        artists: [{ name: 'Tame Impala' }],
+      },
+      {
+        name: 'Something About Us',
+        uri: 'spotify:track:1NeLwFETswx8Fzxl2AFl91',
+        image_url: recentArtwork[0],
+        artists: [{ name: 'Daft Punk' }],
+      },
+      {
+        name: 'Wait',
+        uri: 'spotify:track:2pIUpMhHL6L9Z5lnKxJJr9',
+        image_url: recentArtwork[1],
+        artists: [{ name: 'M83' }],
+      },
+      {
+        name: 'Let It Happen',
+        uri: 'spotify:track:2X485T9Z5Ly0xyaghN73ed',
+        image_url: recentArtwork[2],
+        artists: [{ name: 'Tame Impala' }],
+      },
+    ];
+
+    if (domain === 'spotifyplus' && service === 'get_player_recent_tracks' && returnResponse) {
+      return {
+        context: { id: `preview-${Date.now()}` },
+        response: {
+          result: {
+            items: previewTracks.map((track) => ({ track })),
+          },
+        },
+      };
+    }
+
+    if (domain === 'spotifyplus' && service === 'get_player_queue_info' && returnResponse) {
+      return {
+        context: { id: `preview-${Date.now()}` },
+        response: {
+          result: {
+            queue: [...previewTracks].reverse(),
+          },
+        },
+      };
+    }
+
     return { context: { id: `preview-${Date.now()}` } };
   },
-  callWS: async <T>(): Promise<T> => Promise.resolve(undefined as T),
+  callWS: async <T>(message: MessageBase): Promise<T> => {
+    if (message.type === 'media_player/browse_media' && !message.media_content_id) {
+      return Promise.resolve({
+        title: 'Media Library',
+        media_content_id: 'library',
+        media_content_type: 'spotify://library',
+        children: [{
+          title: 'Recently played',
+          media_content_id: 'current_user_recently_played',
+          media_content_type: 'spotify://current_user_recently_played',
+        }],
+      } as unknown as T);
+    }
+
+    if (
+      message.type === 'media_player/browse_media'
+      && message.media_content_id === 'current_user_recently_played'
+    ) {
+      return Promise.resolve({
+        title: 'Recently played',
+        media_content_id: 'current_user_recently_played',
+        media_content_type: 'spotify://current_user_recently_played',
+        children: [
+          {
+            title: 'Instant Crush (feat. Julian Casablancas)',
+            thumbnail: recentArtwork[0],
+            media_content_id: 'spotify:track:2cGxRwrMyEAp8dEbuZaVv6',
+            media_content_type: 'spotify://track',
+          },
+          {
+            title: 'Midnight City',
+            thumbnail: recentArtwork[1],
+            media_content_id: 'spotify:track:1eyzqe2QqGZUmfcPZtrIyt',
+            media_content_type: 'spotify://track',
+          },
+          {
+            title: 'The Less I Know The Better',
+            thumbnail: recentArtwork[2],
+            media_content_id: 'spotify:track:6K4t31amVTZDgR3sKmwUJJ',
+            media_content_type: 'spotify://track',
+          },
+          {
+            title: 'Something About Us',
+            thumbnail: recentArtwork[0],
+            media_content_id: 'spotify:track:1NeLwFETswx8Fzxl2AFl91',
+            media_content_type: 'spotify://track',
+          },
+          {
+            title: 'Wait',
+            thumbnail: recentArtwork[1],
+            media_content_id: 'spotify:track:2pIUpMhHL6L9Z5lnKxJJr9',
+            media_content_type: 'spotify://track',
+          },
+          {
+            title: 'Let It Happen',
+            thumbnail: recentArtwork[2],
+            media_content_id: 'spotify:track:2X485T9Z5Ly0xyaghN73ed',
+            media_content_type: 'spotify://track',
+          },
+          {
+            title: 'Digital Love',
+            thumbnail: recentArtwork[0],
+            media_content_id: 'spotify:track:2VEZx7NWsZ1D0eJ4uv5Fym',
+            media_content_type: 'spotify://track',
+          },
+          {
+            title: 'Outro',
+            thumbnail: recentArtwork[1],
+            media_content_id: 'spotify:track:1s9i7W8zx7Nxx78MUIsvjV',
+            media_content_type: 'spotify://track',
+          },
+          {
+            title: 'Borderline',
+            thumbnail: recentArtwork[2],
+            media_content_id: 'spotify:track:5hM5arv9KDbCHS0k9uqwjr',
+            media_content_type: 'spotify://track',
+          },
+        ],
+      } as unknown as T);
+    }
+
+    return Promise.resolve(undefined as T);
+  },
 };
 
 const panel: BaseConfig = {
@@ -185,10 +346,37 @@ const panel: BaseConfig = {
 };
 
 const app = document.querySelector<PreviewElement>('desktop-control');
+const toggleTestTrack = document.querySelector<HTMLButtonElement>('#toggle-test-track');
 
-if (!app) {
-  throw new Error('desktop-control preview element was not found');
+if (!app || !toggleTestTrack) {
+  throw new Error('Preview controls were not found');
 }
+
+toggleTestTrack.addEventListener('click', () => {
+  const mediaPlayer = hass.states[config.spotify_name];
+  const isLongTitle = mediaPlayer.attributes.media_title === longTitleTrack.title;
+  const nextTrack = isLongTitle ? defaultTrack : longTitleTrack;
+
+  hass = {
+    ...hass,
+    states: {
+      ...hass.states,
+      [config.spotify_name]: {
+        ...mediaPlayer,
+        attributes: {
+          ...mediaPlayer.attributes,
+          media_title: nextTrack.title,
+          media_artist: nextTrack.artist,
+          media_position: 0,
+          media_position_updated_at: new Date().toISOString(),
+        },
+      },
+    },
+  };
+
+  app.hass = hass;
+  toggleTestTrack.textContent = isLongTitle ? 'Test long title' : 'Use default track';
+});
 
 // Home Assistant can connect the custom element before injecting these properties. Delay preview
 // injection by one task so the standalone preview exercises that production lifecycle.
