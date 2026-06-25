@@ -49,7 +49,7 @@ export default class Recent extends LitElement {
   @property({ type: Object }) public config?: DCPConfig;
   @property({ attribute: false }) private recentItems: MediaListItem[] = [];
   @property({ attribute: false }) private queueItems: MediaListItem[] = [];
-  @property({ type: String, attribute: false }) private selectedList: MediaList = 'recent';
+  @property({ type: String, attribute: false }) private selectedList: MediaList = 'queue';
   @property({ type: Boolean, attribute: false }) private isLoading = false;
   @property({ type: Boolean, attribute: false }) private loadFailed = false;
 
@@ -223,15 +223,6 @@ export default class Recent extends LitElement {
       <section id="recent" aria-label="Spotify">
         <div class="tabs" role="tablist" aria-label="Spotify lists">
           <button
-            class=${this.selectedList === 'recent' ? 'tab selected' : 'tab'}
-            type="button"
-            role="tab"
-            aria-selected=${this.selectedList === 'recent' ? 'true' : 'false'}
-            @click=${(): void => this.selectList('recent')}
-          >
-            Recents
-          </button>
-          <button
             class=${this.selectedList === 'queue' ? 'tab selected' : 'tab'}
             type="button"
             role="tab"
@@ -239,6 +230,15 @@ export default class Recent extends LitElement {
             @click=${(): void => this.selectList('queue')}
           >
             Queue
+          </button>
+          <button
+            class=${this.selectedList === 'recent' ? 'tab selected' : 'tab'}
+            type="button"
+            role="tab"
+            aria-selected=${this.selectedList === 'recent' ? 'true' : 'false'}
+            @click=${(): void => this.selectList('recent')}
+          >
+            Recents
           </button>
         </div>
         ${this.renderContent()}

@@ -360,7 +360,7 @@ export default class MusicPlayer extends LitElement {
       #artist {
         margin: 4px 0 0;
         color: var(--dcp-text-muted);
-        font-size: 14px;
+        font-size: 11px;
         line-height: 1.25;
       }
 
@@ -373,7 +373,7 @@ export default class MusicPlayer extends LitElement {
         justify-content: space-between;
         margin-bottom: 4px;
         color: var(--dcp-text-muted);
-        font-size: 11px;
+        font-size: 14px;
         font-variant-numeric: tabular-nums;
       }
 
@@ -494,10 +494,11 @@ export default class MusicPlayer extends LitElement {
       }
 
       .play-button {
-        width: 80px;
-        height: 80px;
+        width: 72px;
+        height: 72px;
         border-radius: 50%;
-        background: var(--dcp-media-surface);
+        color: rgba(24, 24, 24, 0.92);
+        background: rgba(242, 247, 248, 0.92);
         box-shadow: 0 10px 28px rgba(0, 0, 0, 0.28);
       }
 

@@ -1382,10 +1382,11 @@ var At = class extends k {
       }
 
       .play-button {
-        width: 80px;
-        height: 80px;
+        width: 72px;
+        height: 72px;
         border-radius: 50%;
-        background: var(--dcp-media-surface);
+        color: rgba(24, 24, 24, 0.92);
+        background: rgba(242, 247, 248, 0.92);
         box-shadow: 0 10px 28px rgba(0, 0, 0, 0.28);
       }
 
@@ -1413,7 +1414,7 @@ var At = class extends k {
 P([j({ type: Object })], At.prototype, "hass", void 0), P([j({ type: Object })], At.prototype, "config", void 0), customElements.get("music-player") || customElements.define("music-player", At), A(), N();
 var jt = class e extends k {
 	constructor(...e) {
-		super(...e), this.recentItems = [], this.queueItems = [], this.selectedList = "recent", this.isLoading = !1, this.loadFailed = !1, this.loadedEntityId = "", this.loadedTrackId = "";
+		super(...e), this.recentItems = [], this.queueItems = [], this.selectedList = "queue", this.isLoading = !1, this.loadFailed = !1, this.loadedEntityId = "", this.loadedTrackId = "";
 	}
 	updated(e) {
 		if (!this.hass || !this.config?.spotify_name || !this.config.spotifyplus_name || !this.hass.states[this.config.spotifyplus_name]) return;
@@ -1500,15 +1501,6 @@ var jt = class e extends k {
       <section id="recent" aria-label="Spotify">
         <div class="tabs" role="tablist" aria-label="Spotify lists">
           <button
-            class=${this.selectedList === "recent" ? "tab selected" : "tab"}
-            type="button"
-            role="tab"
-            aria-selected=${this.selectedList === "recent" ? "true" : "false"}
-            @click=${() => this.selectList("recent")}
-          >
-            Recents
-          </button>
-          <button
             class=${this.selectedList === "queue" ? "tab selected" : "tab"}
             type="button"
             role="tab"
@@ -1516,6 +1508,15 @@ var jt = class e extends k {
             @click=${() => this.selectList("queue")}
           >
             Queue
+          </button>
+          <button
+            class=${this.selectedList === "recent" ? "tab selected" : "tab"}
+            type="button"
+            role="tab"
+            aria-selected=${this.selectedList === "recent" ? "true" : "false"}
+            @click=${() => this.selectList("recent")}
+          >
+            Recents
           </button>
         </div>
         ${this.renderContent()}
