@@ -14,12 +14,14 @@ export default class App extends LitElement {
   @property({ type: Object }) public panel: BaseConfig;
 
   protected render(): TemplateResult {
+    const config = this.panel ? this.panel.config : null;
+
     return html`
       <div class="app-shell">
-        <top-row .hass=${this.hass} .config=${this.panel.config}></top-row>
+        <top-row .hass=${this.hass} .config=${config}></top-row>
         <music-player
           .hass=${this.hass}
-          .config=${this.panel.config}
+          .config=${config}
         ></music-player>
       </div>
     `;

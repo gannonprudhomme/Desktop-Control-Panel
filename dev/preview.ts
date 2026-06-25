@@ -190,6 +190,10 @@ if (!app) {
   throw new Error('desktop-control preview element was not found');
 }
 
-app.hass = hass;
-app.narrow = false;
-app.panel = panel;
+// Home Assistant can connect the custom element before injecting these properties. Delay preview
+// injection by one task so the standalone preview exercises that production lifecycle.
+window.setTimeout(() => {
+  app.hass = hass;
+  app.narrow = false;
+  app.panel = panel;
+}, 0);

@@ -16,7 +16,12 @@ export default class WeatherDisplay extends LitElement {
   @property({ type: Object }) public config: DCPConfig;
 
   protected render(): TemplateResult {
-    if (!this.config.weather_name || !this.hass.states[this.config.weather_name]) {
+    if (
+      !this.hass
+      || !this.config
+      || !this.config.weather_name
+      || !this.hass.states[this.config.weather_name]
+    ) {
       return html`
         <div class="unavailable-text">
           Unavailable

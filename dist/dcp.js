@@ -171,18 +171,18 @@ parcelRequire=function(e,r,t,n){var i,o="function"==typeof parcelRequire&&parcel
       `:""}
   </svg>`;exports.default=o;
 },{"lit-element":"bhxD"}],"bzTu":[function(require,module,exports) {
-"use strict";var e=this&&this.__createBinding||(Object.create?function(e,t,r,n){void 0===n&&(n=r),Object.defineProperty(e,n,{enumerable:!0,get:function(){return t[r]}})}:function(e,t,r,n){void 0===n&&(n=r),e[n]=t[r]}),t=this&&this.__setModuleDefault||(Object.create?function(e,t){Object.defineProperty(e,"default",{enumerable:!0,value:t})}:function(e,t){e.default=t}),r=this&&this.__decorate||function(e,t,r,n){var i,a=arguments.length,o=a<3?t:null===n?n=Object.getOwnPropertyDescriptor(t,r):n;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)o=Reflect.decorate(e,t,r,n);else for(var s=e.length-1;s>=0;s--)(i=e[s])&&(o=(a<3?i(o):a>3?i(t,r,o):i(t,r))||o);return a>3&&o&&Object.defineProperty(t,r,o),o},n=this&&this.__importStar||function(r){if(r&&r.__esModule)return r;var n={};if(null!=r)for(var i in r)"default"!==i&&Object.prototype.hasOwnProperty.call(r,i)&&e(n,r,i);return t(n,r),n};Object.defineProperty(exports,"__esModule",{value:!0});const i=require("lit-element"),a=n(require("../external/weatherIcons"));function o(e,t){var r;const n=`component.weather.state._.${t}`;return null!==(r=e.localize(n))&&void 0!==r?r:"unknown"}class s extends i.LitElement{render(){var e;if(!this.config.weather_name||!this.hass.states[this.config.weather_name])return i.html`
+"use strict";var e=this&&this.__createBinding||(Object.create?function(e,t,r,n){void 0===n&&(n=r),Object.defineProperty(e,n,{enumerable:!0,get:function(){return t[r]}})}:function(e,t,r,n){void 0===n&&(n=r),e[n]=t[r]}),t=this&&this.__setModuleDefault||(Object.create?function(e,t){Object.defineProperty(e,"default",{enumerable:!0,value:t})}:function(e,t){e.default=t}),r=this&&this.__decorate||function(e,t,r,n){var i,a=arguments.length,s=a<3?t:null===n?n=Object.getOwnPropertyDescriptor(t,r):n;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)s=Reflect.decorate(e,t,r,n);else for(var o=e.length-1;o>=0;o--)(i=e[o])&&(s=(a<3?i(s):a>3?i(t,r,s):i(t,r))||s);return a>3&&s&&Object.defineProperty(t,r,s),s},n=this&&this.__importStar||function(r){if(r&&r.__esModule)return r;var n={};if(null!=r)for(var i in r)"default"!==i&&Object.prototype.hasOwnProperty.call(r,i)&&e(n,r,i);return t(n,r),n};Object.defineProperty(exports,"__esModule",{value:!0});const i=require("lit-element"),a=n(require("../external/weatherIcons"));function s(e,t){var r;const n=`component.weather.state._.${t}`;return null!==(r=e.localize(n))&&void 0!==r?r:"unknown"}class o extends i.LitElement{render(){var e;if(!(this.hass&&this.config&&this.config.weather_name&&this.hass.states[this.config.weather_name]))return i.html`
         <div class="unavailable-text">
           Unavailable
         </div>
-      `;const{state:t,attributes:r}=this.hass.states[this.config.weather_name],n=o(this.hass,t),s=null!==(e=r.temperature)&&void 0!==e?e:-1;return i.html`
+      `;const{state:t,attributes:r}=this.hass.states[this.config.weather_name],n=s(this.hass,t),o=null!==(e=r.temperature)&&void 0!==e?e:-1;return i.html`
       <div class="weather-container">
         <div class="weather-icon">
             ${a.default(t)}
         </div>
         <div class="temperature-weather-container">
           <span id="temperature">
-            ${s.toFixed(0)}°F
+            ${o.toFixed(0)}°F
           </span>
           <span>
             ${n}
@@ -232,7 +232,7 @@ parcelRequire=function(e,r,t,n){var i,o="function"==typeof parcelRequire&&parcel
         display: flex;
         justify-content: flex-end;
       }
-    `]}}r([i.property({type:Object})],s.prototype,"hass",void 0),r([i.property({type:Object})],s.prototype,"config",void 0),exports.default=s,customElements.get("weather-display")||customElements.define("weather-display",s);
+    `]}}r([i.property({type:Object})],o.prototype,"hass",void 0),r([i.property({type:Object})],o.prototype,"config",void 0),exports.default=o,customElements.get("weather-display")||customElements.define("weather-display",o);
 },{"lit-element":"bhxD","../external/weatherIcons":"wpZ5"}],"kLvr":[function(require,module,exports) {
 "use strict";var e=this&&this.__decorate||function(e,t,r,i){var o,s=arguments.length,p=s<3?t:null===i?i=Object.getOwnPropertyDescriptor(t,r):i;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)p=Reflect.decorate(e,t,r,i);else for(var l=e.length-1;l>=0;l--)(o=e[l])&&(p=(s<3?o(p):s>3?o(t,r,p):o(t,r))||p);return s>3&&p&&Object.defineProperty(t,r,p),p};Object.defineProperty(exports,"__esModule",{value:!0});const t=require("lit-element");require("./TimeDisplay"),require("./WeatherDisplay");class r extends t.LitElement{render(){return t.html`
       <div id="top-row">
@@ -2424,12 +2424,12 @@ const o=document.createElement("style");o.dataset.webAwesome="true",o.textConten
   }
 `;exports.default=a;
 },{"lit-element":"bhxD"}],"QCba":[function(require,module,exports) {
-"use strict";var e=this&&this.__decorate||function(e,t,o,r){var s,i=arguments.length,p=i<3?t:null===r?r=Object.getOwnPropertyDescriptor(t,o):r;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)p=Reflect.decorate(e,t,o,r);else for(var l=e.length-1;l>=0;l--)(s=e[l])&&(p=(i<3?s(p):i>3?s(t,o,p):s(t,o))||p);return i>3&&p&&Object.defineProperty(t,o,p),p},t=this&&this.__importDefault||function(e){return e&&e.__esModule?e:{default:e}};Object.defineProperty(exports,"__esModule",{value:!0});const o=require("lit-element");require("./TopRow/TopRow"),require("./MusicPlayer/MusicPlayer"),require("./webawesome");const r=t(require("./theme"));class s extends o.LitElement{render(){return o.html`
+"use strict";var e=this&&this.__decorate||function(e,t,o,r){var s,i=arguments.length,l=i<3?t:null===r?r=Object.getOwnPropertyDescriptor(t,o):r;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)l=Reflect.decorate(e,t,o,r);else for(var p=e.length-1;p>=0;p--)(s=e[p])&&(l=(i<3?s(l):i>3?s(t,o,l):s(t,o))||l);return i>3&&l&&Object.defineProperty(t,o,l),l},t=this&&this.__importDefault||function(e){return e&&e.__esModule?e:{default:e}};Object.defineProperty(exports,"__esModule",{value:!0});const o=require("lit-element");require("./TopRow/TopRow"),require("./MusicPlayer/MusicPlayer"),require("./webawesome");const r=t(require("./theme"));class s extends o.LitElement{render(){const e=this.panel?this.panel.config:null;return o.html`
       <div class="app-shell">
-        <top-row .hass=${this.hass} .config=${this.panel.config}></top-row>
+        <top-row .hass=${this.hass} .config=${e}></top-row>
         <music-player
           .hass=${this.hass}
-          .config=${this.panel.config}
+          .config=${e}
         ></music-player>
       </div>
     `}static get styles(){return[r.default,o.css`
