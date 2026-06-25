@@ -5,7 +5,6 @@ import { HomeAssistant } from '../types/types';
 import './TopRow/TopRow';
 import './MusicPlayer/MusicPlayer';
 import { BaseConfig } from '../types/Config';
-import './webawesome';
 import theme from './theme';
 
 export default class App extends LitElement {

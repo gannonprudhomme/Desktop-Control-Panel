@@ -57,8 +57,9 @@ under `.context/preview-dist` and must not be committed.
 
 ## Generated files
 
-`dist/dcp.js` and `dist/dcp.js.map` are tracked release artifacts. After changing runtime source,
-run `npm run build` and include both generated files. Do not edit them manually.
+`dist/desktop-control-panel.js` and `dist/desktop-control-panel.js.map` are tracked release
+artifacts. After changing runtime source, run `npm run build` and include both generated files. Do
+not edit them manually.
 
 ## Validation
 

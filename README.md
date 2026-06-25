@@ -33,7 +33,7 @@ panel_custom:
     url_path: desktop-control
     sidebar_title: Desktop Control
     sidebar_icon: mdi:server # This can be any mdi: icon
-    module_url: /local/main.js # This is the only required entry - everything else 
+    module_url: /hacsfiles/Desktop-Control-Panel/desktop-control-panel.js
     config:
       # Determines which modules to use and their order. Remove any modules that are unwanted.
       # Note that each module needs extra configuration, which you can see below
@@ -54,7 +54,7 @@ panel_custom:
     url_path: desktop-control
     sidebar_title: Desktop Control
     sidebar_icon: mdi:server
-    module_url: /local/main.js
+    module_url: /hacsfiles/Desktop-Control-Panel/desktop-control-panel.js
     config:
       weather_name: weather.home
       spotify_name: media_player.spotify_gannon_prudhomme
@@ -131,7 +131,7 @@ panel_custom:
     url_path: desktop-control
     sidebar_title: Desktop Control
     sidebar_icon: mdi:server
-    module_url: /local/community/Desktop-Control-Panel/index.js
+    module_url: /hacsfiles/Desktop-Control-Panel/desktop-control-panel.js
 ```
 
 Then run the panel watcher:
