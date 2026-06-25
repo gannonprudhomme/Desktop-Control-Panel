@@ -1,1 +1,1 @@
-import '../.context/webawesome.js';
+import './webawesome-components.js';

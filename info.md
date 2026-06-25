@@ -14,7 +14,7 @@ panel_custom:
     url_path: desktop-control
     sidebar_title: Desktop Control
     sidebar_icon: mdi:server
-    module_url: /local/main.js
+    module_url: /hacsfiles/Desktop-Control-Panel/desktop-control-panel.js
     config:
       weather_name: weather.home
       spotify_name: media_player.spotify_gannon_prudhomme
