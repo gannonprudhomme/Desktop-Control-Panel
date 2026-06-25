@@ -1,6 +1,6 @@
 import { css, html, LitElement } from 'lit';
-import { property, state } from 'lit/decorators.js';
-import type { CSSResult, PropertyValues, TemplateResult } from 'lit';
+import { property } from 'lit/decorators.js';
+import type { CSSResult, TemplateResult } from 'lit';
 import {
   mdiPause, mdiPlay, mdiSkipNext, mdiSkipPrevious,
 } from '@mdi/js';
@@ -21,38 +21,6 @@ interface PlaybackDetails {
   positionUpdatedAt: string;
 }
 
-interface SpotifyPlusImage {
-  url?: string;
-}
-
-interface SpotifyPlusPlaybackItem {
-  name?: string;
-  uri?: string;
-  duration_ms?: number;
-  artists?: Array<{
-    name?: string;
-  }>;
-  album?: {
-    images?: SpotifyPlusImage[];
-  };
-  show?: {
-    name?: string;
-    publisher?: string;
-    images?: SpotifyPlusImage[];
-  };
-}
-
-interface SpotifyPlusPlaybackResponse {
-  result?: {
-    is_playing?: boolean;
-    progress_ms?: number;
-    item?: SpotifyPlusPlaybackItem;
-  };
-}
-
-const PLAYBACK_REFRESH_INTERVAL = 10000;
-const CONTROL_REFRESH_DELAY = 500;
-
 function formatTime(seconds: number): string {
   const safeSeconds = Math.max(0, Math.floor(seconds || 0));
   const minutes = Math.floor(safeSeconds / 60);
@@ -64,12 +32,8 @@ function formatTime(seconds: number): string {
 export default class MusicPlayer extends LitElement {
   @property({ type: Object }) public hass?: HomeAssistant;
   @property({ type: Object }) public config?: DCPConfig;
-  @state() private spotifyPlayback?: PlaybackDetails | null;
 
   private progressAnimation?: number;
-  private playbackRefreshInterval?: number;
-  private playbackRequestId = 0;
-  private loadedEntityId = '';
   private isScrubbing = false;
   private scrubPosition = 0;
   private timelineClock = new TimelineClock();
@@ -85,102 +49,15 @@ export default class MusicPlayer extends LitElement {
       window.cancelAnimationFrame(this.progressAnimation);
       this.progressAnimation = undefined;
     }
-    if (this.playbackRefreshInterval !== undefined) {
-      window.clearInterval(this.playbackRefreshInterval);
-      this.playbackRefreshInterval = undefined;
-    }
     super.disconnectedCallback();
   }
 
-  protected updated(changedProperties: PropertyValues): void {
-    if (changedProperties.has('hass') || changedProperties.has('config')) {
-      this.startPlaybackRefresh();
-    }
+  protected updated(): void {
     this.syncTimeline();
     this.scheduleProgressAnimation();
   }
 
-  private startPlaybackRefresh(): void {
-    const entityId = this.config?.spotifyplus_name || '';
-
-    if (!this.hass || !entityId) {
-      return;
-    }
-
-    if (this.loadedEntityId !== entityId) {
-      this.loadedEntityId = entityId;
-      this.spotifyPlayback = undefined;
-      void this.refreshPlayback();
-    }
-
-    if (this.playbackRefreshInterval === undefined) {
-      this.playbackRefreshInterval = window.setInterval(() => {
-        void this.refreshPlayback();
-      }, PLAYBACK_REFRESH_INTERVAL);
-    }
-  }
-
-  private static normalizeSpotifyPlayback(
-    response: SpotifyPlusPlaybackResponse,
-  ): PlaybackDetails | null {
-    const result = response.result;
-    const item = result?.item;
-
-    if (!result || !item) {
-      return null;
-    }
-
-    const artists = (item.artists || [])
-      .map((artist) => artist.name || '')
-      .filter(Boolean)
-      .join(', ');
-    const images = item.album?.images || item.show?.images || [];
-
-    return {
-      title: item.name || 'Nothing playing',
-      artist: artists || item.show?.publisher || item.show?.name || '',
-      albumArt: images.find((image) => image.url)?.url || '',
-      contentId: item.uri || '',
-      isPlaying: Boolean(result.is_playing),
-      duration: Number(item.duration_ms) / 1000 || 0,
-      position: Number(result.progress_ms) / 1000 || 0,
-      positionUpdatedAt: new Date().toISOString(),
-    };
-  }
-
-  private async refreshPlayback(): Promise<void> {
-    if (!this.hass || !this.config?.spotifyplus_name) {
-      return;
-    }
-
-    const requestId = ++this.playbackRequestId;
-
-    try {
-      const result = await this.hass.callService<SpotifyPlusPlaybackResponse>(
-        'spotifyplus',
-        'get_player_playback_state',
-        {
-          entity_id: this.config.spotifyplus_name,
-          additional_types: 'episode',
-        },
-        undefined,
-        true,
-        true,
-      );
-
-      if (requestId === this.playbackRequestId && result.response) {
-        this.spotifyPlayback = MusicPlayer.normalizeSpotifyPlayback(result.response);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
   private getPlaybackDetails(): PlaybackDetails | null {
-    if (this.spotifyPlayback !== undefined) {
-      return this.spotifyPlayback;
-    }
-
     const mediaPlayer = this.hass && this.config?.spotifyplus_name
       ? this.hass.states[this.config.spotifyplus_name]
       : null;
@@ -190,16 +67,22 @@ export default class MusicPlayer extends LitElement {
     }
 
     const { attributes } = mediaPlayer;
+    const duration = Number(attributes.media_duration) || 0;
+    const reportedPosition = Number(attributes.media_position);
+    const remaining = Number(attributes.sp_play_time_remaining_est);
+    const position = Number.isFinite(reportedPosition)
+      ? reportedPosition
+      : Math.max(0, duration - (Number.isFinite(remaining) ? remaining : duration));
 
     const playback = {
       title: attributes.media_title || 'Nothing playing',
       artist: attributes.media_artist || '',
-      albumArt: attributes.entity_picture || '',
+      albumArt: attributes.entity_picture || attributes.sp_nowplaying_image_url || '',
       contentId: attributes.media_content_id || '',
       isPlaying: mediaPlayer.state === 'playing',
-      duration: Number(attributes.media_duration) || 0,
-      position: Number(attributes.media_position) || 0,
-      positionUpdatedAt: attributes.media_position_updated_at || '',
+      duration,
+      position,
+      positionUpdatedAt: attributes.media_position_updated_at || mediaPlayer.last_updated || '',
     };
 
     return playback;
@@ -287,11 +170,6 @@ export default class MusicPlayer extends LitElement {
       entity_id: this.config.spotifyplus_name,
       ...serviceData,
     })
-      .then(() => {
-        window.setTimeout(() => {
-          void this.refreshPlayback();
-        }, CONTROL_REFRESH_DELAY);
-      })
       .catch((error) => {
         console.log(error);
       });

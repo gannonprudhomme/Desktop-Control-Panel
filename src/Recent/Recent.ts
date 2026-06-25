@@ -46,7 +46,6 @@ interface MediaListItem {
 
 type MediaList = 'recent' | 'queue';
 
-const MEDIA_LIST_REFRESH_INTERVAL = 10000;
 const PLAY_ITEM_REFRESH_DELAY = 500;
 
 export default class Recent extends LitElement {
@@ -59,18 +58,10 @@ export default class Recent extends LitElement {
   @property({ type: Boolean, attribute: false }) private loadFailed = false;
 
   private loadedEntityId = '';
-  private refreshInterval?: number;
+  private loadedMediaContentId = '';
   private refreshInFlight = false;
   private hasLoaded = false;
   private loadRequestId = 0;
-
-  disconnectedCallback(): void {
-    if (this.refreshInterval !== undefined) {
-      window.clearInterval(this.refreshInterval);
-      this.refreshInterval = undefined;
-    }
-    super.disconnectedCallback();
-  }
 
   protected updated(changedProperties: PropertyValues): void {
     if (
@@ -87,15 +78,24 @@ export default class Recent extends LitElement {
       && entityChanged
     ) {
       this.loadedEntityId = this.config.spotifyplus_name;
+      this.loadedMediaContentId = this.hass.states[
+        this.config.spotifyplus_name
+      ]?.attributes.media_content_id || '';
       queueMicrotask(() => {
         void this.loadMediaLists();
       });
+      return;
     }
 
-    if (this.refreshInterval === undefined) {
-      this.refreshInterval = window.setInterval(() => {
-        void this.loadMediaList(this.selectedList);
-      }, MEDIA_LIST_REFRESH_INTERVAL);
+    if (changedProperties.has('hass')) {
+      const mediaContentId = this.hass.states[
+        this.config.spotifyplus_name
+      ]?.attributes.media_content_id || '';
+
+      if (mediaContentId && mediaContentId !== this.loadedMediaContentId) {
+        this.loadedMediaContentId = mediaContentId;
+        void this.loadMediaLists();
+      }
     }
   }
 

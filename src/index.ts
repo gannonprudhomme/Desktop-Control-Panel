@@ -22,7 +22,9 @@ export default class App extends LitElement {
 
     const mediaPlayer = this.hass?.states[config.spotifyplus_name];
 
-    return mediaPlayer?.attributes.entity_picture || '';
+    return mediaPlayer?.attributes.entity_picture
+      || mediaPlayer?.attributes.sp_nowplaying_image_url
+      || '';
   }
 
   protected render(): TemplateResult {
