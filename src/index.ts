@@ -1,20 +1,25 @@
-import {
-  css, CSSResult, html, LitElement, TemplateResult, property,
-} from 'lit-element';
+import { css, html, LitElement } from 'lit';
+import { property } from 'lit/decorators.js';
+import type { CSSResult, TemplateResult } from 'lit';
 import { HomeAssistant } from '../types/types';
 import './TopRow/TopRow';
 import './MusicPlayer/MusicPlayer';
 import './Recent/Recent';
+import './webawesome';
 import { BaseConfig } from '../types/Config';
 import theme, { borderBoxStyles } from './theme';
 
 export default class App extends LitElement {
-  @property({ type: Object }) public hass: HomeAssistant;
-  @property({ type: Boolean }) public narrow: boolean;
-  @property({ type: Object }) public panel: BaseConfig;
+  @property({ type: Object }) public hass?: HomeAssistant;
+  @property({ type: Boolean }) public narrow = false;
+  @property({ type: Object }) public panel?: BaseConfig;
 
   protected render(): TemplateResult {
-    const config = this.panel ? this.panel.config : null;
+    if (!this.hass || !this.panel) {
+      return html``;
+    }
+
+    const { config } = this.panel;
 
     return html`
       <div class="app-shell">

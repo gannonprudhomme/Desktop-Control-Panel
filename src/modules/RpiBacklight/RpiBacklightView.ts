@@ -1,6 +1,6 @@
-import {
-  css, CSSResult, html, LitElement, TemplateResult, property,
-} from 'lit-element';
+import { css, html, LitElement } from 'lit';
+import { property } from 'lit/decorators.js';
+import type { CSSResult, TemplateResult } from 'lit';
 import { mdiPower, mdiSleep } from '@mdi/js';
 import RaspberryPi from '../../../types/RaspberryPi';
 import { HomeAssistant } from '../../../types/types';
@@ -10,34 +10,13 @@ import { borderBoxStyles } from '../../theme';
 
 // We probably need to get this type from somewhere
 export default class RpiBacklightView extends LitElement {
-  @property({ type: Array }) public hass: HomeAssistant;
-  @property({ type: Object }) public raspberryPi: RaspberryPi;
+  @property({ type: Object }) public hass!: HomeAssistant;
+  @property({ type: Object }) public raspberryPi: RaspberryPi | null = null;
 
   protected render(): TemplateResult {
-    const onChange = (brightness: number) => {
-      // call a service to change the volume
-      this.hass.callService('rpi_backlight', 'set_brightness', { brightness });
+    const raspberryPi = this.raspberryPi;
 
-      // "remake" the property, which forces a re-render
-      this.raspberryPi = { ...this.raspberryPi, brightness };
-    };
-
-    const setScreenPower = () => {
-      this.hass.callService('rpi_backlight', 'set_power', { power: !this.raspberryPi.power });
-
-      // "remake" the property, which forces a re-render
-      // Really only need this so we don't have to wait until we call update on the Pi again
-      this.raspberryPi = { ...this.raspberryPi, power: !this.raspberryPi.power };
-    };
-
-    const shutdown = () => {
-      this.hass.callService('rpi_backlight', 'shutdown', {});
-    };
-
-    if (!this.raspberryPi
-        || this.raspberryPi.brightness === null
-        || this.raspberryPi.power === null
-    ) {
+    if (!raspberryPi) {
       return html`
         <div class="invalid-entry">
           RaspberryPi is not active or is configured incorrectly.
@@ -45,12 +24,42 @@ export default class RpiBacklightView extends LitElement {
       `;
     }
 
+    const { brightness, power } = raspberryPi;
+
+    if (brightness === null || power === null) {
+      return html`
+        <div class="invalid-entry">
+          RaspberryPi is not active or is configured incorrectly.
+        </div>
+      `;
+    }
+
+    const onChange = (brightness: number) => {
+      // call a service to change the volume
+      this.hass.callService('rpi_backlight', 'set_brightness', { brightness });
+
+      // "remake" the property, which forces a re-render
+      this.raspberryPi = { ...raspberryPi, brightness };
+    };
+
+    const setScreenPower = () => {
+      this.hass.callService('rpi_backlight', 'set_power', { power: !power });
+
+      // "remake" the property, which forces a re-render
+      // Really only need this so we don't have to wait until we call update on the Pi again
+      this.raspberryPi = { ...raspberryPi, power: !power };
+    };
+
+    const shutdown = () => {
+      this.hass.callService('rpi_backlight', 'shutdown', {});
+    };
+
     return html`
       <div id="tablet-control">
         <div class="brightness-slider-container">
-          ${createSlider(onChange, null, this.raspberryPi.brightness, 4, 100, null)}
+          ${createSlider(onChange, null, brightness, 4, 100, null)}
           <span class="slider-label">
-            ${this.raspberryPi.brightness}%
+            ${brightness}%
           </span>
           <span class="slider-caption">Brightness</span>
         </div>
@@ -58,14 +67,14 @@ export default class RpiBacklightView extends LitElement {
         <div class="tablet-actions">
           <wa-button
             @click=${setScreenPower}
-            variant=${this.raspberryPi.power ? 'brand' : 'neutral'}
-            appearance=${this.raspberryPi.power ? 'filled' : 'outlined'}
+            variant=${power ? 'brand' : 'neutral'}
+            appearance=${power ? 'filled' : 'outlined'}
             size="l"
             class="tablet-button"
           >
             <span class="button-content">
               ${icon(mdiSleep)}
-              <span>Display ${this.raspberryPi.power ? 'on' : 'off'}</span>
+              <span>Display ${power ? 'on' : 'off'}</span>
             </span>
           </wa-button>
           <wa-button

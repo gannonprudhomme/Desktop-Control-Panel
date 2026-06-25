@@ -1,12 +1,12 @@
-import {
-  css, CSSResult, html, LitElement, TemplateResult, property,
-} from 'lit-element';
+import { css, html, LitElement } from 'lit';
+import { property } from 'lit/decorators.js';
+import type { CSSResult, TemplateResult } from 'lit';
 import Song from '../../types/Song';
 import { borderBoxStyles } from '../theme';
 
 // We probably need to get this type from somewhere
 export default class TrackDisplay extends LitElement {
-  @property({ type: Object }) public song: Song;
+  @property({ type: Object }) public song: Song | null = null;
 
   protected render(): TemplateResult {
     if (!this.song) {

@@ -1,6 +1,6 @@
-import {
-  css, CSSResult, html, LitElement, TemplateResult, property,
-} from 'lit-element';
+import { css, html, LitElement } from 'lit';
+import { property } from 'lit/decorators.js';
+import type { CSSResult, TemplateResult } from 'lit';
 import PCStatData from '../../../types/PCStats';
 import { borderBoxStyles } from '../../theme';
 
@@ -11,7 +11,7 @@ import { borderBoxStyles } from '../../theme';
 
 export default class PCStatsView extends LitElement {
 //   @property({type: Object }) public hass: Hass;
-  @property({ type: Object }) public stats: PCStatData;
+  @property({ type: Object }) public stats: PCStatData | null = null;
 
   protected render(): TemplateResult {
     if (!this.stats) {
@@ -22,8 +22,8 @@ export default class PCStatsView extends LitElement {
       `;
     }
 
-    const format = (num: number) => {
-      if (num) {
+    const format = (num: number | null) => {
+      if (num !== null && Number.isFinite(num)) {
         return num.toFixed(0);
       }
 

@@ -2,6 +2,6 @@
  * The properties for the RaspberryPi touchscreen
  */
 export default interface RaspberryPi {
-  power: boolean;
-  brightness: number;
-};
+  power: boolean | null;
+  brightness: number | null;
+}

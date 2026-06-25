@@ -1,5 +1,6 @@
 import { mdiTuneVertical } from '@mdi/js';
-import { html, TemplateResult } from 'lit-element';
+import { html } from 'lit';
+import type { TemplateResult } from 'lit';
 import Module from '../../../types/Module';
 import { HomeAssistant } from '../../../types/types';
 import './DesktopProcessesView';
@@ -18,9 +19,9 @@ export default class DesktopProcessesModule implements Module {
     this.icon = mdiTuneVertical;
     this.active = true; // This will change
     this.component = (hass: HomeAssistant, config: DCPConfig): TemplateResult => {
-      const desktopName: string = config.desktop_name;
+      const { desktop_name: desktopName } = config;
 
-      let procs: VolumeProcess[] = null;
+      let procs: VolumeProcess[] | null = null;
 
       if (desktopName && hass.states[desktopName]) {
         procs = hass.states[desktopName].attributes.processes;

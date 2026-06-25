@@ -1,6 +1,6 @@
-import {
-  css, CSSResult, html, LitElement, TemplateResult, property,
-} from 'lit-element';
+import { css, html, LitElement } from 'lit';
+import { property } from 'lit/decorators.js';
+import type { CSSResult, TemplateResult } from 'lit';
 import {
   mdiSkipPrevious, mdiPause, mdiPlay, mdiSkipNext,
 } from '@mdi/js';
@@ -22,9 +22,9 @@ export function callSpotifyService(hass: HomeAssistant, mediaPlayerId: string, t
 }
 
 export default class MediaControl extends LitElement {
-  @property({ type: Object }) public hass: HomeAssistant;
-  @property({ type: Object }) public song: Song;
-  @property({ type: String }) public mediaPlayerId: string;
+  @property({ type: Object }) public hass!: HomeAssistant;
+  @property({ type: Object }) public song: Song | null = null;
+  @property({ type: String }) public mediaPlayerId = '';
 
   previousClicked(): void {
     callSpotifyService(this.hass, this.mediaPlayerId, 'media_previous_track');

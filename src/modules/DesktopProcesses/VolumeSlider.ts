@@ -1,6 +1,6 @@
-import {
-  css, CSSResult, html, LitElement, TemplateResult, property,
-} from 'lit-element';
+import { css, html, LitElement } from 'lit';
+import { property } from 'lit/decorators.js';
+import type { CSSResult, TemplateResult } from 'lit';
 import {
   mdiApplication, mdiFirefox, mdiMessage, mdiSpotify,
 } from '@mdi/js';
@@ -10,8 +10,8 @@ import icon from '../../Icon';
 import { borderBoxStyles } from '../../theme';
 // We probably need to get this type from somewhere
 export default class VolumeSlider extends LitElement {
-  @property({ type: Object }) public volumeProcess: VolumeProcess;
-  @property({ type: Function }) public setVolume: (pid: number, value: number) => void;
+  @property({ type: Object }) public volumeProcess!: VolumeProcess;
+  @property({ type: Function }) public setVolume!: (pid: number, value: number) => void;
 
   protected render(): TemplateResult {
     if (!this.volumeProcess) {

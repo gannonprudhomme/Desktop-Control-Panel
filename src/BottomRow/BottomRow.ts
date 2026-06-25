@@ -1,6 +1,6 @@
-import {
-  css, CSSResult, html, LitElement, TemplateResult, property,
-} from 'lit-element';
+import { css, html, LitElement } from 'lit';
+import { property } from 'lit/decorators.js';
+import type { CSSResult, TemplateResult } from 'lit';
 import { HomeAssistant } from '../../types/types';
 import Song from '../../types/Song';
 import './TrackDisplay';
@@ -10,7 +10,7 @@ import DCPConfig from '../../types/Config';
 import Module from '../../types/Module';
 import { borderBoxStyles } from '../theme';
 
-export function getSongFromSpotify(hass: HomeAssistant, config: DCPConfig): Song {
+export function getSongFromSpotify(hass: HomeAssistant, config: DCPConfig): Song | null {
   if (!config.spotify_name) {
     console.log('ERROR: No spotify_name passed in as argument');
     return null;
@@ -27,19 +27,19 @@ export function getSongFromSpotify(hass: HomeAssistant, config: DCPConfig): Song
   const attr = spotifyState.attributes;
 
   return {
-    title: attr.media_title,
-    artistName: attr.media_artist,
-    albumArt: attr.entity_picture,
+    title: attr.media_title ?? 'Nothing playing',
+    artistName: attr.media_artist ?? '',
+    albumArt: attr.entity_picture ?? '',
     isPlaying: spotifyState.state === 'playing',
   };
 }
 
 // We probably need to get this type from somewhere
 export default class BottomRow extends LitElement {
-  @property({ type: Object }) public hass: HomeAssistant;
-  @property({ type: Object }) public config: DCPConfig;
-  @property({ type: Object }) public currentModule: Module
-  @property({ type: Array }) public modules: Module[]
+  @property({ type: Object }) public hass!: HomeAssistant;
+  @property({ type: Object }) public config!: DCPConfig;
+  @property({ type: Object }) public currentModule!: Module;
+  @property({ type: Array }) public modules!: Module[];
 
   protected render(): TemplateResult {
     const song = getSongFromSpotify(this.hass, this.config);
@@ -50,7 +50,7 @@ export default class BottomRow extends LitElement {
         <media-control
           .hass=${this.hass}
           .song=${song}
-          .mediaPlayerId=${this.config.spotify_name}>
+          .mediaPlayerId=${this.config.spotify_name ?? ''}>
         </media-control>
         <module-switcher .modules=${this.modules} .currentModule=${this.currentModule}>
         </module-switcher>
