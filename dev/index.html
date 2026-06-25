@@ -38,6 +38,8 @@
       }
 
       .tablet {
+        display: grid;
+        grid-template-columns: 56px minmax(0, 1fr);
         width: 100%;
         aspect-ratio: 128 / 75;
         overflow: hidden;
@@ -47,10 +49,75 @@
         box-shadow: 0 20px 60px rgb(0 0 0 / 35%);
       }
 
+      .ha-sidebar {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        border-right: 1px solid #303438;
+        background: #1c1c1c;
+        color: #9b9b9b;
+      }
+
+      .sidebar-button {
+        display: grid;
+        width: 56px;
+        height: 48px;
+        padding: 0;
+        place-items: center;
+        border: 0;
+        background: transparent;
+        color: inherit;
+      }
+
+      .sidebar-button:first-child {
+        height: 56px;
+        border-bottom: 1px solid #303438;
+      }
+
+      .sidebar-button.active {
+        margin: 4px;
+        width: 48px;
+        border-radius: 8px;
+        background: #203039;
+        color: #03a9d9;
+      }
+
+      .sidebar-button svg {
+        width: 24px;
+        height: 24px;
+        fill: currentColor;
+      }
+
+      .sidebar-spacer {
+        flex: 1;
+      }
+
+      .sidebar-avatar {
+        display: grid;
+        width: 40px;
+        height: 40px;
+        margin: 8px;
+        place-items: center;
+        border-radius: 50%;
+        background: #9bd9f5;
+        color: #17242b;
+        font-size: 16px;
+      }
+
       desktop-control {
         display: block;
         width: 100%;
         height: 100%;
+      }
+
+      @media (max-width: 800px) {
+        .tablet {
+          display: block;
+        }
+
+        .ha-sidebar {
+          display: none;
+        }
       }
     </style>
   </head>
@@ -58,6 +125,40 @@
     <main class="preview-shell">
       <p class="preview-label">Mock Home Assistant · 1024 × 600 target</p>
       <section class="tablet">
+        <nav class="ha-sidebar" aria-label="Mock Home Assistant sidebar">
+          <button class="sidebar-button" type="button" aria-label="Open sidebar">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/>
+            </svg>
+          </button>
+          <button class="sidebar-button" type="button" aria-label="Overview">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="m12 3 9 8h-3v9h-5v-6h-2v6H6v-9H3l9-8Z"/>
+            </svg>
+          </button>
+          <button class="sidebar-button" type="button" aria-label="Misc">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M4 4h7v7H4V4m9 0h7v7h-7V4M4 13h7v7H4v-7m9 0h7v7h-7v-7Z"/>
+            </svg>
+          </button>
+          <button class="sidebar-button" type="button" aria-label="Energy">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M13 2 5 14h6l-1 8 8-12h-6l1-8Z"/>
+            </svg>
+          </button>
+          <button class="sidebar-button active" type="button" aria-label="Desktop Control">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M3 4h18v13H3V4m2 2v9h14V6H5m5 12h4v2h3v2H7v-2h3v-2Z"/>
+            </svg>
+          </button>
+          <div class="sidebar-spacer"></div>
+          <button class="sidebar-button" type="button" aria-label="Settings">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="m19.4 13 .1-1-.1-1 2.1-1.6-2-3.4-2.5 1a8 8 0 0 0-1.7-1L15 3.3h-4L10.7 6a8 8 0 0 0-1.7 1L6.5 6l-2 3.4L6.6 11l-.1 1 .1 1-2.1 1.6 2 3.4 2.5-1a8 8 0 0 0 1.7 1l.3 2.7h4l.3-2.7a8 8 0 0 0 1.7-1l2.5 1 2-3.4L19.4 13M13 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8Z"/>
+            </svg>
+          </button>
+          <div class="sidebar-avatar" aria-label="User">g</div>
+        </nav>
         <desktop-control></desktop-control>
       </section>
     </main>
