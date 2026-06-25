@@ -1745,12 +1745,12 @@ var Jt = class e extends k {
         view-transition-name: match-element;
         view-transition-class: media-item;
         display: grid;
-        flex: 0 0 56px;
-        grid-template-columns: 56px minmax(0, 1fr);
+        flex: 0 0 72px;
+        grid-template-columns: 72px minmax(0, 1fr);
         align-items: center;
-        gap: 12px;
+        gap: 16px;
         min-width: 0;
-        min-height: 56px;
+        min-height: 72px;
         padding: 0;
         border: 0;
         border-radius: 12px;
@@ -1784,8 +1784,8 @@ var Jt = class e extends k {
 
       .artwork {
         display: block;
-        width: 56px;
-        height: 56px;
+        width: 72px;
+        height: 72px;
         overflow: hidden;
         border: 1px solid rgba(255, 255, 255, 0.1);
         border-radius: 8px;
@@ -1824,14 +1824,14 @@ var Jt = class e extends k {
 
       .track-title {
         color: var(--dcp-text);
-        font-size: 14px;
+        font-size: 16px;
         font-weight: 560;
         line-height: 1.2;
       }
 
       .track-artist {
         color: var(--dcp-text-muted);
-        font-size: 12px;
+        font-size: 14px;
         line-height: 1.2;
       }
 
@@ -1868,7 +1868,7 @@ var Jt = class e extends k {
         }
 
         .media-item {
-          gap: 8px;
+          gap: 16px;
         }
       }
     `];

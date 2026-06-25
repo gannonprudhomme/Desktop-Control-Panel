@@ -30,8 +30,9 @@ SHA-256 checksums match.
 npm run reload:pi
 ```
 
-The reload command clears the Raspberry Pi Chromium caches and hard-reloads the visible Home
-Assistant kiosk window.
+The reload command stops the Raspberry Pi Chromium kiosk, clears its HTTP, code, GPU, and service
+worker caches, then restarts the same Chromium command. Chromium must be stopped because deleting
+cache files while it is running does not evict responses held in memory or open files.
 
 The panel entry in `/homeassistant/configuration.yaml` should use:
 
