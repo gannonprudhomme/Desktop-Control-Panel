@@ -2,6 +2,9 @@
 .vscode/
 *.code-workspace
 
+# macOS
+.DS_Store
+
 node_modules/
 
 # Parcel cache
