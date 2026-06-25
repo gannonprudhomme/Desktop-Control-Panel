@@ -1,4 +1,5 @@
-import { css, CSSResult } from 'lit-element';
+import { css } from 'lit';
+import type { CSSResult } from 'lit';
 
 export const borderBoxStyles: CSSResult = css`
   :host,

@@ -1,6 +1,6 @@
-import {
-  css, CSSResult, html, LitElement, TemplateResult, property,
-} from 'lit-element';
+import { css, html, LitElement } from 'lit';
+import { property } from 'lit/decorators.js';
+import type { CSSResult, TemplateResult } from 'lit';
 import DCPConfig from '../../types/Config';
 import Module from '../../types/Module';
 import { HomeAssistant } from '../../types/types';
@@ -8,9 +8,9 @@ import { borderBoxStyles } from '../theme';
 
 // We probably need to get this type from somewhere
 export default class MiddleRow extends LitElement {
-  @property({ type: Object }) public hass: HomeAssistant;
-  @property({ type: Object }) public config: DCPConfig;
-  @property({ type: Object }) public currentModule: Module;
+  @property({ type: Object }) public hass!: HomeAssistant;
+  @property({ type: Object }) public config!: DCPConfig;
+  @property({ type: Object }) public currentModule!: Module;
 
   protected render(): TemplateResult {
     return html`

@@ -1,14 +1,14 @@
-import {
-  css, CSSResult, html, LitElement, TemplateResult, property,
-} from 'lit-element';
+import { css, html, LitElement } from 'lit';
+import { property } from 'lit/decorators.js';
+import type { CSSResult, TemplateResult } from 'lit';
 import Light from '../../../types/Light';
 import { HomeAssistant } from '../../../types/types';
 import { borderBoxStyles } from '../../theme';
 import './LightSlider';
 
 export default class LightControlView extends LitElement {
-  @property({ type: Object }) public hass: HomeAssistant;
-  @property({ type: Array }) public lights: Light[];
+  @property({ type: Object }) public hass!: HomeAssistant;
+  @property({ type: Array }) public lights: Light[] = [];
 
   protected render(): TemplateResult {
     const setLightState = (lightID: string, state: Record<string, unknown>) => {

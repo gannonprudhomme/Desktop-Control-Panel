@@ -1,11 +1,10 @@
-/* eslint-disable camelcase */
 export interface LightConfig {
   name: string;
   priority?: number;
 }
 
 export interface PCStatsConfig {
-  [key: string]: string;
+  [key: string]: string | undefined;
   cpu_temp?: string;
   gpu_temp?: string;
   cpu_usage?: string;
@@ -14,16 +13,16 @@ export interface PCStatsConfig {
 }
 
 export default interface DCPConfig {
-  desktop_name: string;
-  spotify_name: string;
+  desktop_name?: string;
+  spotify_name?: string;
   spotifyplus_name?: string;
-  weather_name: string;
-  pi_brightness_name: string;
-  pi_power_name: string;
-  modules: string[];
-  lights: LightConfig[];
-  pc_stats: PCStatsConfig;
-};
+  weather_name?: string;
+  pi_brightness_name?: string;
+  pi_power_name?: string;
+  modules?: string[];
+  lights?: LightConfig[];
+  pc_stats?: PCStatsConfig;
+}
 
 // The configs that are passed to use
 export interface BaseConfig {

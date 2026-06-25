@@ -10,30 +10,25 @@
     "dev": "vite build --watch --mode home-assistant",
     "preview": "vite --host 0.0.0.0",
     "build": "vite build",
+    "test:bundle": "node scripts/test-production-bundle.mjs",
     "reload:pi": "scripts/reload-pi-kiosk.sh",
-    "lint": "eslint src/ types/"
+    "lint": "eslint ."
   },
   "dependencies": {
     "@awesome.me/webawesome": "^3.9.0",
     "@mdi/js": "^7.3.67",
-    "eslint-config-airbnb": "^18.2.1",
-    "eslint-config-preact": "^1.1.3",
-    "eslint-import-resolver-typescript": "^2.4.0",
-    "eslint-plugin-import": "^2.22.1",
-    "eslint-plugin-jsx-a11y": "^6.4.1",
     "home-assistant-js-websocket": "^5.9.0",
-    "lit-element": "^2.5.1"
+    "lit": "^3.3.3"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^4.18.0",
-    "@typescript-eslint/parser": "^4.18.0",
-    "eslint": "^7.22.0",
-    "typescript": "^4.2.3",
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.5.0",
+    "globals": "^17.7.0",
+    "typescript": "5.9.3",
+    "typescript-eslint": "^8.62.0",
     "vite": "^8.0.0"
   },
   "author": "",
   "license": "GNU GPL v3",
-  "browserslist": [
-    "last 1 Chrome version"
-  ]
+  "browserslist": ["last 1 Chrome version"]
 }

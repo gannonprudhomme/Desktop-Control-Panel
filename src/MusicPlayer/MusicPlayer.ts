@@ -1,6 +1,6 @@
-import {
-  css, CSSResult, html, LitElement, TemplateResult, property,
-} from 'lit-element';
+import { css, html, LitElement } from 'lit';
+import { property } from 'lit/decorators.js';
+import type { CSSResult, TemplateResult } from 'lit';
 import {
   mdiPause, mdiPlay, mdiSkipNext, mdiSkipPrevious,
 } from '@mdi/js';
@@ -32,13 +32,13 @@ function formatTime(seconds: number): string {
 }
 
 export default class MusicPlayer extends LitElement {
-  @property({ type: Object }) public hass: HomeAssistant;
-  @property({ type: Object }) public config: DCPConfig;
+  @property({ type: Object }) public hass?: HomeAssistant;
+  @property({ type: Object }) public config?: DCPConfig;
 
-  private clock: number;
+  private clock?: number;
   private isScrubbing = false;
   private scrubPosition = 0;
-  private seekAnchor: number = null;
+  private seekAnchor: number | null = null;
   private seekAnchorTime = 0;
   private seekSourceUpdatedAt = '';
   private isHoldingProgress = false;
@@ -49,12 +49,14 @@ export default class MusicPlayer extends LitElement {
   }
 
   disconnectedCallback(): void {
-    window.clearInterval(this.clock);
+    if (this.clock !== undefined) {
+      window.clearInterval(this.clock);
+    }
     super.disconnectedCallback();
   }
 
-  private getPlaybackDetails(): PlaybackDetails {
-    const mediaPlayer = this.hass && this.config
+  private getPlaybackDetails(): PlaybackDetails | null {
+    const mediaPlayer = this.hass && this.config?.spotify_name
       ? this.hass.states[this.config.spotify_name]
       : null;
 
@@ -110,6 +112,10 @@ export default class MusicPlayer extends LitElement {
   }
 
   private callMediaService(service: string, serviceData = {}): void {
+    if (!this.hass || !this.config?.spotify_name) {
+      return;
+    }
+
     this.hass.callService('media_player', service, {
       entity_id: this.config.spotify_name,
       ...serviceData,
@@ -154,13 +160,17 @@ export default class MusicPlayer extends LitElement {
 
   private seeked(event: Event): void {
     const seekPosition = Number((event.target as HTMLInputElement).value);
-    const { positionUpdatedAt } = this.getPlaybackDetails();
+    const playback = this.getPlaybackDetails();
+
+    if (!playback) {
+      return;
+    }
 
     this.isScrubbing = false;
     this.isHoldingProgress = false;
     this.seekAnchor = seekPosition;
     this.seekAnchorTime = Date.now();
-    this.seekSourceUpdatedAt = positionUpdatedAt;
+    this.seekSourceUpdatedAt = playback.positionUpdatedAt;
     this.callMediaService('media_seek', { seek_position: seekPosition });
     this.requestUpdate();
   }

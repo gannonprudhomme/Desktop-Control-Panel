@@ -1,13 +1,13 @@
-import {
-  css, CSSResult, html, LitElement, TemplateResult, property,
-} from 'lit-element';
+import { css, html, LitElement } from 'lit';
+import { property } from 'lit/decorators.js';
+import type { CSSResult, TemplateResult } from 'lit';
 import Module, { updateCurrentModuleEventName } from '../../types/Module';
 import icon from '../Icon';
 import { borderBoxStyles } from '../theme';
 
 export default class ModuleSwitcher extends LitElement {
-  @property({ type: Array }) public modules: Module[];
-  @property({ type: Object }) public currentModule: Module;
+  @property({ type: Array }) public modules!: Module[];
+  @property({ type: Object }) public currentModule!: Module;
 
   private updateCurrentModule(module: Module): void {
     const event = new CustomEvent(updateCurrentModuleEventName, {
