@@ -1747,7 +1747,7 @@ var Jt = class e extends k {
         flex: 0 0 72px;
         grid-template-columns: 72px minmax(0, 1fr);
         align-items: center;
-        gap: 16px;
+        gap: 8px;
         min-width: 0;
         min-height: 72px;
         padding: 0;
@@ -1867,7 +1867,7 @@ var Jt = class e extends k {
         }
 
         .media-item {
-          gap: 16px;
+          gap: 8px;
         }
       }
     `];
