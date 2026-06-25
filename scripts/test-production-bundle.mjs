@@ -73,13 +73,16 @@ const harness = `<!doctype html>
             && service === 'get_player_recent_tracks'
             && returnResponse
           ) {
+            const callNumber = serviceCalls.filter((call) => (
+              call.domain === 'spotifyplus' && call.service === 'get_player_recent_tracks'
+            )).length;
             return {
               context: { id: 'bundle-test' },
               response: {
                 result: {
                   items: [{
                     track: {
-                      name: 'Recent Harness Track',
+                      name: \`Recent Harness Track \${callNumber}\`,
                       uri: 'spotify:track:recent',
                       artists: [{ name: 'Bundle Harness' }],
                     },
@@ -93,12 +96,15 @@ const harness = `<!doctype html>
             && service === 'get_player_queue_info'
             && returnResponse
           ) {
+            const callNumber = serviceCalls.filter((call) => (
+              call.domain === 'spotifyplus' && call.service === 'get_player_queue_info'
+            )).length;
             return {
               context: { id: 'bundle-test' },
               response: {
                 result: {
                   queue: [{
-                    name: 'Queue Harness Track',
+                    name: \`Queue Harness Track \${callNumber}\`,
                     uri: 'spotify:track:queue',
                     artists: [{ name: 'Bundle Harness' }],
                   }],
@@ -186,8 +192,33 @@ const harness = `<!doctype html>
         if (recentCallsAfter !== recentCallsBefore + 1) {
           throw new Error('Switching to Recents did not refresh the list');
         }
-        if (recentTitle !== 'Recent Harness Track') {
+        if (recentTitle !== \`Recent Harness Track \${recentCallsAfter}\`) {
           throw new Error(\`Expected refreshed recent track, received "\${recentTitle}"\`);
+        }
+
+        const queueTab = [...(recentMedia?.shadowRoot?.querySelectorAll('.tab') ?? [])]
+          .find((tab) => tab.textContent?.trim() === 'Queue');
+        if (!(queueTab instanceof HTMLButtonElement)) {
+          throw new Error('Queue tab was not rendered');
+        }
+
+        const queueCallsBefore = serviceCalls.filter(({ domain, service }) => (
+          domain === 'spotifyplus' && service === 'get_player_queue_info'
+        )).length;
+
+        queueTab.click();
+        await new Promise((resolve) => setTimeout(resolve, 0));
+        await recentMedia?.updateComplete;
+
+        const queueCallsAfter = serviceCalls.filter(({ domain, service }) => (
+          domain === 'spotifyplus' && service === 'get_player_queue_info'
+        )).length;
+        const queueTitle = recentMedia?.shadowRoot?.querySelector('.track-title')?.textContent;
+        if (queueCallsAfter !== queueCallsBefore + 1) {
+          throw new Error('Switching to Queue did not refresh the list');
+        }
+        if (queueTitle !== \`Queue Harness Track \${queueCallsAfter}\`) {
+          throw new Error(\`Expected refreshed queue track, received "\${queueTitle}"\`);
         }
 
         setStage('timeline');

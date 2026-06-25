@@ -46,12 +46,6 @@ interface MediaListItem {
 
 type MediaList = 'recent' | 'queue';
 
-interface ViewTransitionElement extends HTMLElement {
-  startViewTransition(options: {
-    callback: () => Promise<void>;
-  }): ViewTransition;
-}
-
 const MEDIA_LIST_REFRESH_INTERVAL = 10000;
 const PLAY_ITEM_REFRESH_DELAY = 500;
 
@@ -130,47 +124,45 @@ export default class Recent extends LitElement {
     recentItems: MediaListItem[],
     queueItems: MediaListItem[],
   ): Promise<void> {
-    const update = async (): Promise<void> => {
-      this.recentItems = recentItems;
-      this.queueItems = queueItems;
-      this.hasLoaded = true;
-      await this.updateComplete;
-    };
-    const list = this.renderRoot.querySelector<ViewTransitionElement>('#media-list');
-
-    if (
-      !this.hasLoaded
-      || !list?.startViewTransition
-      || window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    ) {
-      await update();
-      return;
-    }
-
-    await list.startViewTransition({ callback: update }).updateCallbackDone;
+    this.recentItems = recentItems;
+    this.queueItems = queueItems;
+    this.hasLoaded = true;
+    await this.updateComplete;
+    this.animateMediaList();
   }
 
   private async updateMediaList(listName: MediaList, items: MediaListItem[]): Promise<void> {
-    const update = async (): Promise<void> => {
-      if (listName === 'recent') {
-        this.recentItems = items;
-      } else {
-        this.queueItems = items;
-      }
-      this.hasLoaded = true;
-      await this.updateComplete;
-    };
-    const list = this.renderRoot.querySelector<ViewTransitionElement>('#media-list');
+    if (listName === 'recent') {
+      this.recentItems = items;
+    } else {
+      this.queueItems = items;
+    }
+    this.hasLoaded = true;
+    await this.updateComplete;
+    this.animateMediaList();
+  }
 
-    if (
-      !list?.startViewTransition
-      || window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    ) {
-      await update();
+  private animateMediaList(): void {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       return;
     }
 
-    await list.startViewTransition({ callback: update }).updateCallbackDone;
+    this.renderRoot.querySelector<HTMLElement>('#media-list')?.animate(
+      [
+        {
+          opacity: 0.45,
+          transform: 'translateY(4px)',
+        },
+        {
+          opacity: 1,
+          transform: 'translateY(0)',
+        },
+      ],
+      {
+        duration: 180,
+        easing: 'ease-out',
+      },
+    );
   }
 
   private async callSpotifyPlus<T>(
@@ -282,10 +274,6 @@ export default class Recent extends LitElement {
   }
 
   private selectList(list: MediaList): void {
-    if (this.selectedList === list) {
-      return;
-    }
-
     this.selectedList = list;
     void this.loadMediaList(list);
   }

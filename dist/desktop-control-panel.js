@@ -1646,24 +1646,22 @@ var tn = 1e4, nn = 500, rn = class e extends k {
 		});
 	}
 	async updateMediaLists(e, t) {
-		let n = async () => {
-			this.recentItems = e, this.queueItems = t, this.hasLoaded = !0, await this.updateComplete;
-		}, r = this.renderRoot.querySelector("#media-list");
-		if (!this.hasLoaded || !r?.startViewTransition || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-			await n();
-			return;
-		}
-		await r.startViewTransition({ callback: n }).updateCallbackDone;
+		this.recentItems = e, this.queueItems = t, this.hasLoaded = !0, await this.updateComplete, this.animateMediaList();
 	}
 	async updateMediaList(e, t) {
-		let n = async () => {
-			e === "recent" ? this.recentItems = t : this.queueItems = t, this.hasLoaded = !0, await this.updateComplete;
-		}, r = this.renderRoot.querySelector("#media-list");
-		if (!r?.startViewTransition || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-			await n();
-			return;
-		}
-		await r.startViewTransition({ callback: n }).updateCallbackDone;
+		e === "recent" ? this.recentItems = t : this.queueItems = t, this.hasLoaded = !0, await this.updateComplete, this.animateMediaList();
+	}
+	animateMediaList() {
+		window.matchMedia("(prefers-reduced-motion: reduce)").matches || this.renderRoot.querySelector("#media-list")?.animate([{
+			opacity: .45,
+			transform: "translateY(4px)"
+		}, {
+			opacity: 1,
+			transform: "translateY(0)"
+		}], {
+			duration: 180,
+			easing: "ease-out"
+		});
 	}
 	async callSpotifyPlus(e, t = {}) {
 		if (!this.hass || !this.config?.spotifyplus_name) throw Error("SpotifyPlus is not configured");
@@ -1704,7 +1702,7 @@ var tn = 1e4, nn = 500, rn = class e extends k {
 		}
 	}
 	selectList(e) {
-		this.selectedList !== e && (this.selectedList = e, this.loadMediaList(e));
+		this.selectedList = e, this.loadMediaList(e);
 	}
 	playItem(e) {
 		!e.uri || !this.hass || !this.config?.spotifyplus_name || this.hass.callService("media_player", "play_media", {
