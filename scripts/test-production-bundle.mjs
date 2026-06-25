@@ -28,7 +28,8 @@ const harness = `<!doctype html>
         spotify_name: 'media_player.test',
         weather_name: 'weather.home',
       };
-      const createHass = (title) => ({
+      const serviceCalls = [];
+      const createHass = (title, mediaOverrides = {}) => ({
         states: {
           'media_player.test': entity('media_player.test', 'playing', {
             media_title: title,
@@ -36,13 +37,17 @@ const harness = `<!doctype html>
             media_duration: 120,
             media_position: 15,
             media_position_updated_at: new Date().toISOString(),
+            ...mediaOverrides,
           }),
           'weather.home': entity('weather.home', 'sunny', { temperature: 72 }),
         },
         panels: {},
         dockedSidebar: 'always_hidden',
         localize: () => 'Sunny',
-        callService: async () => ({ context: { id: 'bundle-test' } }),
+        callService: async (domain, service, serviceData) => {
+          serviceCalls.push({ domain, service, serviceData });
+          return { context: { id: 'bundle-test' } };
+        },
         callWS: async () => undefined,
       });
       const panel = { name: 'desktop-control', config };
@@ -76,6 +81,47 @@ const harness = `<!doctype html>
 
         hassFirst.hass = createHass('Updated Hass');
         await verifyRender(hassFirst, 'Updated Hass');
+
+        const player = hassFirst.shadowRoot?.querySelector('music-player');
+        const progress = player?.shadowRoot?.querySelector('#progress');
+        const progressControl = player?.shadowRoot?.querySelector('#progress-control');
+        const elapsedTime = player?.shadowRoot?.querySelector('#elapsed-time');
+
+        if (!(progress instanceof HTMLInputElement) || !progressControl || !elapsedTime) {
+          throw new Error('Music player timeline controls were not rendered');
+        }
+
+        progress.value = '60';
+        progress.dispatchEvent(new Event('input', { bubbles: true, composed: true }));
+
+        if (progressControl.style.getPropertyValue('--progress') !== '50%') {
+          throw new Error('Scrubbing did not update the visual timeline');
+        }
+        if (elapsedTime.textContent !== '1:00') {
+          throw new Error('Scrubbing did not update the elapsed timestamp');
+        }
+
+        progress.dispatchEvent(new Event('change', { bubbles: true, composed: true }));
+        progress.dispatchEvent(new Event('change', { bubbles: true, composed: true }));
+        await Promise.resolve();
+
+        const seekCalls = serviceCalls.filter(({ domain, service }) => (
+          domain === 'media_player' && service === 'media_seek'
+        ));
+        if (seekCalls.length !== 1 || seekCalls[0].serviceData.seek_position !== 60) {
+          throw new Error('Timeline seek did not dispatch exactly one media_seek call');
+        }
+
+        hassFirst.hass = createHass('Updated Hass', {
+          media_position: 60,
+          media_position_updated_at: new Date().toISOString(),
+        });
+        await verifyRender(hassFirst, 'Updated Hass');
+
+        const updatedPosition = Number(progress.value);
+        if (updatedPosition < 60 || updatedPosition > 61) {
+          throw new Error(\`Timeline did not resume after seeking: \${updatedPosition}\`);
+        }
 
         const unavailable = document.createElement('desktop-control');
         document.body.append(unavailable);

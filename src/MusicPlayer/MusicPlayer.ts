@@ -8,19 +8,17 @@ import DCPConfig from '../../types/Config';
 import { HomeAssistant } from '../../types/types';
 import icon from '../Icon';
 import { borderBoxStyles } from '../theme';
+import TimelineClock, { TimelineSource } from './TimelineClock';
 
 interface PlaybackDetails {
   title: string;
   artist: string;
   albumArt: string;
+  contentId: string;
   isPlaying: boolean;
   duration: number;
   position: number;
   positionUpdatedAt: string;
-}
-
-function clamp(value: number, minimum: number, maximum: number): number {
-  return Math.min(Math.max(value, minimum), maximum);
 }
 
 function formatTime(seconds: number): string {
@@ -35,24 +33,28 @@ export default class MusicPlayer extends LitElement {
   @property({ type: Object }) public hass?: HomeAssistant;
   @property({ type: Object }) public config?: DCPConfig;
 
-  private clock?: number;
+  private progressAnimation?: number;
   private isScrubbing = false;
   private scrubPosition = 0;
-  private seekAnchor: number | null = null;
-  private seekAnchorTime = 0;
-  private seekSourceUpdatedAt = '';
+  private timelineClock = new TimelineClock();
   private isHoldingProgress = false;
 
   connectedCallback(): void {
     super.connectedCallback();
-    this.clock = window.setInterval(() => this.requestUpdate(), 1000);
+    this.scheduleProgressAnimation();
   }
 
   disconnectedCallback(): void {
-    if (this.clock !== undefined) {
-      window.clearInterval(this.clock);
+    if (this.progressAnimation !== undefined) {
+      window.cancelAnimationFrame(this.progressAnimation);
+      this.progressAnimation = undefined;
     }
     super.disconnectedCallback();
+  }
+
+  protected updated(): void {
+    this.syncTimeline();
+    this.scheduleProgressAnimation();
   }
 
   private getPlaybackDetails(): PlaybackDetails | null {
@@ -70,45 +72,87 @@ export default class MusicPlayer extends LitElement {
       title: attributes.media_title || 'Nothing playing',
       artist: attributes.media_artist || '',
       albumArt: attributes.entity_picture || '',
+      contentId: attributes.media_content_id || '',
       isPlaying: mediaPlayer.state === 'playing',
       duration: Number(attributes.media_duration) || 0,
       position: Number(attributes.media_position) || 0,
       positionUpdatedAt: attributes.media_position_updated_at || '',
     };
 
-    if (
-      this.seekAnchor !== null
-      && playback.positionUpdatedAt
-      && playback.positionUpdatedAt !== this.seekSourceUpdatedAt
-    ) {
-      this.seekAnchor = null;
+    return playback;
+  }
+
+  private getTimelineSource(playback: PlaybackDetails): TimelineSource {
+    return {
+      track: [
+        playback.contentId,
+        playback.title,
+        playback.artist,
+        playback.duration,
+      ].join('\n'),
+      isPlaying: playback.isPlaying,
+      duration: playback.duration,
+      position: playback.position,
+      positionUpdatedAt: playback.positionUpdatedAt,
+    };
+  }
+
+  private getProjectedPosition(playback: PlaybackDetails): number {
+    return this.timelineClock.project(this.getTimelineSource(playback));
+  }
+
+  private syncTimeline(): PlaybackDetails | null {
+    const playback = this.getPlaybackDetails();
+
+    if (!playback || this.isScrubbing) {
+      return playback;
     }
+
+    const displayedPosition = this.getProjectedPosition(playback);
+    this.updateTimelineDisplay(displayedPosition, playback.duration);
 
     return playback;
   }
 
-  private getProjectedPosition(playback: PlaybackDetails): number {
-    if (!playback.duration) {
-      return 0;
+  private updateTimelineDisplay(displayedPosition: number, duration: number): void {
+    const progress = duration
+      ? (displayedPosition / duration) * 100
+      : 0;
+    const progressControl = this.shadowRoot?.querySelector<HTMLElement>('#progress-control');
+    const progressInput = this.shadowRoot?.querySelector<HTMLInputElement>('#progress');
+    const elapsedTime = this.shadowRoot?.querySelector<HTMLElement>('#elapsed-time');
+
+    progressControl?.style.setProperty('--progress', `${progress}%`);
+
+    if (progressInput) {
+      progressInput.value = String(displayedPosition);
     }
 
-    let position = playback.position;
+    if (elapsedTime) {
+      const formattedPosition = formatTime(displayedPosition);
 
-    if (this.seekAnchor !== null) {
-      position = this.seekAnchor;
-
-      if (playback.isPlaying) {
-        position += (Date.now() - this.seekAnchorTime) / 1000;
-      }
-    } else if (playback.isPlaying && playback.positionUpdatedAt) {
-      const updatedAt = Date.parse(playback.positionUpdatedAt);
-
-      if (!Number.isNaN(updatedAt)) {
-        position += (Date.now() - updatedAt) / 1000;
+      if (elapsedTime.textContent !== formattedPosition) {
+        elapsedTime.textContent = formattedPosition;
       }
     }
+  }
 
-    return clamp(position, 0, playback.duration);
+  private scheduleProgressAnimation(): void {
+    if (this.progressAnimation !== undefined || this.isScrubbing) {
+      return;
+    }
+
+    const playback = this.getPlaybackDetails();
+
+    if (!playback?.isPlaying || this.getProjectedPosition(playback) >= playback.duration) {
+      return;
+    }
+
+    this.progressAnimation = window.requestAnimationFrame(() => {
+      this.progressAnimation = undefined;
+      this.syncTimeline();
+      this.scheduleProgressAnimation();
+    });
   }
 
   private callMediaService(service: string, serviceData = {}): void {
@@ -125,54 +169,74 @@ export default class MusicPlayer extends LitElement {
   }
 
   private previousClicked(): void {
-    this.seekAnchor = null;
-    this.seekSourceUpdatedAt = '';
     this.callMediaService('media_previous_track');
   }
 
   private playPauseClicked(): void {
-    this.seekAnchor = null;
-    this.seekSourceUpdatedAt = '';
     this.callMediaService('media_play_pause');
   }
 
   private nextClicked(): void {
-    this.seekAnchor = null;
-    this.seekSourceUpdatedAt = '';
     this.callMediaService('media_next_track');
   }
 
   private scrubbed(event: Event): void {
     this.isScrubbing = true;
     this.scrubPosition = Number((event.target as HTMLInputElement).value);
-    this.requestUpdate();
+    const playback = this.getPlaybackDetails();
+
+    if (playback) {
+      this.updateTimelineDisplay(this.scrubPosition, playback.duration);
+    }
   }
 
-  private progressHeld(): void {
+  private progressHeld(event: PointerEvent): void {
+    const playback = this.getPlaybackDetails();
+    const progressInput = event.currentTarget as HTMLInputElement;
+
     this.isHoldingProgress = true;
-    this.requestUpdate();
+    this.isScrubbing = true;
+    progressInput.setPointerCapture(event.pointerId);
+    this.shadowRoot?.querySelector('#progress-control')?.classList.add('is-held');
+
+    if (playback) {
+      this.scrubPosition = this.getProjectedPosition(playback);
+    }
   }
 
-  private progressReleased(): void {
+  private progressReleased(event: Event): void {
     this.isHoldingProgress = false;
-    this.requestUpdate();
+    this.seeked(event);
+  }
+
+  private progressCanceled(): void {
+    this.isHoldingProgress = false;
+    this.isScrubbing = false;
+    this.shadowRoot?.querySelector('#progress-control')?.classList.remove('is-held');
+    this.syncTimeline();
+    this.scheduleProgressAnimation();
   }
 
   private seeked(event: Event): void {
+    if (!this.isScrubbing) {
+      return;
+    }
+
     const seekPosition = Number((event.target as HTMLInputElement).value);
     const playback = this.getPlaybackDetails();
+
+    this.isScrubbing = false;
+    this.isHoldingProgress = false;
+    this.shadowRoot?.querySelector('#progress-control')?.classList.remove('is-held');
 
     if (!playback) {
       return;
     }
 
-    this.isScrubbing = false;
-    this.isHoldingProgress = false;
-    this.seekAnchor = seekPosition;
-    this.seekAnchorTime = Date.now();
-    this.seekSourceUpdatedAt = playback.positionUpdatedAt;
+    this.timelineClock.seek(seekPosition, this.getTimelineSource(playback));
     this.callMediaService('media_seek', { seek_position: seekPosition });
-    this.requestUpdate();
+    this.syncTimeline();
+    this.scheduleProgressAnimation();
   }
 
   protected render(): TemplateResult {
@@ -209,7 +273,7 @@ export default class MusicPlayer extends LitElement {
 
         <div id="timeline">
           <div id="timestamps">
-            <span>${formatTime(displayedPosition)}</span>
+            <span id="elapsed-time"></span>
             <span>${formatTime(playback.duration)}</span>
           </div>
           <div
@@ -235,7 +299,8 @@ export default class MusicPlayer extends LitElement {
               ?disabled=${!playback.duration}
               @pointerdown=${this.progressHeld}
               @pointerup=${this.progressReleased}
-              @pointercancel=${this.progressReleased}
+              @pointercancel=${this.progressCanceled}
+              @lostpointercapture=${this.progressCanceled}
               @input=${this.scrubbed}
               @change=${this.seeked}
             />
@@ -412,19 +477,6 @@ export default class MusicPlayer extends LitElement {
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.38);
         transform: translate(-50%, -50%);
         transition:
-          left 0s,
-          width 120ms ease,
-          height 120ms ease,
-          box-shadow 120ms ease;
-      }
-
-      #progress-control.is-playing #progress-fill {
-        transition: width 1s linear;
-      }
-
-      #progress-control.is-playing #progress-thumb {
-        transition:
-          left 1s linear,
           width 120ms ease,
           height 120ms ease,
           box-shadow 120ms ease;

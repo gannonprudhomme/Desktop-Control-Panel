@@ -10,6 +10,7 @@
     "dev": "vite build --watch --mode home-assistant",
     "preview": "vite --host 0.0.0.0",
     "build": "vite build",
+    "test": "node --test scripts/test-timeline-clock.mjs",
     "test:bundle": "node scripts/test-production-bundle.mjs",
     "deploy:ha": "scripts/deploy-home-assistant.sh",
     "reload:pi": "scripts/reload-pi-kiosk.sh",
