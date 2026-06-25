@@ -373,7 +373,7 @@ export default class MusicPlayer extends LitElement {
         justify-content: space-between;
         margin-bottom: 4px;
         color: var(--dcp-text-muted);
-        font-size: 11px;
+        font-size: 16px;
         font-variant-numeric: tabular-nums;
       }
 
