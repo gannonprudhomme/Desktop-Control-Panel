@@ -100,16 +100,48 @@ panel_custom:
 
 ## Development
 
-### Setting up HA
+Install the JavaScript dependencies:
 
-1. Install homeassistant
-2. ...?
-3. `source env/Source/activate` / `env/bin/activate`
-4. Run `hass -c config`
+```sh
+npm ci
+```
 
-### Building and running locally
+### Standalone preview
 
-`npm run dev`, then refresh the window
+Run the panel against mocked Home Assistant entities and services:
+
+```sh
+npm run preview
+```
+
+The preview is served at `http://localhost:1234` by default. Conductor's Run button starts the same
+preview on the workspace's assigned port, so multiple workspaces can run concurrently.
+
+### Running with Home Assistant
+
+The standalone preview covers the normal UI development loop. Use a Home Assistant instance when
+testing real entities and service calls.
+
+Configure a Home Assistant development instance to use this workspace's `config/` directory, then
+register the panel with:
+
+```yaml
+panel_custom:
+  - name: desktop-control
+    url_path: desktop-control
+    sidebar_title: Desktop Control
+    sidebar_icon: mdi:server
+    module_url: /local/community/Desktop-Control-Panel/index.js
+```
+
+Then run the panel watcher:
+
+```sh
+npm run dev
+```
+
+The watcher writes the panel bundle to `config/www/community/Desktop-Control-Panel/`. Refresh Home
+Assistant after changes.
 
 ### Deploying new version
 

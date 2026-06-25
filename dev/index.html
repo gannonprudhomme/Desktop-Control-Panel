@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Desktop Control Panel Preview</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        margin: 0;
+        min-height: 100%;
+        background: #111820;
+        color: #f4f7f9;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+
+      body {
+        display: grid;
+        min-height: 100vh;
+        place-items: center;
+      }
+
+      .preview-shell {
+        width: min(100vw, 900px);
+        padding: 24px;
+      }
+
+      .preview-label {
+        margin: 0 0 10px;
+        color: #8ba0ae;
+        font-size: 12px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .tablet {
+        width: 100%;
+        aspect-ratio: 5 / 3;
+        overflow: hidden;
+        border: 1px solid #33434f;
+        border-radius: 12px;
+        background: #171f26;
+        box-shadow: 0 20px 60px rgb(0 0 0 / 35%);
+      }
+
+      desktop-control {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="preview-shell">
+      <p class="preview-label">Mock Home Assistant · 800 × 480 target</p>
+      <section class="tablet">
+        <desktop-control></desktop-control>
+      </section>
+    </main>
+    <script type="module" src="./preview.ts"></script>
+  </body>
+</html>

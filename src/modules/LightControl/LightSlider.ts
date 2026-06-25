@@ -80,7 +80,7 @@ export default class LightSlider extends LitElement {
           </div>
           <div class="light-slider-container">
             <!-- TODO: Note that we do minMireds + 1 - otherwise, it will throw an error for some reason -->
-            ${createSlider(onTempSlide, onTempChange, this.light.mireds, this.light.minMireds + 1, this.light.maxMireds, 'temperature-slider-container', 'end-lamp')}
+            ${createSlider(onTempSlide, onTempChange, this.light.mireds, this.light.minMireds + 1, this.light.maxMireds, 'temperature-slider-container')}
 
             <div class="slider-info-container">
               <span class="brightness-value">

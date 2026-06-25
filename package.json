@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "parcel watch src/index.ts --out-dir ./config/www/community/Desktop-Control-Panel/",
+    "preview": "parcel dev/index.html --out-dir .context/preview-dist",
     "build": "parcel build src/index.ts --out-dir ./dist/ --out-file dcp.js --public-url ./",
     "lint": "eslint src/ types/"
   },
