@@ -194,22 +194,22 @@ parcelRequire=function(e,r,t,n){var i,o="function"==typeof parcelRequire&&parcel
         display: flex;
         justify-content: flex-end;
         align-items: center;
-        gap: 7px;
+        gap: 8px;
         color: var(--dcp-text);
         height: 100%;
         padding-right: 4px;
       }
 
       .weather-icon {
-        font-size: 30px;
+        font-size: 28px;
         display: flex;
         align-items: center;
-        min-width: 34px;
+        min-width: 32px;
         color: var(--dcp-accent-strong);
       }
 
       .weather-icon > * {
-        flex: 0 0 34px;
+        flex: 0 0 32px;
       }
 
       .temperature-weather-container {
@@ -223,7 +223,7 @@ parcelRequire=function(e,r,t,n){var i,o="function"==typeof parcelRequire&&parcel
 
       #temperature {
         color: var(--dcp-text);
-        font-size: 19px;
+        font-size: 20px;
         font-weight: 500;
         letter-spacing: -0.02em;
       }
@@ -345,10 +345,10 @@ parcelRequire=function(e,r,t,n){var i,o="function"==typeof parcelRequire&&parcel
         display: grid;
         grid-template-rows: minmax(0, 1fr) auto auto;
         gap: 16px;
-        width: min(100%, 650px);
+        width: min(100%, 640px);
         height: 100%;
         margin: 0 auto;
-        padding: 4px 18px 6px;
+        padding: 4px 16px 8px;
       }
 
       #music-player.unavailable {
@@ -360,7 +360,7 @@ parcelRequire=function(e,r,t,n){var i,o="function"==typeof parcelRequire&&parcel
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 34px;
+        gap: 24px;
         min-height: 0;
       }
 
@@ -407,16 +407,16 @@ parcelRequire=function(e,r,t,n){var i,o="function"==typeof parcelRequire&&parcel
       #title {
         margin: 0;
         color: var(--dcp-text);
-        font-size: clamp(26px, 4vw, 36px);
+        font-size: clamp(20px, 3vw, 28px);
         font-weight: 520;
         line-height: 1.08;
         letter-spacing: -0.025em;
       }
 
       #artist {
-        margin: 10px 0 0;
+        margin: 12px 0 0;
         color: var(--dcp-text-muted);
-        font-size: 18px;
+        font-size: 14px;
         line-height: 1.25;
       }
 
@@ -427,7 +427,7 @@ parcelRequire=function(e,r,t,n){var i,o="function"==typeof parcelRequire&&parcel
       #timestamps {
         display: flex;
         justify-content: space-between;
-        margin-bottom: 5px;
+        margin-bottom: 4px;
         color: var(--dcp-text-muted);
         font-size: 11px;
         font-variant-numeric: tabular-nums;
@@ -514,8 +514,8 @@ parcelRequire=function(e,r,t,n){var i,o="function"==typeof parcelRequire&&parcel
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 36px;
-        min-height: 82px;
+        gap: 32px;
+        min-height: 80px;
       }
 
       .transport-button {
@@ -540,26 +540,26 @@ parcelRequire=function(e,r,t,n){var i,o="function"==typeof parcelRequire&&parcel
       }
 
       .skip-button {
-        width: 58px;
-        height: 58px;
+        width: 56px;
+        height: 56px;
       }
 
       .skip-button .control-icon {
-        width: 46px;
-        height: 46px;
+        width: 44px;
+        height: 44px;
       }
 
       .play-button {
-        width: 82px;
-        height: 82px;
+        width: 80px;
+        height: 80px;
         border-radius: 50%;
         background: var(--dcp-surface-raised);
         box-shadow: 0 10px 28px rgba(0, 0, 0, 0.28);
       }
 
       .play-button .control-icon {
-        width: 39px;
-        height: 39px;
+        width: 40px;
+        height: 40px;
       }
 
       @media (max-width: 560px) {
@@ -569,17 +569,17 @@ parcelRequire=function(e,r,t,n){var i,o="function"==typeof parcelRequire&&parcel
         }
 
         #track {
-          gap: 20px;
+          gap: 16px;
         }
 
         #artwork-frame {
-          flex-basis: 126px;
-          width: 126px;
-          height: 126px;
+          flex-basis: 128px;
+          width: 128px;
+          height: 128px;
         }
 
         #controls {
-          gap: 28px;
+          gap: 24px;
         }
       }
     `}}t([i.property({type:Object})],n.prototype,"hass",void 0),t([i.property({type:Object})],n.prototype,"config",void 0),exports.default=n,customElements.get("music-player")||customElements.define("music-player",n);
@@ -2377,8 +2377,8 @@ const o=document.createElement("style");o.dataset.webAwesome="true",o.textConten
     --dcp-border: rgba(162, 198, 211, 0.18);
     --dcp-text: var(--primary-text-color, #f2f7f8);
     --dcp-text-muted: var(--secondary-text-color, #9db0ba);
-    --dcp-radius: 18px;
-    --dcp-radius-small: 12px;
+    --dcp-radius: 16px;
+    --dcp-radius-small: 8px;
     --dcp-shadow: 0 12px 28px rgba(0, 0, 0, 0.22);
 
     --wa-color-surface-raised: var(--dcp-surface-raised);
@@ -2456,7 +2456,7 @@ const o=document.createElement("style");o.dataset.webAwesome="true",o.textConten
       }
 
       top-row {
-        flex: 0 0 38px;
+        flex: 0 0 40px;
       }
     `]}}e([o.property({type:Object})],s.prototype,"hass",void 0),e([o.property({type:Boolean})],s.prototype,"narrow",void 0),e([o.property({type:Object})],s.prototype,"panel",void 0),exports.default=s,customElements.get("desktop-control")||customElements.define("desktop-control",s);
 },{"lit-element":"bhxD","./TopRow/TopRow":"kLvr","./MusicPlayer/MusicPlayer":"qEsR","./webawesome":"vKBN","./theme":"AczT"}]},{},["QCba"], null)

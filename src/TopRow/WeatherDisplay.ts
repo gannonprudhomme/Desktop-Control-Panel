@@ -53,22 +53,22 @@ export default class WeatherDisplay extends LitElement {
         display: flex;
         justify-content: flex-end;
         align-items: center;
-        gap: 7px;
+        gap: 8px;
         color: var(--dcp-text);
         height: 100%;
         padding-right: 4px;
       }
 
       .weather-icon {
-        font-size: 30px;
+        font-size: 28px;
         display: flex;
         align-items: center;
-        min-width: 34px;
+        min-width: 32px;
         color: var(--dcp-accent-strong);
       }
 
       .weather-icon > * {
-        flex: 0 0 34px;
+        flex: 0 0 32px;
       }
 
       .temperature-weather-container {
@@ -82,7 +82,7 @@ export default class WeatherDisplay extends LitElement {
 
       #temperature {
         color: var(--dcp-text);
-        font-size: 19px;
+        font-size: 20px;
         font-weight: 500;
         letter-spacing: -0.02em;
       }

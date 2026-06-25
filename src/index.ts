@@ -50,7 +50,7 @@ export default class App extends LitElement {
       }
 
       top-row {
-        flex: 0 0 38px;
+        flex: 0 0 40px;
       }
     `];
   }

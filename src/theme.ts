@@ -21,8 +21,8 @@ const theme: CSSResult = css`
     --dcp-border: rgba(162, 198, 211, 0.18);
     --dcp-text: var(--primary-text-color, #f2f7f8);
     --dcp-text-muted: var(--secondary-text-color, #9db0ba);
-    --dcp-radius: 18px;
-    --dcp-radius-small: 12px;
+    --dcp-radius: 16px;
+    --dcp-radius-small: 8px;
     --dcp-shadow: 0 12px 28px rgba(0, 0, 0, 0.22);
 
     --wa-color-surface-raised: var(--dcp-surface-raised);

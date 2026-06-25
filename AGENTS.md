@@ -42,6 +42,19 @@ under `.context/preview-dist` and must not be committed.
 - Do not commit `.DS_Store`, `node_modules`, `.cache`, `.context` output, `config`, or local
   environment files.
 
+## UI design principles
+
+- Apply these rules only to the active redesign and new UI; leave legacy modules unchanged unless
+  explicitly requested.
+- Use multiples of `4px` for layout spacing, including padding, margins, gaps, and offsets.
+- Reuse established spacing, corner radii, icon sizes, and control dimensions instead of introducing
+  near-duplicate values.
+- Keep related content visually grouped: internal spacing should be smaller than spacing between
+  separate groups.
+- Make interactive targets at least `44px` in both dimensions.
+- Design and verify the active layout at 800 × 480, ensuring essential controls remain visible
+  without accidental overflow.
+
 ## Generated files
 
 `dist/dcp.js` and `dist/dcp.js.map` are tracked release artifacts. After changing runtime source,
