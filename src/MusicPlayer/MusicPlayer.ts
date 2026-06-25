@@ -1,0 +1,520 @@
+import {
+  css, CSSResult, html, LitElement, TemplateResult, property,
+} from 'lit-element';
+import {
+  mdiPause, mdiPlay, mdiSkipNext, mdiSkipPrevious,
+} from '@mdi/js';
+import DCPConfig from '../../types/Config';
+import { HomeAssistant } from '../../types/types';
+import icon from '../Icon';
+
+interface PlaybackDetails {
+  title: string;
+  artist: string;
+  albumArt: string;
+  isPlaying: boolean;
+  duration: number;
+  position: number;
+  positionUpdatedAt: string;
+}
+
+function clamp(value: number, minimum: number, maximum: number): number {
+  return Math.min(Math.max(value, minimum), maximum);
+}
+
+function formatTime(seconds: number): string {
+  const safeSeconds = Math.max(0, Math.floor(seconds || 0));
+  const minutes = Math.floor(safeSeconds / 60);
+  const remainder = safeSeconds % 60;
+
+  return `${minutes}:${remainder.toString().padStart(2, '0')}`;
+}
+
+export default class MusicPlayer extends LitElement {
+  @property({ type: Object }) public hass: HomeAssistant;
+  @property({ type: Object }) public config: DCPConfig;
+
+  private clock: number;
+  private isScrubbing = false;
+  private scrubPosition = 0;
+  private seekAnchor: number = null;
+  private seekAnchorTime = 0;
+  private seekSourceUpdatedAt = '';
+  private isHoldingProgress = false;
+
+  connectedCallback(): void {
+    super.connectedCallback();
+    this.clock = window.setInterval(() => this.requestUpdate(), 1000);
+  }
+
+  disconnectedCallback(): void {
+    window.clearInterval(this.clock);
+    super.disconnectedCallback();
+  }
+
+  private getPlaybackDetails(): PlaybackDetails {
+    const mediaPlayer = this.hass && this.config
+      ? this.hass.states[this.config.spotify_name]
+      : null;
+
+    if (!mediaPlayer) {
+      return null;
+    }
+
+    const { attributes } = mediaPlayer;
+
+    const playback = {
+      title: attributes.media_title || 'Nothing playing',
+      artist: attributes.media_artist || '',
+      albumArt: attributes.entity_picture || '',
+      isPlaying: mediaPlayer.state === 'playing',
+      duration: Number(attributes.media_duration) || 0,
+      position: Number(attributes.media_position) || 0,
+      positionUpdatedAt: attributes.media_position_updated_at || '',
+    };
+
+    if (
+      this.seekAnchor !== null
+      && playback.positionUpdatedAt
+      && playback.positionUpdatedAt !== this.seekSourceUpdatedAt
+    ) {
+      this.seekAnchor = null;
+    }
+
+    return playback;
+  }
+
+  private getProjectedPosition(playback: PlaybackDetails): number {
+    if (!playback.duration) {
+      return 0;
+    }
+
+    let position = playback.position;
+
+    if (this.seekAnchor !== null) {
+      position = this.seekAnchor;
+
+      if (playback.isPlaying) {
+        position += (Date.now() - this.seekAnchorTime) / 1000;
+      }
+    } else if (playback.isPlaying && playback.positionUpdatedAt) {
+      const updatedAt = Date.parse(playback.positionUpdatedAt);
+
+      if (!Number.isNaN(updatedAt)) {
+        position += (Date.now() - updatedAt) / 1000;
+      }
+    }
+
+    return clamp(position, 0, playback.duration);
+  }
+
+  private callMediaService(service: string, serviceData = {}): void {
+    this.hass.callService('media_player', service, {
+      entity_id: this.config.spotify_name,
+      ...serviceData,
+    }).catch((error) => {
+      console.log(error);
+    });
+  }
+
+  private previousClicked(): void {
+    this.seekAnchor = null;
+    this.seekSourceUpdatedAt = '';
+    this.callMediaService('media_previous_track');
+  }
+
+  private playPauseClicked(): void {
+    this.seekAnchor = null;
+    this.seekSourceUpdatedAt = '';
+    this.callMediaService('media_play_pause');
+  }
+
+  private nextClicked(): void {
+    this.seekAnchor = null;
+    this.seekSourceUpdatedAt = '';
+    this.callMediaService('media_next_track');
+  }
+
+  private scrubbed(event: Event): void {
+    this.isScrubbing = true;
+    this.scrubPosition = Number((event.target as HTMLInputElement).value);
+    this.requestUpdate();
+  }
+
+  private progressHeld(): void {
+    this.isHoldingProgress = true;
+    this.requestUpdate();
+  }
+
+  private progressReleased(): void {
+    this.isHoldingProgress = false;
+    this.requestUpdate();
+  }
+
+  private seeked(event: Event): void {
+    const seekPosition = Number((event.target as HTMLInputElement).value);
+    const { positionUpdatedAt } = this.getPlaybackDetails();
+
+    this.isScrubbing = false;
+    this.isHoldingProgress = false;
+    this.seekAnchor = seekPosition;
+    this.seekAnchorTime = Date.now();
+    this.seekSourceUpdatedAt = positionUpdatedAt;
+    this.callMediaService('media_seek', { seek_position: seekPosition });
+    this.requestUpdate();
+  }
+
+  protected render(): TemplateResult {
+    const playback = this.getPlaybackDetails();
+
+    if (!playback) {
+      return html`
+        <section id="music-player" class="unavailable">
+          <p>Media player unavailable</p>
+        </section>
+      `;
+    }
+
+    const projectedPosition = this.getProjectedPosition(playback);
+    const displayedPosition = this.isScrubbing ? this.scrubPosition : projectedPosition;
+    const progress = playback.duration
+      ? (displayedPosition / playback.duration) * 100
+      : 0;
+
+    return html`
+      <section id="music-player" aria-label="Now playing">
+        <div id="track">
+          <div id="artwork-frame">
+            ${playback.albumArt
+    ? html`<img id="album-cover" src=${playback.albumArt} alt="" />`
+    : html`<div id="album-placeholder" aria-hidden="true"></div>`}
+          </div>
+
+          <div id="track-info">
+            <h1 id="title">${playback.title}</h1>
+            <p id="artist">${playback.artist}</p>
+          </div>
+        </div>
+
+        <div id="timeline">
+          <div id="timestamps">
+            <span>${formatTime(displayedPosition)}</span>
+            <span>${formatTime(playback.duration)}</span>
+          </div>
+          <div
+            id="progress-control"
+            class=${[
+    playback.isPlaying && !this.isScrubbing ? 'is-playing' : '',
+    this.isHoldingProgress ? 'is-held' : '',
+  ].filter(Boolean).join(' ')}
+            style=${`--progress: ${progress}%`}
+          >
+            <div id="progress-track" aria-hidden="true">
+              <div id="progress-fill"></div>
+              <div id="progress-thumb"></div>
+            </div>
+            <input
+              id="progress"
+              type="range"
+              min="0"
+              max=${playback.duration || 1}
+              step="1"
+              .value=${String(displayedPosition)}
+              aria-label="Track position"
+              ?disabled=${!playback.duration}
+              @pointerdown=${this.progressHeld}
+              @pointerup=${this.progressReleased}
+              @pointercancel=${this.progressReleased}
+              @input=${this.scrubbed}
+              @change=${this.seeked}
+            />
+          </div>
+        </div>
+
+        <div id="controls">
+          <button
+            class="transport-button skip-button"
+            type="button"
+            aria-label="Previous track"
+            @click=${this.previousClicked}
+          >
+            ${icon(mdiSkipPrevious)}
+          </button>
+          <button
+            class="transport-button play-button"
+            type="button"
+            aria-label=${playback.isPlaying ? 'Pause' : 'Play'}
+            @click=${this.playPauseClicked}
+          >
+            ${icon(playback.isPlaying ? mdiPause : mdiPlay)}
+          </button>
+          <button
+            class="transport-button skip-button"
+            type="button"
+            aria-label="Next track"
+            @click=${this.nextClicked}
+          >
+            ${icon(mdiSkipNext)}
+          </button>
+        </div>
+      </section>
+    `;
+  }
+
+  static get styles(): CSSResult {
+    return css`
+      :host {
+        display: block;
+        width: 100%;
+        height: 100%;
+        min-height: 0;
+      }
+
+      #music-player {
+        display: grid;
+        grid-template-rows: minmax(0, 1fr) auto auto;
+        gap: 16px;
+        width: min(100%, 650px);
+        height: 100%;
+        margin: 0 auto;
+        padding: 4px 18px 6px;
+      }
+
+      #music-player.unavailable {
+        place-items: center;
+        color: var(--dcp-text-muted);
+      }
+
+      #track {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 34px;
+        min-height: 0;
+      }
+
+      #artwork-frame {
+        flex: 0 0 148px;
+        width: 148px;
+        height: 148px;
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: 8px;
+        background: var(--dcp-surface);
+        box-shadow: 0 14px 34px rgba(0, 0, 0, 0.32);
+      }
+
+      #album-cover,
+      #album-placeholder {
+        display: block;
+        width: 100%;
+        height: 100%;
+        border-radius: 8px;
+        object-fit: cover;
+      }
+
+      #album-placeholder {
+        background: var(--dcp-surface-raised);
+      }
+
+      #track-info {
+        min-width: 0;
+        width: min(360px, 48vw);
+      }
+
+      #title,
+      #artist {
+        display: -webkit-box;
+        overflow: hidden;
+        overflow-wrap: anywhere;
+        text-overflow: ellipsis;
+        white-space: normal;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+      }
+
+      #title {
+        margin: 0;
+        color: var(--dcp-text);
+        font-size: clamp(26px, 4vw, 36px);
+        font-weight: 520;
+        line-height: 1.08;
+        letter-spacing: -0.025em;
+      }
+
+      #artist {
+        margin: 10px 0 0;
+        color: var(--dcp-text-muted);
+        font-size: 18px;
+        line-height: 1.25;
+      }
+
+      #timeline {
+        width: 100%;
+      }
+
+      #timestamps {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 5px;
+        color: var(--dcp-text-muted);
+        font-size: 11px;
+        font-variant-numeric: tabular-nums;
+      }
+
+      #progress-control {
+        position: relative;
+        width: 100%;
+        height: 24px;
+      }
+
+      #progress-track {
+        position: absolute;
+        top: 50%;
+        right: 0;
+        left: 0;
+        height: 3px;
+        overflow: visible;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.28);
+        transform: translateY(-50%);
+      }
+
+      #progress-fill {
+        width: var(--progress);
+        height: 100%;
+        border-radius: inherit;
+        background: #f2f2f2;
+      }
+
+      #progress-thumb {
+        position: absolute;
+        top: 50%;
+        left: var(--progress);
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: #f2f2f2;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.38);
+        transform: translate(-50%, -50%);
+        transition:
+          left 0s,
+          width 120ms ease,
+          height 120ms ease,
+          box-shadow 120ms ease;
+      }
+
+      #progress-control.is-playing #progress-fill {
+        transition: width 1s linear;
+      }
+
+      #progress-control.is-playing #progress-thumb {
+        transition:
+          left 1s linear,
+          width 120ms ease,
+          height 120ms ease,
+          box-shadow 120ms ease;
+      }
+
+      #progress-control.is-held #progress-thumb {
+        width: 20px;
+        height: 20px;
+        box-shadow: 0 3px 12px rgba(0, 0, 0, 0.48);
+      }
+
+      #progress {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        opacity: 0;
+        appearance: none;
+        -webkit-appearance: none;
+        cursor: pointer;
+      }
+
+      #progress:disabled {
+        cursor: default;
+        opacity: 0.45;
+      }
+
+      #controls {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 36px;
+        min-height: 82px;
+      }
+
+      .transport-button {
+        display: grid;
+        flex: 0 0 auto;
+        padding: 0;
+        place-items: center;
+        border: 0;
+        color: var(--dcp-text);
+        cursor: pointer;
+        background: transparent;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      .transport-button:focus-visible {
+        outline: 2px solid var(--dcp-accent-strong);
+        outline-offset: 5px;
+      }
+
+      .transport-button:active {
+        transform: scale(0.94);
+      }
+
+      .skip-button {
+        width: 58px;
+        height: 58px;
+      }
+
+      .skip-button .control-icon {
+        width: 46px;
+        height: 46px;
+      }
+
+      .play-button {
+        width: 82px;
+        height: 82px;
+        border-radius: 50%;
+        background: var(--dcp-surface-raised);
+        box-shadow: 0 10px 28px rgba(0, 0, 0, 0.28);
+      }
+
+      .play-button .control-icon {
+        width: 39px;
+        height: 39px;
+      }
+
+      @media (max-width: 560px) {
+        #music-player {
+          gap: 12px;
+          padding-inline: 8px;
+        }
+
+        #track {
+          gap: 20px;
+        }
+
+        #artwork-frame {
+          flex-basis: 126px;
+          width: 126px;
+          height: 126px;
+        }
+
+        #controls {
+          gap: 28px;
+        }
+      }
+    `;
+  }
+}
+
+if (!customElements.get('music-player')) {
+  customElements.define('music-player', MusicPlayer);
+}

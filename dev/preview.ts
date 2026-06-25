@@ -8,19 +8,7 @@ interface PreviewElement extends HTMLElement {
   panel?: BaseConfig;
 }
 
-const albumArt = `data:image/svg+xml,${encodeURIComponent(`
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96">
-    <defs>
-      <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-        <stop stop-color="#00c8c8"/>
-        <stop offset="1" stop-color="#3420aa"/>
-      </linearGradient>
-    </defs>
-    <rect width="96" height="96" rx="8" fill="url(#g)"/>
-    <circle cx="48" cy="48" r="25" fill="none" stroke="white" stroke-width="4" opacity=".85"/>
-    <circle cx="48" cy="48" r="5" fill="white"/>
-  </svg>
-`)}`;
+const albumArt = 'https://image-cdn-ak.spotifycdn.com/image/ab67616d00001e029b9b36b0e22870b9f542d937';
 
 const mockIcon = (svg: string): string => `data:image/svg+xml,${encodeURIComponent(svg)}`;
 
@@ -68,9 +56,12 @@ const entity = (
 const states = {
   'weather.home': entity('weather.home', 'sunny', { temperature: 72 }),
   'media_player.spotify_preview': entity('media_player.spotify_preview', 'playing', {
-    media_title: 'Midnight Circuit',
-    media_artist: 'Local Preview',
+    media_title: 'Instant Crush (feat. Julian Casablancas)',
+    media_artist: 'Daft Punk, Julian Casablancas',
     entity_picture: albumArt,
+    media_duration: 337,
+    media_position: 148,
+    media_position_updated_at: new Date().toISOString(),
   }),
   'sensor.desktop_processes': entity('sensor.desktop_processes', 'online', {
     processes: [
@@ -137,6 +128,10 @@ let hass: HomeAssistant = {
     if (domain === 'media_player' && service === 'media_play_pause') {
       const mediaPlayer = hass.states[config.spotify_name];
       const nextState = mediaPlayer.state === 'playing' ? 'paused' : 'playing';
+      const lastUpdated = Date.parse(mediaPlayer.attributes.media_position_updated_at);
+      const elapsed = mediaPlayer.state === 'playing' && !Number.isNaN(lastUpdated)
+        ? (Date.now() - lastUpdated) / 1000
+        : 0;
 
       hass = {
         ...hass,
@@ -145,6 +140,34 @@ let hass: HomeAssistant = {
           [config.spotify_name]: {
             ...mediaPlayer,
             state: nextState,
+            attributes: {
+              ...mediaPlayer.attributes,
+              media_position: Math.min(
+                Number(mediaPlayer.attributes.media_position) + elapsed,
+                Number(mediaPlayer.attributes.media_duration),
+              ),
+              media_position_updated_at: new Date().toISOString(),
+            },
+          },
+        },
+      };
+      app.hass = hass;
+    }
+
+    if (domain === 'media_player' && service === 'media_seek') {
+      const mediaPlayer = hass.states[config.spotify_name];
+
+      hass = {
+        ...hass,
+        states: {
+          ...hass.states,
+          [config.spotify_name]: {
+            ...mediaPlayer,
+            attributes: {
+              ...mediaPlayer.attributes,
+              media_position: Number(serviceData.seek_position),
+              media_position_updated_at: new Date().toISOString(),
+            },
           },
         },
       };

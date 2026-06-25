@@ -3,11 +3,8 @@ import {
 } from 'lit-element';
 import { HomeAssistant } from '../types/types';
 import './TopRow/TopRow';
-import './MiddleRow/MiddleRow';
-import './BottomRow/BottomRow';
+import './MusicPlayer/MusicPlayer';
 import { BaseConfig } from '../types/Config';
-import Module from '../types/Module';
-import getModules from '../types/ModulesManager';
 import './webawesome';
 import theme from './theme';
 
@@ -16,46 +13,14 @@ export default class App extends LitElement {
   @property({ type: Boolean }) public narrow: boolean;
   @property({ type: Object }) public panel: BaseConfig;
 
-  @property({ type: Array }) public modules: Module[];
-  @property({ type: Object }) public currentModule: Module = null;
-
-  constructor() {
-    super();
-    this.addEventListener('update-current-module', this.handleUpdateCurrentModule);
-  }
-
-  private handleUpdateCurrentModule(event: CustomEvent): void {
-    const { detail } = event;
-
-    if (!detail.module) {
-      throw Error('did not receive module in current-module CustomEvent');
-    }
-
-    this.currentModule = detail.module;
-  }
-
   protected render(): TemplateResult {
-    if (!this.modules) {
-      this.modules = getModules(this.panel.config.modules);
-      [this.currentModule = null] = this.modules;
-    }
-
     return html`
       <div class="app-shell">
         <top-row .hass=${this.hass} .config=${this.panel.config}></top-row>
-        <middle-row
-          .hass=${this.hass}
-          .currentModule=${this.currentModule}
-          .config=${this.panel.config}
-          id="middle-row">
-        </middle-row>
-        <bottom-row
+        <music-player
           .hass=${this.hass}
           .config=${this.panel.config}
-          .modules=${this.modules}
-          .currentModule=${this.currentModule}
-        >
-        </bottom-row>
+        ></music-player>
       </div>
     `;
   }
@@ -75,22 +40,17 @@ export default class App extends LitElement {
         flex-direction: column;
         height: 100%;
         width: 100%;
-        gap: 10px;
+        gap: 4px;
         padding: 12px;
       }
 
-      #middle-row {
-        flex-grow: 1;
+      music-player {
+        flex: 1 1 auto;
         min-height: 0;
       }
 
       top-row {
-        flex: 0 0 50px;
-      }
-
-      bottom-row {
-        flex: 0 0 72px;
-        min-height: 0;
+        flex: 0 0 38px;
       }
     `];
   }

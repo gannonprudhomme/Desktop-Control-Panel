@@ -60,15 +60,15 @@ export default class WeatherDisplay extends LitElement {
       }
 
       .weather-icon {
-        font-size: 36px;
+        font-size: 30px;
         display: flex;
         align-items: center;
-        min-width: 42px;
+        min-width: 34px;
         color: var(--dcp-accent-strong);
       }
 
       .weather-icon > * {
-        flex: 0 0 42px;
+        flex: 0 0 34px;
       }
 
       .temperature-weather-container {
@@ -76,14 +76,14 @@ export default class WeatherDisplay extends LitElement {
         flex-direction: column;
         text-align: right;
         color: var(--dcp-text-muted);
-        font-size: 12px;
+        font-size: 11px;
         line-height: 1.15;
       }
 
       #temperature {
         color: var(--dcp-text);
-        font-size: 24px;
-        font-weight: 650;
+        font-size: 19px;
+        font-weight: 500;
         letter-spacing: -0.02em;
       }
 
