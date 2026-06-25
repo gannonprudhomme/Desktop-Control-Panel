@@ -5,44 +5,33 @@ the official installation and update path.
 
 ## Connection
 
-Set the SSH connection details for a Home Assistant OS SSH add-on:
+The deployment command defaults to:
 
 ```sh
 export HA_HOST=root@homeassistant.local
-export HA_SSH_KEY=~/.ssh/id_homeassistant
+export HA_SSH_KEY=~/.ssh/id_ecdsa_homeassistant
 ```
 
+Override `HA_REMOTE_BUNDLE` if the Home Assistant installation uses a different destination.
 The Home Assistant host and the Raspberry Pi kiosk display may be separate machines. Deploy the
 bundle to the Home Assistant host.
 
-## Build
+## Deploy
 
 ```sh
-npx tsc --noEmit
-npm run build
+npm run deploy:ha
 ```
 
-## Back up and copy
+This type-checks and builds the project, backs up the current remote bundle to
+`desktop-control-panel.js.backup`, copies the new bundle, and verifies that the local and remote
+SHA-256 checksums match.
 
 ```sh
-ssh -i "$HA_SSH_KEY" "$HA_HOST" \
-  'cp /homeassistant/www/community/Desktop-Control-Panel/desktop-control-panel.js \
-      /homeassistant/www/community/Desktop-Control-Panel/desktop-control-panel.js.backup'
-
-scp -i "$HA_SSH_KEY" \
-  dist/desktop-control-panel.js \
-  "$HA_HOST":/homeassistant/www/community/Desktop-Control-Panel/desktop-control-panel.js
+npm run reload:pi
 ```
 
-## Verify
-
-Confirm that the local and remote checksums match:
-
-```sh
-shasum -a 256 dist/desktop-control-panel.js
-ssh -i "$HA_SSH_KEY" "$HA_HOST" \
-  'sha256sum /homeassistant/www/community/Desktop-Control-Panel/desktop-control-panel.js'
-```
+The reload command clears the Raspberry Pi Chromium caches and hard-reloads the visible Home
+Assistant kiosk window.
 
 The panel entry in `/homeassistant/configuration.yaml` should use:
 

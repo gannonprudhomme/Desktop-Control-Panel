@@ -13,6 +13,8 @@ Raspberry Pi controls.
 - Type-check: `npx tsc --noEmit`
 - Build the Home Assistant bundle: `npm run build`
 - Watch and emit into a local Home Assistant config: `npm run dev`
+- Build and deploy the bundle to Home Assistant over SSH: `npm run deploy:ha`
+- Clear the Raspberry Pi Chromium caches and hard-reload the kiosk: `npm run reload:pi`
 - Run the legacy lint configuration: `npm run lint`
 
 Conductor's Run action starts the mock preview on `$CONDUCTOR_PORT`. Preview build artifacts belong
@@ -41,6 +43,11 @@ under `.context/preview-dist` and must not be committed.
   development.
 - Follow `docs/local-ssh-deployment.md` when a task explicitly calls for live deployment over SSH.
   HACS remains the official installation path.
+- `npm run deploy:ha` defaults to `root@homeassistant.local` with
+  `~/.ssh/id_ecdsa_homeassistant`; override `HA_HOST`, `HA_SSH_KEY`, or `HA_REMOTE_BUNDLE` when
+  needed.
+- `npm run reload:pi` defaults to `gannon@raspberrypi.local` with
+  `~/.ssh/id_ed25519_raspberrypi`; override the `PI_*` environment variables when needed.
 - Use the workspace-specific Conductor port for servers; do not introduce a fixed port into the
   Conductor run command.
 - Do not commit `.DS_Store`, `node_modules`, `.cache`, `.context` output, `config`, or local
