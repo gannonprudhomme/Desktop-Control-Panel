@@ -7,6 +7,7 @@ import {
 import DCPConfig from '../../types/Config';
 import { HomeAssistant } from '../../types/types';
 import icon from '../Icon';
+import { borderBoxStyles } from '../theme';
 
 interface PlaybackDetails {
   title: string;
@@ -261,8 +262,8 @@ export default class MusicPlayer extends LitElement {
     `;
   }
 
-  static get styles(): CSSResult {
-    return css`
+  static get styles(): CSSResult[] {
+    return [borderBoxStyles, css`
       :host {
         display: block;
         width: 100%;
@@ -511,7 +512,7 @@ export default class MusicPlayer extends LitElement {
           gap: 24px;
         }
       }
-    `;
+    `];
   }
 }
 

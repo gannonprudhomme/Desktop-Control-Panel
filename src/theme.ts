@@ -1,5 +1,14 @@
 import { css, CSSResult } from 'lit-element';
 
+export const borderBoxStyles: CSSResult = css`
+  :host,
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+`;
+
 const theme: CSSResult = css`
   :host {
     color-scheme: dark;
@@ -61,11 +70,6 @@ const theme: CSSResult = css`
     --wa-shadow-m: var(--dcp-shadow);
   }
 
-  *,
-  *::before,
-  *::after {
-    box-sizing: border-box;
-  }
 `;
 
 export default theme;

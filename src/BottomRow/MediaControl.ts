@@ -7,6 +7,7 @@ import {
 import { HomeAssistant } from '../../types/types';
 import Song from '../../types/Song';
 import icon from '../Icon';
+import { borderBoxStyles } from '../theme';
 
 /**
  * Calls the according Spotify service using hass.callService
@@ -82,8 +83,8 @@ export default class MediaControl extends LitElement {
     `;
   }
 
-  static get styles(): CSSResult {
-    return css`
+  static get styles(): CSSResult[] {
+    return [borderBoxStyles, css`
       :host {
         display: block;
         height: 100%;
@@ -135,7 +136,7 @@ export default class MediaControl extends LitElement {
       .play-button.is-paused .control-icon {
         transform: translateX(1px);
       }
-    `;
+    `];
   }
 }
 

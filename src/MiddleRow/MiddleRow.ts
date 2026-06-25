@@ -4,6 +4,7 @@ import {
 import DCPConfig from '../../types/Config';
 import Module from '../../types/Module';
 import { HomeAssistant } from '../../types/types';
+import { borderBoxStyles } from '../theme';
 
 // We probably need to get this type from somewhere
 export default class MiddleRow extends LitElement {
@@ -21,8 +22,8 @@ export default class MiddleRow extends LitElement {
     `;
   }
 
-  static get styles(): CSSResult {
-    return css`
+  static get styles(): CSSResult[] {
+    return [borderBoxStyles, css`
       :host,
       #module-card,
       #middle-row {
@@ -45,7 +46,7 @@ export default class MiddleRow extends LitElement {
       #middle-row {
         overflow: hidden;
       }
-    `;
+    `];
   }
 }
 

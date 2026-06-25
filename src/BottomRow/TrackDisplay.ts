@@ -2,6 +2,7 @@ import {
   css, CSSResult, html, LitElement, TemplateResult, property,
 } from 'lit-element';
 import Song from '../../types/Song';
+import { borderBoxStyles } from '../theme';
 
 // We probably need to get this type from somewhere
 export default class TrackDisplay extends LitElement {
@@ -31,8 +32,8 @@ export default class TrackDisplay extends LitElement {
     `;
   }
 
-  static get styles(): CSSResult {
-    return css`
+  static get styles(): CSSResult[] {
+    return [borderBoxStyles, css`
       :host {
         display: block;
         width: 100%;
@@ -84,7 +85,7 @@ export default class TrackDisplay extends LitElement {
         white-space: nowrap;
         overflow: hidden;
       }
-    `;
+    `];
   }
 }
 

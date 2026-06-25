@@ -3,6 +3,7 @@ import {
 } from 'lit-element';
 import Module, { updateCurrentModuleEventName } from '../../types/Module';
 import icon from '../Icon';
+import { borderBoxStyles } from '../theme';
 
 export default class ModuleSwitcher extends LitElement {
   @property({ type: Array }) public modules: Module[];
@@ -47,8 +48,8 @@ export default class ModuleSwitcher extends LitElement {
     `;
   }
 
-  static get styles(): CSSResult {
-    return css`
+  static get styles(): CSSResult[] {
+    return [borderBoxStyles, css`
       :host {
         display: block;
         height: 100%;
@@ -81,7 +82,7 @@ export default class ModuleSwitcher extends LitElement {
         width: 24px;
         height: 24px;
       }
-    `;
+    `];
   }
 }
 

@@ -3,6 +3,7 @@ import {
 } from 'lit-element';
 import DCPConfig from '../../types/Config';
 import { HomeAssistant } from '../../types/types';
+import { borderBoxStyles } from '../theme';
 import './TimeDisplay';
 import './WeatherDisplay';
 
@@ -21,15 +22,15 @@ export default class TopRow extends LitElement {
     `;
   }
 
-  static get styles(): CSSResult {
-    return css`
+  static get styles(): CSSResult[] {
+    return [borderBoxStyles, css`
       #top-row {
         display: grid;
         grid-template-columns: 1fr auto 1fr;
         align-items: center;
         height: 100%;
       }
-    `;
+    `];
   }
 }
 

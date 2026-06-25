@@ -3,6 +3,7 @@ import {
 } from 'lit-element';
 import { HomeAssistant } from '../../../types/types';
 import VolumeProcess from '../../../types/VolumeProcess';
+import { borderBoxStyles } from '../../theme';
 import './VolumeSlider';
 
 // We probably need to get this type from somewhere
@@ -51,8 +52,8 @@ export default class DesktopProcessesView extends LitElement {
     `;
   }
 
-  static get styles(): CSSResult {
-    return css`
+  static get styles(): CSSResult[] {
+    return [borderBoxStyles, css`
       #volume-mixer {
         display: flex;
         justify-content: flex-start;
@@ -78,7 +79,7 @@ export default class DesktopProcessesView extends LitElement {
         font-size: 20px;
         height: 100%;
       }
-    `;
+    `];
   }
 }
 

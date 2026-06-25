@@ -8,6 +8,7 @@ import './MediaControl';
 import './ModuleSwitcher';
 import DCPConfig from '../../types/Config';
 import Module from '../../types/Module';
+import { borderBoxStyles } from '../theme';
 
 export function getSongFromSpotify(hass: HomeAssistant, config: DCPConfig): Song {
   if (!config.spotify_name) {
@@ -57,8 +58,8 @@ export default class BottomRow extends LitElement {
     `;
   }
 
-  static get styles(): CSSResult {
-    return css`
+  static get styles(): CSSResult[] {
+    return [borderBoxStyles, css`
       #bottom-row {
         display: grid;
         grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
@@ -74,7 +75,7 @@ export default class BottomRow extends LitElement {
         height: 72px;
         min-height: 72px;
       }
-    `;
+    `];
   }
 }
 

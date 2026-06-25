@@ -3,6 +3,7 @@ import {
 } from 'lit-element';
 import Light from '../../../types/Light';
 import { HomeAssistant } from '../../../types/types';
+import { borderBoxStyles } from '../../theme';
 import './LightSlider';
 
 export default class LightControlView extends LitElement {
@@ -35,8 +36,8 @@ export default class LightControlView extends LitElement {
     `;
   }
 
-  static get styles(): CSSResult {
-    return css`
+  static get styles(): CSSResult[] {
+    return [borderBoxStyles, css`
       #light-control {
         display: flex;
         justify-content: flex-start;
@@ -57,7 +58,7 @@ export default class LightControlView extends LitElement {
       .light-slider-margin:last-child {
         border-right: none;
       }
-    `;
+    `];
   }
 }
 

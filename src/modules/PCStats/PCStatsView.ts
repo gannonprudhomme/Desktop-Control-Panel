@@ -2,6 +2,7 @@ import {
   css, CSSResult, html, LitElement, TemplateResult, property,
 } from 'lit-element';
 import PCStatData from '../../../types/PCStats';
+import { borderBoxStyles } from '../../theme';
 
 // TODO: In the future, in the spirit of HA, should make this module so we can just pass in any
 // { stat-name, value } pair and have it generate some form of display for it
@@ -56,8 +57,8 @@ export default class PCStatsView extends LitElement {
     `;
   }
 
-  static get styles(): CSSResult {
-    return css`
+  static get styles(): CSSResult[] {
+    return [borderBoxStyles, css`
       #pc-stats {
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -107,7 +108,7 @@ export default class PCStatsView extends LitElement {
         height: 100%;
         font-size: 20px;
       }
-    `;
+    `];
   }
 }
 

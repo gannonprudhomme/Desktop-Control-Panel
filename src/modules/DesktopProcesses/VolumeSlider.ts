@@ -7,6 +7,7 @@ import {
 import VolumeProcess from '../../../types/VolumeProcess';
 import createSlider from '../../Slider';
 import icon from '../../Icon';
+import { borderBoxStyles } from '../../theme';
 // We probably need to get this type from somewhere
 export default class VolumeSlider extends LitElement {
   @property({ type: Object }) public volumeProcess: VolumeProcess;
@@ -53,8 +54,8 @@ export default class VolumeSlider extends LitElement {
     `;
   }
 
-  static get styles(): CSSResult {
-    return css`
+  static get styles(): CSSResult[] {
+    return [borderBoxStyles, css`
       :host {
         display: block;
         height: 100%;
@@ -131,7 +132,7 @@ export default class VolumeSlider extends LitElement {
         white-space: nowrap;
         overflow: hidden;
       }
-    `;
+    `];
   }
 }
 

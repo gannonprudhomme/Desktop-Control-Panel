@@ -5,6 +5,7 @@ import { mdiLightbulbOn, mdiLightbulbOutline } from '@mdi/js';
 import Light from '../../../types/Light';
 import createSlider from '../../Slider';
 import icon from '../../Icon';
+import { borderBoxStyles } from '../../theme';
 
 /**
  * Displays a single light, with multiple sliders (one for brigttness, one for color temp or hue)
@@ -93,8 +94,8 @@ export default class LightSlider extends LitElement {
     `;
   }
 
-  static get styles(): CSSResult {
-    return css`
+  static get styles(): CSSResult[] {
+    return [borderBoxStyles, css`
       :host {
         display: block;
         flex: 0 0 auto;
@@ -157,7 +158,7 @@ export default class LightSlider extends LitElement {
         text-overflow: ellipsis;
         white-space: nowrap;
       }
-    `;
+    `];
   }
 }
 

@@ -6,6 +6,7 @@ import RaspberryPi from '../../../types/RaspberryPi';
 import { HomeAssistant } from '../../../types/types';
 import createSlider from '../../Slider';
 import icon from '../../Icon';
+import { borderBoxStyles } from '../../theme';
 
 // We probably need to get this type from somewhere
 export default class RpiBacklightView extends LitElement {
@@ -84,8 +85,8 @@ export default class RpiBacklightView extends LitElement {
     `;
   }
 
-  static get styles(): CSSResult {
-    return css`
+  static get styles(): CSSResult[] {
+    return [borderBoxStyles, css`
       #tablet-control {
         display: flex;
         justify-content: center;
@@ -157,7 +158,7 @@ export default class RpiBacklightView extends LitElement {
         height: 25px;
         justify-self: center;
       }
-    `;
+    `];
   }
 }
 

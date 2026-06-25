@@ -5,7 +5,7 @@ import { HomeAssistant } from '../types/types';
 import './TopRow/TopRow';
 import './MusicPlayer/MusicPlayer';
 import { BaseConfig } from '../types/Config';
-import theme from './theme';
+import theme, { borderBoxStyles } from './theme';
 
 export default class App extends LitElement {
   @property({ type: Object }) public hass: HomeAssistant;
@@ -27,7 +27,7 @@ export default class App extends LitElement {
   }
 
   static get styles(): CSSResult[] {
-    return [theme, css`
+    return [theme, borderBoxStyles, css`
       :host {
         display: block;
         width: 100%;

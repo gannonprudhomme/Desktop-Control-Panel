@@ -1,6 +1,7 @@
 import {
   css, CSSResult, html, LitElement, TemplateResult, property,
 } from 'lit-element';
+import { borderBoxStyles } from '../theme';
 
 function formatTime(now: Date): string {
   let hours = now.getHours();
@@ -37,8 +38,8 @@ export default class TimeDisplay extends LitElement {
     `;
   }
 
-  static get styles(): CSSResult {
-    return css`
+  static get styles(): CSSResult[] {
+    return [borderBoxStyles, css`
       #time-container {
         display: flex;
         justify-content: center;
@@ -54,7 +55,7 @@ export default class TimeDisplay extends LitElement {
         letter-spacing: -0.02em;
         line-height: 1;
       }
-    `;
+    `];
   }
 }
 

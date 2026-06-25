@@ -4,6 +4,7 @@ import {
 import DCPConfig from '../../types/Config';
 import { HomeAssistant } from '../../types/types';
 import getWeatherStateSVG, { weatherSVGStyles } from '../external/weatherIcons';
+import { borderBoxStyles } from '../theme';
 
 function getWeatherText(hass: HomeAssistant, weatherState: string): string {
   const localizeUrl = `component.weather.state._.${weatherState}`;
@@ -52,6 +53,7 @@ export default class WeatherDisplay extends LitElement {
 
   static get styles(): CSSResult[] {
     return [
+      borderBoxStyles,
       weatherSVGStyles,
       css`
       .weather-container {
