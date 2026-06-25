@@ -740,7 +740,7 @@ var ft = class extends k {
         display: flex;
         justify-content: center;
         color: var(--dcp-text);
-        font-size: 24px;
+        font-size: 28px;
         font-variant-numeric: tabular-nums;
         font-weight: 400;
         letter-spacing: -0.02em;
@@ -943,13 +943,13 @@ var xt = class extends k {
         flex-direction: column;
         text-align: right;
         color: var(--dcp-text-muted);
-        font-size: 11px;
+        font-size: 15px;
         line-height: 1.15;
       }
 
       #temperature {
         color: var(--dcp-text);
-        font-size: 20px;
+        font-size: 24px;
         font-weight: 500;
         letter-spacing: -0.02em;
       }
@@ -967,8 +967,8 @@ var St = class extends k {
 	render() {
 		return E`
       <div id="top-row">
-        <weather-display .hass=${this.hass} .config=${this.config}></weather-display>
         <time-display></time-display>
+        <weather-display .hass=${this.hass} .config=${this.config}></weather-display>
       </div>
     `;
 	}
@@ -1220,7 +1220,6 @@ var At = class extends k {
 
       #track-info {
         min-width: 0;
-        min-height: 84px;
         width: 100%;
         text-align: center;
       }
@@ -1239,7 +1238,7 @@ var At = class extends k {
       #title {
         margin: 0;
         color: var(--dcp-text);
-        font-size: 28px;
+        font-size: 32px;
         font-weight: 520;
         line-height: 1.08;
         letter-spacing: -0.025em;
@@ -1248,7 +1247,7 @@ var At = class extends k {
       #artist {
         margin: 4px 0 0;
         color: var(--dcp-text-muted);
-        font-size: 14px;
+        font-size: 18px;
         line-height: 1.25;
       }
 
@@ -1261,7 +1260,7 @@ var At = class extends k {
         justify-content: space-between;
         margin-bottom: 4px;
         color: var(--dcp-text-muted);
-        font-size: 16px;
+        font-size: 20px;
         font-variant-numeric: tabular-nums;
       }
 
@@ -6460,17 +6459,15 @@ var Qo = class extends k {
           </div>
         ` : ""}
       <div class="app-shell">
+        <top-row .hass=${this.hass} .config=${e}></top-row>
         <music-player
           .hass=${this.hass}
           .config=${e}
         ></music-player>
-        <aside class="side-rail" aria-label="Media overview">
-          <top-row .hass=${this.hass} .config=${e}></top-row>
-          <recent-media
-            .hass=${this.hass}
-            .config=${e}
-          ></recent-media>
-        </aside>
+        <recent-media
+          .hass=${this.hass}
+          .config=${e}
+        ></recent-media>
       </div>
     `;
 	}
@@ -6526,26 +6523,31 @@ var Qo = class extends k {
         z-index: 1;
         display: grid;
         grid-template-columns: minmax(0, 1fr) 320px;
+        grid-template-rows: 44px minmax(0, 1fr);
+        grid-template-areas:
+          "top-row recents"
+          "player recents";
         gap: 16px;
         height: 100%;
         width: 100%;
         padding: 16px;
       }
 
-      music-player {
-        min-height: 0;
-      }
-
-      .side-rail {
-        display: grid;
-        grid-template-rows: 44px minmax(0, 1fr);
-        gap: 12px;
-        min-width: 0;
-        min-height: 0;
-      }
-
       top-row {
+        grid-area: top-row;
         min-width: 0;
+      }
+
+      music-player {
+        grid-area: player;
+        min-height: 0;
+        padding-inline: 8px;
+      }
+
+      recent-media {
+        grid-area: recents;
+        min-width: 0;
+        min-height: 0;
       }
 
       @media (max-width: 760px) {
@@ -6553,10 +6555,6 @@ var Qo = class extends k {
           grid-template-columns: minmax(0, 1fr) 280px;
           gap: 12px;
           padding: 8px;
-        }
-
-        .side-rail {
-          grid-template-rows: 44px minmax(0, 1fr);
         }
       }
     `

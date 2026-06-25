@@ -332,7 +332,6 @@ export default class MusicPlayer extends LitElement {
 
       #track-info {
         min-width: 0;
-        min-height: 84px;
         width: 100%;
         text-align: center;
       }
@@ -351,7 +350,7 @@ export default class MusicPlayer extends LitElement {
       #title {
         margin: 0;
         color: var(--dcp-text);
-        font-size: 28px;
+        font-size: 32px;
         font-weight: 520;
         line-height: 1.08;
         letter-spacing: -0.025em;
@@ -360,7 +359,7 @@ export default class MusicPlayer extends LitElement {
       #artist {
         margin: 4px 0 0;
         color: var(--dcp-text-muted);
-        font-size: 14px;
+        font-size: 18px;
         line-height: 1.25;
       }
 
@@ -373,7 +372,7 @@ export default class MusicPlayer extends LitElement {
         justify-content: space-between;
         margin-bottom: 4px;
         color: var(--dcp-text-muted);
-        font-size: 16px;
+        font-size: 20px;
         font-variant-numeric: tabular-nums;
       }
 

@@ -83,13 +83,13 @@ export default class WeatherDisplay extends LitElement {
         flex-direction: column;
         text-align: right;
         color: var(--dcp-text-muted);
-        font-size: 11px;
+        font-size: 15px;
         line-height: 1.15;
       }
 
       #temperature {
         color: var(--dcp-text);
-        font-size: 20px;
+        font-size: 24px;
         font-weight: 500;
         letter-spacing: -0.02em;
       }

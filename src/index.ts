@@ -42,17 +42,15 @@ export default class App extends LitElement {
         `
     : ''}
       <div class="app-shell">
+        <top-row .hass=${this.hass} .config=${config}></top-row>
         <music-player
           .hass=${this.hass}
           .config=${config}
         ></music-player>
-        <aside class="side-rail" aria-label="Media overview">
-          <top-row .hass=${this.hass} .config=${config}></top-row>
-          <recent-media
-            .hass=${this.hass}
-            .config=${config}
-          ></recent-media>
-        </aside>
+        <recent-media
+          .hass=${this.hass}
+          .config=${config}
+        ></recent-media>
       </div>
     `;
   }
@@ -106,26 +104,31 @@ export default class App extends LitElement {
         z-index: 1;
         display: grid;
         grid-template-columns: minmax(0, 1fr) 320px;
+        grid-template-rows: 44px minmax(0, 1fr);
+        grid-template-areas:
+          "top-row recents"
+          "player recents";
         gap: 16px;
         height: 100%;
         width: 100%;
         padding: 16px;
       }
 
-      music-player {
-        min-height: 0;
-      }
-
-      .side-rail {
-        display: grid;
-        grid-template-rows: 44px minmax(0, 1fr);
-        gap: 12px;
-        min-width: 0;
-        min-height: 0;
-      }
-
       top-row {
+        grid-area: top-row;
         min-width: 0;
+      }
+
+      music-player {
+        grid-area: player;
+        min-height: 0;
+        padding-inline: 8px;
+      }
+
+      recent-media {
+        grid-area: recents;
+        min-width: 0;
+        min-height: 0;
       }
 
       @media (max-width: 760px) {
@@ -133,10 +136,6 @@ export default class App extends LitElement {
           grid-template-columns: minmax(0, 1fr) 280px;
           gap: 12px;
           padding: 8px;
-        }
-
-        .side-rail {
-          grid-template-rows: 44px minmax(0, 1fr);
         }
       }
     `];

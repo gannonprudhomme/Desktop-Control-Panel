@@ -49,7 +49,7 @@ export default class TimeDisplay extends LitElement {
         display: flex;
         justify-content: center;
         color: var(--dcp-text);
-        font-size: 24px;
+        font-size: 28px;
         font-variant-numeric: tabular-nums;
         font-weight: 400;
         letter-spacing: -0.02em;

@@ -15,8 +15,8 @@ export default class TopRow extends LitElement {
   protected render(): TemplateResult {
     return html`
       <div id="top-row">
-        <weather-display .hass=${this.hass} .config=${this.config}></weather-display>
         <time-display></time-display>
+        <weather-display .hass=${this.hass} .config=${this.config}></weather-display>
       </div>
     `;
   }
