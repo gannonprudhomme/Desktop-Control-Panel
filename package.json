@@ -2,36 +2,34 @@
   "name": "dct-ha",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/desktop-control-panel.js",
+  "engines": {
+    "node": "^20.19.0 || ^22.13.0 || >=24.0.0"
+  },
   "scripts": {
-    "vendor:webawesome": "esbuild scripts/webawesome-entry.js --bundle --target=es2018 --format=iife --outfile=.context/webawesome.js && node scripts/inline-webawesome-css.js",
-    "dev": "npm run vendor:webawesome && parcel watch src/index.ts --out-dir ./config/www/community/Desktop-Control-Panel/",
-    "preview": "npm run vendor:webawesome && parcel dev/index.html --out-dir .context/preview-dist",
-    "build": "npm run vendor:webawesome && parcel build src/index.ts --out-dir ./dist/ --out-file desktop-control-panel.js --public-url ./ && node scripts/make-parcel-bundle-module-safe.js",
+    "dev": "vite build --watch --mode home-assistant",
+    "preview": "vite --host 0.0.0.0",
+    "build": "vite build",
     "reload:pi": "scripts/reload-pi-kiosk.sh",
     "lint": "eslint src/ types/"
   },
   "dependencies": {
     "@awesome.me/webawesome": "^3.9.0",
     "@mdi/js": "^7.3.67",
-    "css-loader": "^5.1.3",
     "eslint-config-airbnb": "^18.2.1",
     "eslint-config-preact": "^1.1.3",
     "eslint-import-resolver-typescript": "^2.4.0",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-jsx-a11y": "^6.4.1",
     "home-assistant-js-websocket": "^5.9.0",
-    "lit-element": "^2.5.1",
-    "source-map-loader": "^2.0.1",
-    "style-loader": "^2.0.0"
+    "lit-element": "^2.5.1"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^4.18.0",
     "@typescript-eslint/parser": "^4.18.0",
-    "esbuild": "^0.25.5",
     "eslint": "^7.22.0",
-    "parcel-bundler": "^1.10.3",
-    "typescript": "^4.2.3"
+    "typescript": "^4.2.3",
+    "vite": "^8.0.0"
   },
   "author": "",
   "license": "GNU GPL v3",
