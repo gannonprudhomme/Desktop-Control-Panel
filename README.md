@@ -4,7 +4,7 @@ A custom HomeAssistant panel intended to be used in pair with a desktop computer
 tablet. Originally designed to work on a RaspberryPi 7" Touchscreen. Based on my previous project,
  [Desktop Control Tablet](https://github.com/gannonprudhomme/Desktop-Control-Tablet)
 
-![volume-mixer](screenshots/volume-mixer.png)
+![media-player](screenshots/media-player.png)
 
 ## Installation (via HACS)
 
