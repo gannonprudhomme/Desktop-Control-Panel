@@ -13,20 +13,37 @@ export default class MiddleRow extends LitElement {
 
   protected render(): TemplateResult {
     return html`
-      <div id="middle-row">
-        ${this.currentModule ? this.currentModule.component(this.hass, this.config) : 'No modules enabled'}
-      </div>
+      <wa-card id="module-card" appearance="filled-outlined">
+        <div id="middle-row">
+          ${this.currentModule ? this.currentModule.component(this.hass, this.config) : 'No modules enabled'}
+        </div>
+      </wa-card>
     `;
   }
 
   static get styles(): CSSResult {
     return css`
+      :host,
+      #module-card,
       #middle-row {
+        display: block;
         width: 100%;
         height: 100%;
-        border: 1px solid #00C8C8;
-        overflow-y: hidden;
-        flex-grow: 1;
+        min-height: 0;
+      }
+
+      #module-card {
+        --spacing: 0;
+        box-shadow: var(--dcp-shadow);
+      }
+
+      #module-card::part(body) {
+        height: 100%;
+        padding: 10px;
+      }
+
+      #middle-row {
+        overflow: hidden;
       }
     `;
   }

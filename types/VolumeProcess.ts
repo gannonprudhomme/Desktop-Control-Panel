@@ -5,4 +5,5 @@ export default interface VolumeProcess {
   volume: number;
   priority: number;
   dominantColor?: string; // hex value for the dominat color
+  iconUrl?: string;
 };

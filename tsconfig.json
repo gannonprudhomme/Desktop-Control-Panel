@@ -5,6 +5,7 @@
     "noImplicitAny": true,
     "module": "commonjs",
     "target": "ES2018",
+    "types": [],
     // "esModuleInterop": true,
 
     "experimentalDecorators": true,

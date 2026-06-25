@@ -43,16 +43,16 @@ export default class TimeDisplay extends LitElement {
         display: flex;
         justify-content: center;
       }
+
       #time {
         display: flex;
         justify-content: center;
-        width: 66%;
-        border: 1px solid #00C8C8;
-        border-radius: 15px;
-        padding: 5px;
-        margin-top: -8px;
-        color: #00C8C8;
+        color: var(--dcp-text);
         font-size: 30px;
+        font-variant-numeric: tabular-nums;
+        font-weight: 650;
+        letter-spacing: -0.03em;
+        line-height: 1;
       }
     `;
   }

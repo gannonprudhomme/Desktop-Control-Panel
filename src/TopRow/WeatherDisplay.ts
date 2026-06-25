@@ -53,30 +53,38 @@ export default class WeatherDisplay extends LitElement {
         display: flex;
         justify-content: flex-end;
         align-items: center;
-        color: #00C8C8;
+        gap: 7px;
+        color: var(--dcp-text);
         height: 100%;
-        padding: 0px 5px 5px 5px;
+        padding-right: 4px;
       }
 
       .weather-icon {
-        font-size: 40px;
+        font-size: 36px;
         display: flex;
-        align-items: flex-end;
-        min-width: 48px;
+        align-items: center;
+        min-width: 42px;
+        color: var(--dcp-accent-strong);
       }
 
       .weather-icon > * {
-        flex: 0 0 48px;
+        flex: 0 0 42px;
       }
 
       .temperature-weather-container {
         display: flex;
         flex-direction: column;
         text-align: right;
+        color: var(--dcp-text-muted);
+        font-size: 12px;
+        line-height: 1.15;
       }
 
       #temperature {
-        font-size: 28px;
+        color: var(--dcp-text);
+        font-size: 24px;
+        font-weight: 650;
+        letter-spacing: -0.02em;
       }
 
       .unavailable-text {

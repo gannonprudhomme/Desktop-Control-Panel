@@ -8,6 +8,8 @@ import './BottomRow/BottomRow';
 import { BaseConfig } from '../types/Config';
 import Module from '../types/Module';
 import getModules from '../types/ModulesManager';
+import './webawesome';
+import theme from './theme';
 
 export default class App extends LitElement {
   @property({ type: Object }) public hass: HomeAssistant;
@@ -39,7 +41,7 @@ export default class App extends LitElement {
     }
 
     return html`
-      <div class="grid-container">
+      <div class="app-shell">
         <top-row .hass=${this.hass} .config=${this.panel.config}></top-row>
         <middle-row
           .hass=${this.hass}
@@ -58,21 +60,39 @@ export default class App extends LitElement {
     `;
   }
 
-  static get styles(): CSSResult {
-    return css`
-      .grid-container {
+  static get styles(): CSSResult[] {
+    return [theme, css`
+      :host {
+        display: block;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background: var(--dcp-background);
+      }
+
+      .app-shell {
         display: flex;
         flex-direction: column;
         height: 100%;
-        width: calc(100% - 1.5% * 2);
-        padding-left: 1.5%;
-        justify-content: space-around;
+        width: 100%;
+        gap: 10px;
+        padding: 12px;
       }
 
       #middle-row {
         flex-grow: 1;
+        min-height: 0;
       }
-    `;
+
+      top-row {
+        flex: 0 0 50px;
+      }
+
+      bottom-row {
+        flex: 0 0 72px;
+        min-height: 0;
+      }
+    `];
   }
 }
 

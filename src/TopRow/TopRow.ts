@@ -25,13 +25,9 @@ export default class TopRow extends LitElement {
     return css`
       #top-row {
         display: grid;
-        grid-template-columns: 33% 33% 33%;
-        grid-template-rows: 100%;
-        justify-content: space-between;
+        grid-template-columns: 1fr auto 1fr;
         align-items: center;
-        margin-top: 4px;
-
-        height: calc(100% - 4px);
+        height: 100%;
       }
     `;
   }

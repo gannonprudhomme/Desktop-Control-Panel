@@ -1,8 +1,12 @@
 import {
   css, CSSResult, html, LitElement, TemplateResult, property,
 } from 'lit-element';
+import {
+  mdiApplication, mdiFirefox, mdiMessage, mdiSpotify,
+} from '@mdi/js';
 import VolumeProcess from '../../../types/VolumeProcess';
 import createSlider from '../../Slider';
+import icon from '../../Icon';
 // We probably need to get this type from somewhere
 export default class VolumeSlider extends LitElement {
   @property({ type: Object }) public volumeProcess: VolumeProcess;
@@ -21,17 +25,29 @@ export default class VolumeSlider extends LitElement {
       this.volumeProcess = { ...this.volumeProcess, volume: value };
     };
 
-    const url = `/local/icons/${this.volumeProcess.name}.png`;
+    const url = this.volumeProcess.iconUrl ?? `/local/icons/${this.volumeProcess.name}.png`;
+    const hideBrokenIcon = (event: Event) => {
+      (event.target as HTMLImageElement).style.display = 'none';
+    };
+    const fallbackIcons = new Map<string, string>([
+      ['spotify', mdiSpotify],
+      ['discord', mdiMessage],
+      ['firefox', mdiFirefox],
+    ]);
+    const fallbackIcon = fallbackIcons.get(this.volumeProcess.name.toLowerCase()) ?? mdiApplication;
+
     return html`
       <div class="volume-slider-container">
-        ${createSlider(onChange, null, this.volumeProcess.volume, 0, 100, 'override')}
+        ${createSlider(onChange, null, this.volumeProcess.volume, 0, 100, 'volume-level')}
         <span class="slider-label">
           ${this.volumeProcess.volume}%
         </span>
-        <img src=${url} class="slider-icon"></img>
+        <div class="process-icon">
+          ${icon(fallbackIcon, 'process-icon-svg')}
+          <img src=${url} class="slider-icon" alt="" @error=${hideBrokenIcon}></img>
+        </div>
         <span class="process-name-text">
           ${this.volumeProcess.name}
-          <!-- ${this.volumeProcess.name.charAt(0) === 'D' ? 'askldfjghkasjodlhgfghsdaf' : null} -->
         </span>
       </div>
     `;
@@ -39,48 +55,78 @@ export default class VolumeSlider extends LitElement {
 
   static get styles(): CSSResult {
     return css`
+      :host {
+        display: block;
+        height: 100%;
+      }
+
       .volume-slider-container {
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: flex-end;
-        height: 100%;
-        margin-left: 16px;
+        width: 92px;
+        padding: 4px 4px 2px;
       }
 
-      /* Should probably make this always be stuck at the bottom no matter what, but this will work
-        since we're using a fixed screen size
-      */
-      .slider-info-container {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
+      .slider-container.volume-level {
+        height: 184px;
+        padding-bottom: 0;
+      }
+
+      .slider.volume-level {
+        height: 174px;
+      }
+
+      .slider.volume-level::part(track) {
+        height: 164px;
+      }
+
+      .process-icon {
+        position: relative;
+        display: grid;
+        width: 32px;
+        height: 32px;
+        place-items: center;
+        overflow: hidden;
+        border: 1px solid var(--dcp-border);
+        border-radius: 9px;
+        background: rgba(32, 199, 199, 0.13);
+        color: var(--dcp-accent-strong);
+        margin-top: 3px;
+      }
+
+      .process-icon-svg {
+        width: 21px;
+        height: 21px;
       }
 
       .slider-icon {
-        width: 32px;
-        height: 32px;
-        position: relative;
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
       }
 
       .slider-label {
-        padding-left: 5px;
-        min-width: 34px; /* So the text doesn't shift when it changes digits */
-      }
-
-      /* Override styles from the slider */
-      .slider-container {
-        padding: -40% 0;
-        width: 0;
-        margin-left: -25%;
+        min-width: 42px;
+        margin-top: 1px;
+        color: var(--dcp-text);
+        font-size: 14px;
+        font-variant-numeric: tabular-nums;
+        font-weight: 650;
+        text-align: center;
       }
 
       .process-name-text {
+        width: 92px;
+        margin-top: 2px;
+        color: var(--dcp-text-muted);
+        font-size: 11px;
+        text-align: center;
         text-overflow: ellipsis;
         white-space: nowrap;
         overflow: hidden;
-        max-width: 6rem;
       }
     `;
   }

@@ -40,8 +40,8 @@ export default class DesktopProcessesView extends LitElement {
     });
 
     const sliders: TemplateResult[] = sortedProcs.map((proc: VolumeProcess) => html`
-      <volume-slider .volumeProcess=${proc} class="volume-slider" .setVolume=${setVolume} />
-      <volume-slider>
+      <volume-slider .volumeProcess=${proc} class="volume-slider" .setVolume=${setVolume}>
+      </volume-slider>
     `);
 
     return html`
@@ -56,11 +56,19 @@ export default class DesktopProcessesView extends LitElement {
       #volume-mixer {
         display: flex;
         justify-content: flex-start;
-        width: calc(100% - 20px);
-        height: calc(100% - 4px);
+        align-items: flex-start;
+        gap: 2px;
+        width: 100%;
+        height: 100%;
         overflow-x: auto;
         overflow-y: hidden;
-        margin-bottom: 2px;
+        padding-bottom: 1px;
+        scrollbar-width: thin;
+        scrollbar-color: var(--dcp-border) transparent;
+      }
+
+      .volume-slider {
+        flex: 0 0 auto;
       }
 
       .invalid-entry {

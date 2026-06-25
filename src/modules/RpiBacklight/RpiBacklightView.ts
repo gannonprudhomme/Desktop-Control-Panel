@@ -1,10 +1,11 @@
 import {
   css, CSSResult, html, LitElement, TemplateResult, property,
 } from 'lit-element';
+import { mdiPower, mdiSleep } from '@mdi/js';
 import RaspberryPi from '../../../types/RaspberryPi';
 import { HomeAssistant } from '../../../types/types';
 import createSlider from '../../Slider';
-import themeColor from '../../theme';
+import icon from '../../Icon';
 
 // We probably need to get this type from somewhere
 export default class RpiBacklightView extends LitElement {
@@ -50,30 +51,48 @@ export default class RpiBacklightView extends LitElement {
           <span class="slider-label">
             ${this.raspberryPi.brightness}%
           </span>
+          <span class="slider-caption">Brightness</span>
         </div>
 
-        <div>
-          <ha-icon-button @click=${shutdown} icon="mdi:power" class="sleep-button">
-          </ha-icon-button>
-          <ha-icon-button @click=${setScreenPower} icon="mdi:sleep" class="power-button">
-          </ha-icon-button>
+        <div class="tablet-actions">
+          <wa-button
+            @click=${setScreenPower}
+            variant=${this.raspberryPi.power ? 'brand' : 'neutral'}
+            appearance=${this.raspberryPi.power ? 'filled' : 'outlined'}
+            size="l"
+            class="tablet-button"
+          >
+            <span class="button-content">
+              ${icon(mdiSleep)}
+              <span>Display ${this.raspberryPi.power ? 'on' : 'off'}</span>
+            </span>
+          </wa-button>
+          <wa-button
+            @click=${shutdown}
+            variant="neutral"
+            appearance="filled"
+            size="l"
+            class="tablet-button"
+          >
+            <span class="button-content">
+              ${icon(mdiPower)}
+              <span>Shut down</span>
+            </span>
+          </wa-button>
         </div>
       </div>
     `;
   }
 
-  static get styles(): CSSResult[] {
-    const styles = css`
+  static get styles(): CSSResult {
+    return css`
       #tablet-control {
         display: flex;
-        flex-direction: column;
-        justify-content: flex-start;
+        justify-content: center;
         align-items: center;
+        gap: 54px;
         width: 100%;
-        height: calc(100% - 4px);
-        overflow-x: auto;
-        overflow-y: hidden;
-        margin-bottom: 2px;
+        height: 100%;
       }
 
       .invalid-entry {
@@ -84,29 +103,61 @@ export default class RpiBacklightView extends LitElement {
         height: 100%;
       }
 
-      .sleep-button, .power-button {
-        --mdc-icon-size: 48px;
-        --mdc-icon-button-size: 56px;
-        color: var(--theme-color);
-      }
-
       .brightness-slider-container {
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: flex-end;
+        justify-content: center;
         height: 100%;
       }
 
-      /* Override styles from the slider */
-      .slider-container {
-        padding: -40% 0;
-        width: 0;
-        margin-left: -25%;
+      .slider-label {
+        margin-top: 5px;
+        color: var(--dcp-text);
+        font-size: 16px;
+        font-variant-numeric: tabular-nums;
+        font-weight: 650;
+      }
+
+      .slider-caption {
+        margin-top: 2px;
+        color: var(--dcp-text-muted);
+        font-size: 10px;
+      }
+
+      .tablet-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        width: 190px;
+      }
+
+      .tablet-button::part(base) {
+        min-height: 58px;
+        padding-inline: 18px;
+      }
+
+      .tablet-button::part(label) {
+        display: block;
+        width: 100%;
+      }
+
+      .button-content {
+        display: grid;
+        grid-template-columns: 28px 1fr;
+        align-items: center;
+        width: 100%;
+        column-gap: 10px;
+        text-align: left;
+      }
+
+      .control-icon {
+        display: block;
+        width: 25px;
+        height: 25px;
+        justify-self: center;
       }
     `;
-
-    return [themeColor, styles];
   }
 }
 

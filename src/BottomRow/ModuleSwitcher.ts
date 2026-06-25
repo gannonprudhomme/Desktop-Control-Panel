@@ -2,7 +2,7 @@ import {
   css, CSSResult, html, LitElement, TemplateResult, property,
 } from 'lit-element';
 import Module, { updateCurrentModuleEventName } from '../../types/Module';
-import themeColor from '../theme';
+import icon from '../Icon';
 
 export default class ModuleSwitcher extends LitElement {
   @property({ type: Array }) public modules: Module[];
@@ -24,55 +24,64 @@ export default class ModuleSwitcher extends LitElement {
       const action = () => this.updateCurrentModule(mod);
 
       return html`
-        <div class="button-container">
-          <ha-icon-button @click=${action} .path=${mod.icon} class="icon-button">
-          </ha-icon-button>
-        </div> 
+        <wa-button
+          @click=${action}
+          variant=${mod === this.currentModule ? 'brand' : 'neutral'}
+          appearance=${mod === this.currentModule ? 'filled' : 'plain'}
+          size="m"
+          class="module-button"
+          aria-label=${mod.name}
+          title=${mod.name}
+        >
+          ${icon(mod.icon)}
+        </wa-button>
       `;
     });
 
     return html`
       <div id="module-swapper">
-        <div id="control-container">
+        <wa-button-group id="control-container" label="Panel modules">
           ${moduleButtons}
-        </div>
+        </wa-button-group>
       </div>
     `;
   }
 
-  static get styles(): CSSResult[] {
-    const styles = css`
+  static get styles(): CSSResult {
+    return css`
+      :host {
+        display: block;
+        height: 100%;
+      }
+
       #module-swapper {
         display: flex;
         justify-content: flex-end;
-        align-items: flex-end;
+        align-items: center;
         width: 100%;
         height: 100%;
       }
 
       #control-container {
-        display: flex;
-        justify-content: space-around;
-        align-items: center;
-        border: 1px solid #00C8C8;
-        border-radius: 20px;
-        min-width: 200px;
+        box-sizing: border-box;
         height: 100%;
+        border: 1px solid var(--dcp-border);
+        border-radius: var(--dcp-radius);
+        background: var(--dcp-surface-soft);
+        padding: 8px;
       }
 
-      /* Add greater gaps between buttons to force container to grow */
-      .button-container {
-        padding: 0 4px;
+      .module-button::part(base) {
+        min-width: 54px;
+        min-height: 54px;
+        padding: 0;
       }
 
-      .icon-button {
-        --mdc-icon-size: 36px;
-        --mdc-icon-button-size: 40px;
-        color: var(--theme-color);
+      .control-icon {
+        width: 24px;
+        height: 24px;
       }
     `;
-
-    return [themeColor, styles];
   }
 }
 

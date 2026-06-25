@@ -19,9 +19,7 @@ export default function createSlider(
   max = 100, additionalClass: string = null,
 ): TemplateResult {
   const callOnSlider = (event: Event) => {
-    const valueStr = (<HTMLInputElement>event.target).value;
-    // convert value to an int
-    const value = Number.parseInt(valueStr, 10);
+    const value = Number((event.target as HTMLElement & { value: number }).value);
 
     if (onSlide) {
       onSlide(value);
@@ -29,9 +27,7 @@ export default function createSlider(
   };
 
   const callOnChange = (event: Event) => {
-    const valueStr = (<HTMLInputElement>event.target).value;
-    // convert value to an int
-    const value = Number.parseInt(valueStr, 10);
+    const value = Number((event.target as HTMLElement & { value: number }).value);
 
     if (onChange) {
       onChange(value);
@@ -41,72 +37,63 @@ export default function createSlider(
   // https://stackoverflow.com/a/58095358/
   const styles = css`
     .slider {
-      -webkit-appearance: none;
-      /* TODO: This width does *not* scale well, but it's really wack since vh isn't working */
-      width: min(30vw, 74vh);
-      height: 12px; /* width of the track */
-      border-radius: 25px;
-      background: #d3d3d3;
-      outline: none;
-      opacity: 0.7;
+      --track-size: 9px;
+      --thumb-width: 30px;
+      --thumb-height: 30px;
+      display: block;
+      height: 184px;
+      color: var(--dcp-accent);
+    }
 
-      margin-left: -50%;
-  }
+    .slider::part(track) {
+      height: 174px;
+      background: rgba(255, 255, 255, 0.1);
+    }
 
-  .slider::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
+    .slider::part(thumb) {
+      border: 3px solid var(--dcp-surface);
+      box-shadow: 0 3px 12px rgba(0, 0, 0, 0.32);
+    }
 
-    width: 36px;
-    height: 36px;
+    .temperature-slider-container::part(track) {
+      background: linear-gradient(
+        to top,
+        rgb(255, 151, 53),
+        rgb(255, 239, 210) 50%,
+        rgb(130, 198, 255)
+      );
+    }
 
-    background: #fff;
-    border-radius: 50%;
-    border: 2px solid currentColor;
-  }
+    .temperature-slider-container::part(indicator) {
+      background: rgba(255, 255, 255, 0.42);
+    }
 
-  .slider::-moz-slider-thumb {
-    appearance: none;
-
-    width: 36px;
-    height: 36px;
-
-    background: #fff;
-    border-radius: 50%;
-    border: 2px solid currentColor;
-  }
-
-  .element-to-rotate {
-    display: block;
-    transform-origin: top left;
-    transform: rotate(-90deg);
-    margin-top: -50%;
-    white-space: nowrap;
-  }
-
-  /* TODO: This doesn't seem to do anything and idk why */
-  .slider-container { /* Centers it */
-    width: 0;
-    margin-left: 25%;
-  }
+    .slider-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 44px;
+      height: 194px;
+      padding-bottom: 10px;
+    }
   `;
 
   return html`
-    <div class="slider-container ${additionalClass}">
+    <div class="slider-container ${additionalClass ?? ''}">
       <style>
         ${styles}
       </style>
-      <input
-        type="range"
-        orient="vertical"
-        class="slider element-to-rotate"
+      <wa-slider
+        orientation="vertical"
+        class="slider ${additionalClass ?? ''}"
         @input=${callOnSlider}
         @change=${callOnChange}
-        min=${min}
-        max=${max}
-        value=${startVal}
+        .min=${min}
+        .max=${max}
+        .value=${startVal}
+        aria-label="Level"
       >
-      </input>
+      </wa-slider>
     </div>
   `;
 }

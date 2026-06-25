@@ -40,11 +40,22 @@ export default class LightControlView extends LitElement {
       #light-control {
         display: flex;
         justify-content: flex-start;
-        width: calc(100% - 8px);
-        height: calc(100% - 8px);
+        width: 100%;
+        height: 100%;
         overflow-x: auto;
         overflow-y: hidden;
-        margin: 4px 0;
+        padding-bottom: 1px;
+        scrollbar-width: thin;
+        scrollbar-color: var(--dcp-border) transparent;
+      }
+
+      .light-slider-margin {
+        flex: 0 0 auto;
+        border-right: 1px solid var(--dcp-border);
+      }
+
+      .light-slider-margin:last-child {
+        border-right: none;
       }
     `;
   }

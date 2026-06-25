@@ -2,12 +2,11 @@ import {
   css, CSSResult, html, LitElement, TemplateResult, property,
 } from 'lit-element';
 import {
-  mdiSkipPrevious, mdiPauseCircleOutline, mdiPlayCircleOutline, mdiSkipNext
+  mdiSkipPrevious, mdiPause, mdiPlay, mdiSkipNext,
 } from '@mdi/js';
 import { HomeAssistant } from '../../types/types';
 import Song from '../../types/Song';
-
-import themeColor from '../theme';
+import icon from '../Icon';
 
 /**
  * Calls the according Spotify service using hass.callService
@@ -39,70 +38,104 @@ export default class MediaControl extends LitElement {
   }
 
   protected render(): TemplateResult {
+    if (!this.song) {
+      return html`<div id="spotify-playback">Media unavailable</div>`;
+    }
+
     const playPauseIcon = this.song.isPlaying
-      ? mdiPauseCircleOutline : mdiPlayCircleOutline;
+      ? mdiPause : mdiPlay;
 
     return html`
       <div id="spotify-playback">
         <div id="playback-container">
-          <ha-icon-button
+          <wa-button
             @click=${this.previousClicked}
-            .path=${mdiSkipPrevious}
+            appearance="plain"
+            size="m"
             class="icon-button skip-button"
+            aria-label="Previous track"
           >
-          </ha-icon-button>
-          <ha-icon-button
+            ${icon(mdiSkipPrevious)}
+          </wa-button>
+          <wa-button
             @click=${this.playPauseClicked}
-            .path=${playPauseIcon}
-            class="icon-button"
+            variant="brand"
+            appearance="filled"
+            size="l"
+            pill
+            class="icon-button play-button ${this.song.isPlaying ? 'is-playing' : 'is-paused'}"
+            aria-label=${this.song.isPlaying ? 'Pause' : 'Play'}
           >
-          </ha-icon-button>
-          <ha-icon-button
+            ${icon(playPauseIcon)}
+          </wa-button>
+          <wa-button
             @click=${this.nextClicked}
-            .path=${mdiSkipNext}
+            appearance="plain"
+            size="m"
             class="icon-button skip-button"
+            aria-label="Next track"
           >
-          </ha-icon-button>
+            ${icon(mdiSkipNext)}
+          </wa-button>
         </div>
       </div>
     `;
   }
 
-  static get styles(): CSSResult[] {
-    const styles = css`
+  static get styles(): CSSResult {
+    return css`
+      :host {
+        display: block;
+        height: 100%;
+      }
+
       #spotify-playback {
         display: flex;
-        flex-direction: column;
-        justify-content: flex-end;
+        justify-content: center;
         align-items: center;
         height: 100%;
       }
 
       #playback-container {
-        border: 1px solid var(--theme-color) !important;
-        border-radius: 20px;
         display: flex;
-        justify-content: space-between;
+        justify-content: center;
         align-items: center;
-        width: 250px;
+        gap: 5px;
+      }
+
+      wa-button::part(base) {
+        min-width: 46px;
+        min-height: 46px;
+        padding: 0;
+      }
+
+      wa-button::part(label) {
+        display: grid;
+        width: 100%;
         height: 100%;
+        place-items: center;
       }
 
-      .icon-button {
-        --mdc-icon-size: 56px;
-        --mdc-icon-button-size: 60px;
-        /* 8 is mostly arbitrary - but it's 56 - 48 px */
-        color: var(--theme-color);
+      .play-button::part(base) {
+        min-width: 50px;
+        min-height: 50px;
       }
 
-      /* Skip buttons have more empty space than pause, so reduce their size to match the
-         icon size */
-      .skip-button {
-        --mdc-icon-button-size: 56px;
+      .control-icon {
+        display: block;
+        width: 27px;
+        height: 27px;
+      }
+
+      .play-button .control-icon {
+        width: 31px;
+        height: 31px;
+      }
+
+      .play-button.is-paused .control-icon {
+        transform: translateX(1px);
       }
     `;
-
-    return [themeColor, styles];
   }
 }
 

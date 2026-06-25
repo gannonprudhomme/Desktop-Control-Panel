@@ -40,11 +40,12 @@ export default class PCStatsView extends LitElement {
     const rows: TemplateResult[] = [];
     conv.forEach((val, key) => {
       rows.push(html`
-        <div class="stat-row">
-          <span>${key}:</span>
-          <!-- TODO: Check for non-percentage values? -->
-          <span>${val}</span>
-        </div>
+        <wa-card class="stat-card" appearance="filled">
+          <div class="stat-row">
+            <span class="stat-label">${key}</span>
+            <span class="stat-value">${val}</span>
+          </div>
+        </wa-card>
       `);
     });
 
@@ -58,14 +59,45 @@ export default class PCStatsView extends LitElement {
   static get styles(): CSSResult {
     return css`
       #pc-stats {
-        display: flex;
-        flex-direction: column;
-        padding: 8px 8px;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-rows: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+        width: 100%;
+        height: 100%;
+      }
+
+      .stat-card {
+        display: block;
+        height: 100%;
+        --spacing: 0;
+      }
+
+      .stat-card::part(body) {
+        height: 100%;
+        padding: 12px 16px;
       }
 
       .stat-row {
-        font-size: 24px;
-        padding-bottom: 8px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        height: 100%;
+      }
+
+      .stat-label {
+        color: var(--dcp-text-muted);
+        font-size: 12px;
+        font-weight: 600;
+      }
+
+      .stat-value {
+        margin-top: 5px;
+        color: var(--dcp-text);
+        font-size: 31px;
+        font-variant-numeric: tabular-nums;
+        font-weight: 700;
+        letter-spacing: -0.04em;
       }
 
       .unavailable-text {

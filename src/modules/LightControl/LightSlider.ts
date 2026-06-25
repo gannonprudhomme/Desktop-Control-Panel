@@ -1,10 +1,10 @@
 import {
   css, CSSResult, html, LitElement, TemplateResult, property,
 } from 'lit-element';
-import { mdiLightbulbOn } from '@mdi/js';
+import { mdiLightbulbOn, mdiLightbulbOutline } from '@mdi/js';
 import Light from '../../../types/Light';
 import createSlider from '../../Slider';
-import themeColor from '../../theme';
+import icon from '../../Icon';
 
 /**
  * Displays a single light, with multiple sliders (one for brigttness, one for color temp or hue)
@@ -71,109 +71,93 @@ export default class LightSlider extends LitElement {
         <div class="multi-light-slider-container">
           <div class="light-slider-container">
             ${createSlider(onBrightnessSlide, onBrightnessChange, brightness, 1, 100)}
-
-            <div class="slider-info-container">
-              <span class="brightness-value">
-                ${brightnessValue}
-              </span>
-            </div>
+            <span class="slider-value">${brightnessValue}</span>
           </div>
           <div class="light-slider-container">
-            <!-- TODO: Note that we do minMireds + 1 - otherwise, it will throw an error for some reason -->
             ${createSlider(onTempSlide, onTempChange, this.light.mireds, this.light.minMireds + 1, this.light.maxMireds, 'temperature-slider-container')}
-
-            <div class="slider-info-container">
-              <span class="brightness-value">
-                ${temperatureValue}
-              </span>
-            </div>
+            <span class="slider-value">${temperatureValue}</span>
           </div>
         </div>
-        <div class="power-button-container">
-          <ha-icon-button @click=${onPowerClick} .path=${mdiLightbulbOn} class="power-button">
-          </ha-icon-button>
-        </div>
-        <div class="light-name-container">
-          <span class="light-name">
-            ${this.light.name}
-          </span>
-        </div>
+        <wa-button
+          @click=${onPowerClick}
+          variant=${this.light.isOn ? 'brand' : 'neutral'}
+          appearance="plain"
+          size="m"
+          class="power-button"
+          aria-label=${this.light.isOn ? `Turn off ${this.light.name}` : `Turn on ${this.light.name}`}
+        >
+          ${icon(this.light.isOn ? mdiLightbulbOn : mdiLightbulbOutline)}
+        </wa-button>
+        <div class="light-name">${this.light.name}</div>
       </div>
     `;
   }
 
-  // TODO: See if we can get some of these from elsewhere? slider-info-container should be common
-  static get styles(): CSSResult[] {
-    const styles = css`
+  static get styles(): CSSResult {
+    return css`
+      :host {
+        display: block;
+        flex: 0 0 auto;
+        height: 100%;
+      }
+
       .smart-light-slider-container {
         display: flex;
         flex-direction: column;
+        align-items: center;
         justify-content: flex-start;
-        /* TODO: Check this */
-        max-width: 15rem;
+        width: 190px;
         height: 100%;
-        margin-left: 16px;
+        padding: 0 8px;
       }
 
       .multi-light-slider-container {
         display: flex;
-        justify-content: flex-start;
-        height: 100%;
-      }
-
-      .slider-info-container {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
         justify-content: center;
-        margin-right: 6px;
-      }
-
-      .brightness-value {
-        min-width: 34px; /* So the text doesn't shift when it goes to 1 digit */
-        text-align: right;
+        gap: 12px;
       }
 
       .light-slider-container {
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: flex-end;
       }
 
-      .slider-container {
-        width: 0;
-        margin-left: -25%;
-      }
-
-      .power-button-container {
-        display: flex;
-        justify-content: center;
-      }
-
-      .light-name-container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-
-      .light-name {
-        display: inline-block;
-        flex-grow: 0;
+      .slider-value {
+        min-width: 46px;
+        margin-top: 4px;
+        color: var(--dcp-text);
+        font-size: 14px;
+        font-variant-numeric: tabular-nums;
+        text-align: center;
       }
 
       .power-button {
-        --mdc-icon-size: 32px;
-        --mdc-icon-button-size: 36px;
-        color: var(--theme-color);
+        margin-top: 1px;
       }
 
-      .temperature-slider-container > .slider {
-        background-image: -webkit-linear-gradient( right, rgb(255, 160, 0) 0%, white 50%, rgb(166, 209, 255) 100% );
+      .power-button::part(base) {
+        min-width: 38px;
+        min-height: 34px;
+        padding: 0;
+      }
+
+      .control-icon {
+        width: 27px;
+        height: 27px;
+      }
+
+      .light-name {
+        overflow: hidden;
+        width: 100%;
+        margin-top: 1px;
+        color: var(--dcp-text);
+        font-size: 13px;
+        text-align: center;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
     `;
-
-    return [themeColor, styles];
   }
 }
 

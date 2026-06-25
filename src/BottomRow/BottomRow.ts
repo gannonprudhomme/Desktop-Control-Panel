@@ -61,10 +61,18 @@ export default class BottomRow extends LitElement {
     return css`
       #bottom-row {
         display: grid;
-        grid-template-columns: 32% 36% 32%;
-        grid-template-rows: 100%;
-        height: calc(100% - 16px);
-        padding: 8px 0;
+        grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+        align-items: stretch;
+        gap: 10px;
+        height: 100%;
+      }
+
+      track-display,
+      media-control,
+      module-switcher {
+        display: block;
+        height: 72px;
+        min-height: 72px;
       }
     `;
   }
