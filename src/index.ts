@@ -1,7 +1,9 @@
 import { css, html, LitElement } from 'lit';
 import { property } from 'lit/decorators.js';
-import type { CSSResult, TemplateResult } from 'lit';
+import type { CSSResult, PropertyValues, TemplateResult } from 'lit';
+import { mdiEyeOutline } from '@mdi/js';
 import { HomeAssistant } from '../types/types';
+import icon from './Icon';
 import './TopRow/TopRow';
 import './MusicPlayer/MusicPlayer';
 import './Recent/Recent';
@@ -10,10 +12,70 @@ import type DCPConfig from '../types/Config';
 import type { BaseConfig } from '../types/Config';
 import theme, { borderBoxStyles } from './theme';
 
+type SidebarMode = HomeAssistant['dockedSidebar'];
+
 export default class App extends LitElement {
   @property({ type: Object }) public hass?: HomeAssistant;
   @property({ type: Boolean }) public narrow = false;
   @property({ type: Object }) public panel?: BaseConfig;
+
+  @property({ type: Boolean, attribute: false }) private sidebarHidden = false;
+
+  private managedSidebar = false;
+  private previousSidebarMode?: SidebarMode;
+
+  protected updated(changedProperties: PropertyValues): void {
+    if (
+      !this.managedSidebar
+      && this.hass
+      && this.panel
+      && (changedProperties.has('hass') || changedProperties.has('panel'))
+    ) {
+      this.previousSidebarMode = this.hass.dockedSidebar;
+      this.managedSidebar = true;
+      this.sidebarHidden = true;
+      this.setSidebarMode('always_hidden');
+      return;
+    }
+
+    if (this.managedSidebar && this.hass && changedProperties.has('hass')) {
+      this.sidebarHidden = this.hass.dockedSidebar === 'always_hidden';
+    }
+  }
+
+  disconnectedCallback(): void {
+    if (this.managedSidebar && this.previousSidebarMode) {
+      this.setSidebarMode(this.previousSidebarMode);
+    }
+
+    this.managedSidebar = false;
+    super.disconnectedCallback();
+  }
+
+  private setSidebarMode(mode: SidebarMode): void {
+    const eventTarget = document.querySelector('home-assistant') || this;
+
+    eventTarget.dispatchEvent(new CustomEvent('hass-dock-sidebar', {
+      bubbles: true,
+      composed: true,
+      detail: { dock: mode },
+    }));
+  }
+
+  private toggleSidebar(): void {
+    if (!this.sidebarHidden) {
+      this.sidebarHidden = true;
+      this.setSidebarMode('always_hidden');
+      return;
+    }
+
+    const mode = this.previousSidebarMode === 'always_hidden'
+      ? 'docked'
+      : this.previousSidebarMode || 'docked';
+
+    this.sidebarHidden = false;
+    this.setSidebarMode(mode);
+  }
 
   private getAlbumArt(config: DCPConfig): string {
     if (!config.spotifyplus_name) {
@@ -54,6 +116,19 @@ export default class App extends LitElement {
           .config=${config}
         ></recent-media>
       </div>
+      <button
+        class="sidebar-toggle"
+        type="button"
+        aria-label=${this.sidebarHidden
+    ? 'Show Home Assistant sidebar'
+    : 'Hide Home Assistant sidebar'}
+        title=${this.sidebarHidden
+    ? 'Show Home Assistant sidebar'
+    : 'Hide Home Assistant sidebar'}
+        @click=${this.toggleSidebar}
+      >
+        ${icon(mdiEyeOutline, 'sidebar-toggle-icon')}
+      </button>
     `;
   }
 
@@ -131,6 +206,40 @@ export default class App extends LitElement {
         grid-area: recents;
         min-width: 0;
         min-height: 0;
+      }
+
+      .sidebar-toggle {
+        position: absolute;
+        z-index: 3;
+        left: 8px;
+        bottom: 8px;
+        display: grid;
+        width: 44px;
+        height: 44px;
+        padding: 0;
+        place-items: center;
+        border: 0;
+        background: transparent;
+        color: var(--dcp-text-muted);
+        cursor: pointer;
+        opacity: 0.28;
+      }
+
+      .sidebar-toggle:hover {
+        color: var(--dcp-text);
+        opacity: 0.62;
+      }
+
+      .sidebar-toggle:focus-visible {
+        opacity: 1;
+        outline: 2px solid var(--dcp-accent-strong);
+        outline-offset: 2px;
+      }
+
+      .sidebar-toggle-icon {
+        width: 20px;
+        height: 20px;
+        fill: currentColor;
       }
 
       @media (max-width: 760px) {

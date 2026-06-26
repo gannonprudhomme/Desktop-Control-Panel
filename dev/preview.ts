@@ -152,7 +152,7 @@ if (!previewApp) {
 let hass: HomeAssistant = {
   states: states as HomeAssistant['states'],
   panels: {},
-  dockedSidebar: 'always_hidden',
+  dockedSidebar: 'docked',
   localize: (): string => 'Sunny',
   formatEntityState: (stateObj): string => stateObj.state
     .split(/[-_]/)
@@ -393,6 +393,14 @@ const panel: BaseConfig = {
   name: 'desktop-control',
   config,
 };
+
+document.addEventListener('hass-dock-sidebar', (event) => {
+  const sidebarMode = (event as CustomEvent<{ dock?: HomeAssistant['dockedSidebar'] }>)
+    .detail?.dock;
+  const tablet = document.querySelector<HTMLElement>('.tablet');
+
+  tablet?.classList.toggle('sidebar-hidden', sidebarMode === 'always_hidden');
+});
 
 const toggleTestTrack = document.querySelector<HTMLButtonElement>('#toggle-test-track');
 

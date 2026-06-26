@@ -29,7 +29,6 @@ export default class TopRow extends LitElement {
         justify-content: space-between;
         gap: 12px;
         height: 100%;
-        padding-top: var(--dcp-radius);
       }
 
       weather-display {
